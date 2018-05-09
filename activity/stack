@@ -1,0 +1,54 @@
+1 如果指定的task不在inRecents中,说明这个task已经不存在了,设置mInTask为null
+2 START_FLAG_ONLY_IF_NEEDED 标志的作用是给那些当前就在task顶部并且设置了singleTask和singleInstance的activity传递一个intent处理,否则和普通的activity启动没有任何区别,这里我们不禁产生疑问, singleInstance 的activity如果就在栈顶是不是就不需要处理新intent了?  所以这里处理了对于调用者和启动者不是同一个activity的情况就去掉这个标志
+3 computeLaunchingTaskFlags 重新修正launchflags , 主干上有两个路径
+   1 如果调用者Activity不存在,并且指定了task,且task存在对应的stack
+        1获取指定的task的baseIntent 和指定的task的rootActivity(task中最底部没有销毁的activity)
+        2 如果baseIntent是空的,直接抛出异常 并不知道是什么情况发生
+        3 如果是启动launchSingleInstance || mLaunchSingleTask 模式的activity
+           1baseIntent和我们要启动的activity不一样则抛出异常(对于指定task的情况要求比较严格,task必须正确)
+           2 如果rootActivity是空的也会抛出异常
+           3 由此可以看出来,如果mLaunchSingleInstance || mLaunchSingleTask 必须存在baseIntent和rootActivity 
+        4 经过上面对mLaunchSingleInstance || mLaunchSingleTask的检查,抛出一些不正常的情况,下面又做了如下检查
+           1 task的root为空,这种情况需要对task进行一些调整,既然要求启动activity在一个task中,但是这个task是空的,我们就要对这个task做一些初始化操作,把他变成以我们为基准的task
+               首先对于一个新task清楚 mLaunchFlags的FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_MULTIPLE_TASK
+                                       | FLAG_ACTIVITY_NEW_DOCUMENT | FLAG_ACTIVITY_RETAIN_IN_RECENTS 位 ,然后添加原来task存在的那些标志,设置到task中,我们对task的baseintent的管理还所知很少,所以还不能详细说明它的作用,当我们遇到的时候再去分析,但是我们这里可以确定task是存在的所以设置变量mAddingToTask = true 表示不需要新创建task,直接放到存在的task中就好,并且我们就是这个task的baseIntent的主人
+           2 如果指定了task并且启动这个activity设置了mLaunchFlags设置了FLAG_ACTIVITY_NEW_TASK标志表明我们希望新启动一个task,但是这个task已经存在,所以就把它拿到上上面来,并发送一个新的intent给它,所以设置mAddingToTask = false,由此看来我们不需要启动一个新的activity,看来指定inTask要在一定的语义下完成,我们前面的分析一定遗漏了一些条件. 我们还需要重新弄醒出inTask设置的条件, 否则我们没有办法弄明白它
+           3 在1,2 都不满足的条件也就是说我们的tack中已经存在activity但是没有指定FLAG_ACTIVITY_NEW_TASK标志,这种情况要在task中新建activity,为什么活这样的呢????? 
+        5 最终设置 mReuseTask = mInTask 到这里我们确定了要重用task
+        6 这里可以总结下指定inTak的情况必须不存在sourceActivity,另外还要task真实的存在stak中. 另外就是如果是一个空的task就要创建activity,而不是空的并且指定了FLAG_ACTIVITY_NEW_TASK即使activity不存在也不会重新创建. 不指定FLAG_ACTIVITY_NEW_TASK且task不是空的,就会创建activity.  这里第二个条件下可能只是把task带到前台
+   2 与1 条件相反(也就是没有指定task或者指定的task有问题,或者sourceRecord被指定)
+       1 mInTask 设置为null 
+       2 对于resloveraCTIVITY或者noDisplay要并且mSourceRecord不为空并且mSourceRecord在freefrom 的task上要把这样的activity放在源sourceRecord上面,这是很合理的,因为是一个free的情况,这种情况必然要把activity放到task上所以设置mAddingToTask = true
+   3 最后如果mInTask 是空的 ,也就是没有指定task或者被我们修正为null的情况
+      1 如果mSourceRecord为空的情况不是由于其他activity启动你能放到sourceRecord的task中所以设置mLaunchFlags |= FLAG_ACTIVITY_NEW_TASK,一遍后面可以为它创建一个task
+      2 对于mSourceRecord.launchMode == LAUNCH_SINGLE_INSTANCE的情况,sourceRecord的task必须只能包含这一个activity,所以也不能把要启动的activity放到这个task中,这里也要设置mLaunchFlags |= FLAG_ACTIVITY_NEW_TASK
+      3  对于要启动的activity是mLaunchSingleInstance || mLaunchSingleTask 要添加FLAG_ACTIVITY_NEW_TASK 以便不把它启动到sourceRecord所在的task
+   4 这里我们在总结下inTask和非inTask的情况,如果指定的task得到复用,设置mReuseTask = mInTask, mAddingToTask代表要不要放到task中,如果为false则不会启动新的 activity, FLAG_ACTIVITY_NEW_TASK表示不把activity放到当前task中
+
+
+
+private void computeSourceStack()
+1  mSourceRecord == null 那么sourceStack也不存在,直接返回
+2 如果mSourceRecord没有关闭,直接设置mSourceStack = mSourceRecord.getStack() 返回
+3  这种情况对应sourceRecord正在关闭或者sourceRecord不存在(注意不存在的情况下FLAG_ACTIVITY_NEW_TASK必然不为0),如果没有设置FLAG_ACTIVITY_NEW_TASK标志,要添加上FLAG_ACTIVITY_NEW_TASK以便不在原来的task上启动
+    设置mNewTaskInfo = mSourceRecord.info,这是因为吊起我们的activity的task已经被销毁,所以我们不能盲目的把它添加到原来的task中,但是我们可以保留原来的ActivityInfo,以便我们在创建新的task的时候恢复它的信息,同样我们
+    也记录了原来sourceRecord的intent信息
+4 最后设置 mSourceRecord = null;
+        mSourceStack = null;
+ 
+5 最后设置新的intent标志
+6 getReusableIntentActivity() 获取可重用的activity
+   1 首先获取是否需要重用activity.该变量通过putIntoExistingTask变量反应,也就是要满足的条件为
+      1 mLaunchFlags & FLAG_ACTIVITY_NEW_TASK!=0 表示要启动新的task
+      2 mLaunchFlags & FLAG_ACTIVITY_MULTIPLE_TASK) == 0 如果不为0 表示要启用一个全新的task,所以这里要求不能有该标志
+      3 mInTask == null 我们前面已经看到,去过mInTask情况遇到mLaunchSingleInstance || mLaunchSingleTask 就要要求task中没有任何activity,并且task的baseIntent指定的组件和我们要启动的相同
+         另外如果指定了FLAG_ACTIVITY_MULTIPLE_TASK标志并且栈中存在activity则表示不需要启动新的activity,只是把他的task拿到前台就可以了. 所以对于inTask的情况要么启动一个新的activity,要么存在一个新的task(没有activity).
+      4 mStartActivity.resultTo == null.  
+   2 putIntoExistingTask = (1 || 2) &3 &4  对于这种情况如果已经存在合适的task,需要将activity放到对应task,getReusableIntentActivity只是用于找到对应的task,那么返回activity是做什么用的呢,只是用于找到我们的activity应该放在task上的位置. 
+
+
+好了现在可以进入reusedActivity != null的情况进行分析了
+   1 如果task被锁定 还要检查是否可行,不可行直接返回START_RETURN_LOCK_TASK_MODE_VIOLATION
+   2 如果mSatrtActivity没有task则设置它的task为reusedActivity.getTask()因为我们要把它放在这个task中
+   3 如果找到的task没有intent把我们的intent设置给它
+   4 如果指定了FLAG_ACTIVITY_CLEAR_TOP 

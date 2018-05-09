@@ -1,0 +1,70 @@
+1 关于AudioFocus 只是起象征作用,并不强制争夺焦点, 需要多应用配合自觉根据自己是否有foucs进行开始播放和结束播放.如果失去焦点的应用不停止播放也是没有办法的
+requestAudioFocus 请求焦点
+abandonAudioFocus 用于释放焦点
+OnAudioFocusChangeListener 用于回调焦点获取或者时失去的事件
+
+
+AudioSystem 用于提供和底层设备交互的接口
+AudioManager 用于管理
+
+主要调查的问题 为什么蓝牙耳机在链接中增加音量不会提示音量过大
+
+1 调用接口调节音量 
+public void adjustStreamVolume(int streamType, int direction, int flags) 
+三个参数 streamType只是调节音量的类型如音乐 通话 闹钟等 这可以理解为我们调节音量时候会显示的那个状态兰i(如图音量调节)
+STREAM_SYSTEM|STREAM_RING|STREAM_MUSIC|STREAM_ALARM
+
+direction方向,其实就是你按键的方向也就是音量加还是减
+ADJUST_LOWER音量减  ADJUST_RAISE 音量加  ADJUST_SAME 音量不变,意图是显示音量的那个面板, 其实就是要调节的数值 如+1 0 -1
+flag参数用到再去分析
+
+调用到adjustStreamVolumeForUid方法 
+ public void adjustStreamVolumeForUid(int streamType, int direction, int flags,
+                 String callingPackage, int uid) {
+                             adjustStreamVolume(streamType, direction, flags, callingPackage,
+                                                 callingPackage, uid);
+                                                         }
+参数是一样的 只不过多了个uid,这个uid其实是之userid  android里面很容易把userid和uid搞混
+
+整个函数不太长
+
+1第一步骤校验音量操作是否合理
+2 验证streamType是否合理 
+声音的类型放在mStreamStates的结合中对于不同的设备有不同的配置,AudioService进行了一些映射
+3 判断设置静音和是否需可以静音是否有冲突
+4 获取别名 并且根据别名获取对应的VolumeStreamState
+5 获取设备id   getDeviceForStream(streamTypeAlias)函数
+6 通过设备id称获取音量值streamState.getIndex(device)
+7 检查权限
+8 修复flags
+对于固定不能调整音量的设备 且是播放音乐的设备 添加FLAG_FIXED_VOLUME 标志 设置为安全音量
+对于可调节是被
+9 有可能要修改RINGER_MODES  比如音量调节为0 可能要改成震动模式
+10 volumeAdjustmentAllowedByDnd(streamTypeAlias, flags) 函数用于判断是否要修改音量值
+11 如果允许修改采取修改 又有几个分支
+  分别对应静音相关操作  增加音量  减少音量 
+
+请求焦点的过程
+1焦点被请求的时候 正在打电话或者被锁定则不允许请求者马上获取焦点,使用
+canReassignAudioFocus 判断是否允许马上获取焦点, 如果该函数返回false则不能马上获取焦点,如果请求者设置了AUDIOFOCUS_FLAG_DELAY_OK 表示可以延迟获取焦点,则可以继续,要设置focusGrantDelayed = true,否则直接返回失败
+2 注册一个回调死亡的通知 用于OnAudioFocusChangeListener死亡的时候回调通知,做一些清理工作
+3 如果焦点栈不为空,并且栈顶的FocusRequester就是自己的焦点数据,则执行一下操作
+  如果获取的焦点请求原先已经请求了一次则什么都不做直接授权,重新通知所有监听者变化 
+  否则焦点发生变化则出栈原来的焦点,执行释放操作
+4 下面进行新的焦点申请的操作
+   移除该应用申请的所有焦点(可见每个应用最多有一个焦点,放在栈里操作可能是为了提高效率)
+5 创建FocusRequester 
+6 添加焦点
+   1 延迟申请 
+      1.1如果栈中已经没有锁定的焦点或者电话通话焦点,则直接添加焦点到站定(使用同步方法)
+      1.2如果有则插入到最后一个有锁或者电话焦点的下面 
+      2 通知
+      调用propagateFocusLossFromGain_syncAf(focusChangeHint);函数通知,稍后分析
+
+      设置焦点到栈中 通知
+
+
+最关键函数propagateFocusLossFromGain_syncAf()
+对于每个FocusRequester执行 分发时区焦点信息
+
+

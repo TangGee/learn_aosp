@@ -1,0 +1,73 @@
+拉动的时候会调用setStackHeight更新stackscrolllayout 的高度，分析下他的算法
+　首先setIsExpanded　更新mStackScrollAlgorithm的状态和mIsExpanded状态，设置
+mOwnScrollY，y轴滚动距离，没有展开为0　，mSwipeHelper.resetViewIfNeed()　reset滑动的notification 更新mCurrentStackHeight，更新mStackScrollAlgorithm
+requestChildrenUpdate更新子视图，更新子视图通过updateChildren　后面分析
+
+updateChildren是通过设置OnPreDrawListener完成的　更新完成后移除listener
+updateChildren是比较重要的函数之一　，他的逻辑如下
+　　1 mAmbientState.setScrollY(mOwnScrollY);跟新环境状态
+　　2  markAllSeen(mOwnScrollY)
+
+
+getStackScrollState(AmbientState ambientState, StackScrollState resultState)　获取栈的滚动状态
+
+首先StackScrollState.resultState更新子view状态
+
+1 更新state.visibleChildren　可见的notification
+2 对可见的notification做处理　
+
+
+
+现在分析updateChildren不太好分析，所以还是先从事件入手
+
+
+getStackScrollState　：
+　将notification中的view分为三个栈
+　　top_stack :　目前发现只有第一个view会被划分到该栈
+    bottom_stack: 底部超出栈高度的view
+	scroll_stack: 其他view
+
+我们来分析下对三种栈中view的处理：
+  top_stack:
+　　　updatePositionsForState 主要更新transationY
+      updateZValuesForState 更新z 坐标？ 越网上ｚ坐标越大离人越近
+	  handleDraggedViews()更新左右拖拽的view 主要更新dragview和周围的alphal 注意这里miui有问题没有清除draggedViews数据
+	  updateDimmedActivated() miui 没有使用
+
+
+updateChildren更新子view的状态
+  一种通过动画更新到新状态
+  一种直接更新到新状态
+
+
+
+三种事件处理　
+　原生notification 有三种事件需要处理　分别总结下
+　我们分析下他的过程,注意　view的事件处理是层层拦截的，只要上层view 不关心的事件才会到我们的view进行处理，所以下面只描述NotificationStackScrollLayout的事件处理，被上层消耗事件我们会给出提示
+
+
+变量解释
+　　mOnlyScrollingInThisMotion　NotificationStackLayout正在滚动状态下　该值为true 
+　　mSwipingInProgress　正在左滑或者右滑
+　　mExpandingNotification　正在展开notification 
+　　mExpandedInThisMotion　当前操作用于展开　　这个值在notification 展开状态变化的时候设置成true 
+    mIsBeingDragged 开始滚动的时候设置成true  如果正在滚动的时候点击　则直接托管操作
+	mDisallowDismissInThisMotion　removeInputView的时候不允许　滑动关闭notification 
+	mDisallowScrollingInThisMotion　不允许滚动　ExpandableNotificationRow展开向上滚的过程中
+
+
+1 展开事件　展开事件的条件首先是Stack已经完全展开（并且没有处于滚动状态），点击有notification　view的区域，并且view可以展开或者收起，就会进行展开说是操作
+　　来看看如何把事件拦截下来，首先有一点可肯定，ACTION_DOWN事件还不能看出用户的操作意图　是不会对事件进行拦截的　，onInterceptTouchEvent的处理
+　　首先ACTION_DOWN的时候初始化变量　
+　　　　　mExpandedInThisMotion = false 
+　　　　　mOnlyScrollingInThisMotion　= !mScroller.isFinished();　
+　　　　　mDisallowScrollingInThisMotion = false;　
+          mDisallowDismissInThisMotion = false; 
+		  mInitialTouchX = ev.getX();
+		  mInitialTouchY = ev.getY();
+
+	首先判断配有处于　首先不处于左右滑动过程中并且不处于　滚动中则　把事件交给mExpandHelper处理
+	　　mExpandHelper　有两种情况处理　
+	　　　　1 一个手指拖动
+	　　　　2 手势
+	

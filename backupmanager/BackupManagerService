@@ -1,0 +1,79 @@
+BackupManagerService的功能请参考https://developer.android.com/guide/topics/data/backup.html  这个文章,主要用户设置向导中恢复数据
+
+BackupManagerService恢复过程
+
+1 通过transport.getAvailableRestoreSets()获取可恢复的集合
+2 用户选择而一个可以恢复的数据节点,传递token,调用 bmgr的restoreAll进行恢复
+3 发送消息进行恢复  
+      Message msg = mBackupHandler.obtainMessage(MSG_RUN_RESTORE);
+                        msg.obj = new RestoreParams(mRestoreTransport, dirName,
+                                observer, monitor, token);
+                        mBackupHandler.sendMessage(msg);
+
+4 创建PerformUnifiedRestoreTask 
+5 处理备份任务
+ Message restoreMsg = obtainMessage(MSG_BACKUP_RESTORE_STEP, task);
+                        sendMessage(restoreMsg);
+6 startRestore() 开始恢复
+
+
+恢复@pmp@的过程
+使用PackageManagerBackupAgent进行恢复
+从客户端获取备份信息 保存在/data/cache/backup_stage/@pmp@.restore文件中
+主要就是读取签名包名信息 还有launcher信息  备份时候的sdk信息 保存在sigMap中,startRestore就完成了
+这里还有关键的一句话  executeNextState(UnifiedRestoreState.RUNNING_QUEUE)  进行下一个任务
+
+
+
+之后执行 RUNNING_QUEUE命令 用于选取下一个要恢复的应用
+对于以下应用不备份:
+1 @pmp@中没有该包的Metadata
+2 版本降级切没有 ApplicationInfo.FLAG_RESTORE_ANY_VERSION标志
+3 备份的类型不是TYPE_KEY_VALUE 或者 TYPE_FULL_STREAM  
+结束条件
+ 1 包名为null或者RestoreDescription.NO_MORE_PACKAGES
+
+选择好之后就会执行
+   if (type == RestoreDescription.TYPE_KEY_VALUE) {
+                    nextState = UnifiedRestoreState.RESTORE_KEYVALUE;
+                } else if (type == RestoreDescription.TYPE_FULL_
+STREAM) {
+                    nextState = UnifiedRestoreState.RESTORE_FULL;
+                } 任务
+
+否则执行结束任务
+
+
+
+
+先看恢复keyvalue 
+restoreKeyValue() 函数
+对两种情况直接跳过选择下一个应用备份 (这段完全可以在处理RUNNING_QUEUE中进行,可能不是同一个开发者写的)
+1 没有backupAgentName
+2 安装的包与要恢复的包签名不一致 
+下一步绑定agent执行doAgent函数进行恢复 这里的逻辑由客户端自己实现
+
+
+
+之后restoreFull()是最复杂的部分 在线程中完成
+StreamFeederThread
+一般都会调用doRestoreFile进行恢复
+就是简单的写文件
+
+
+RESTORE_FINISHED 的处理
+主要是执行杀死应用 调用restoreWidgetData恢复小部件
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+

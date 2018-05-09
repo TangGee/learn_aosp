@@ -1,0 +1,39 @@
+performClearTaskLocked的过程
+    首先这个函数是给设置了FLAG_ACTIVITY_CLEAR_TOP flags的情况设置的.这种情况会清除参数newR前面的activity并且返回和newR相同componentname的activity,如果找不到与newR相同的Activity则什么都不做
+   下面进行流程说明
+   1 第一部分是想找到与参数newR相同component的Activity. 然后遍历这个activity上面的activity,从下向上,这样的好处是可以先销毁那些底部的没有显示的activity只需要对他们执行destory函数就可以了. 最后才有可能对最上面resumeactivity执行销毁操作
+       我们来看下销毁操作吧
+       1 首先停止执行原来的pendingOptions,放到找到的newR上,我们先不关心Options做什么操作,有时间彻底分析. 
+       2 执行mStack.finishActivityLocked(
+                                   r, Activity.RESULT_CANCELED, null, "clear-task-stack", false)) finish掉这个activity
+       3 如果找到的newR,如果这个newR 是标准的activity,没有执行lunchMode,并且启动参数也没有FLAG_ACTIVITY_SINGLE_TOP(可见FLAG_ACTIVITY_SINGLE_TOP的影响),并且activity也不是一个存在的Document,这种清下下也要销毁newR,后面进行重建. 
+       4 最后返回空或者newR
+       5 总结一下函数的这一层封装还是相当不错的,简单清晰
+ 
+ performClearTaskLocked 函数比较简单难点都留在了ActivityStack-->finishActivityLocked 函数中
+ 1 如果正在finishing则返回false
+ 2 禁止WMS relayout
+ 3 ActivityRecord.makeFinishingLocked()
+   条件是如果finishing为false 
+   1 如果之前这个activity是作为behind显示的,则去掉viasibleBehind, 设置finishing = true , 通知mTaskChangeNotificationController 
+   2 找到要destory的activity在task中的位置,如果位置不是最上面的,更新task的frontOfTask 也就是task中的最下面的activity的位置
+   3 传递FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET 给上面的activity
+   4 如果这个activity还能接收时间,停止这个activity上的事件派发派发,更新wms的window信息
+   5 adjustFocusedActivityStackLocked 计算焦点activityStack
+       1  如果当前不是焦点task 或者 当前activity不是当前mResumedActivity则没必要进行下面的计算,因为这个函数的目的就是计算(更新)焦点stack的焦点activity,满足这个条件说明不需要更新
+       2 获取这个stack最上面的Activity. 这里肯定是自己或者空
+       3 如果获取到的焦点activity不是我们要destory的activity,注意这里的找到的next的Activity是必须是running状态的也就是没有finishing状态,所以这里不会是参数r,条件比人成立
+           1 对于freeform, docked, and pinned 的stack直接返回,不需要更新焦点
+           2 获取要销毁的activity的task如果为空抛出异常
+           3 如果是助手stack或者在助手task之上则如果当前销毁的activity是frontOfTask,也就是在task底部,并且这个task已经不存在没有销毁的activity,并且这个task要返回到homeStack 或者要返回到语音助手的task,则需要把新的stack切换到前台, 这又分为两种情况
+                 1 如果我们要退出焦点的task不是全屏的或者是助手task,则需要计算其他的stack作为焦点(因为这时候不光我们一个stack是可见的,还有其他task是可见的,最好能把焦点给他们),成功返回
+                 
+                 2 对于全屏stack并且返回的stack为homestack,则吧homestack作为task,成功返回
+                
+       4 对于不成功返回的情况或者获取到的task上锁存在的activity就是我们要销毁的activity,这样它就是最顶部的activity使用moveFocusableActivityStackToFrontLocked 把焦点activity的stack移动到顶端. 这种情况主要对应于activity还没有到底的情况 . 到目前位置我们还有三个函数需要细节分析,包括adjustFocusToNextFocusableStackLocked 和moveFocusableActivityStackToFrontLocked 和moveHomeStackTaskToTop 三个函数
+       6 如果当前要销毁的activity是ResumeActivity并且destory的这个activity是这个task中最后一个Activity,那么这个task对于我们来说已经没有实际价值,通知task被remove, 并且执行task相关close相关的动画,设置activit为不可见,这里面和window是密切先关的. 
+           如果正在mPausingActivity是空的执行startPausingLocked
+       5 如果destory的这个activity是这个task中最后一个task
+1 private boolean adjustFocusToNextFocusableStackLocked(String reason, boolean allowFocusSelf) 
+  1 ActivityStackSupervisor-->getNextFocusableStackLocked(ActivityStack currentFocus)
+       1 

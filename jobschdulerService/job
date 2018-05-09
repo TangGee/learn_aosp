@@ -1,0 +1,37 @@
+schedule
+scheduleAsPackage
+   JobStatus.createFromJobInfo 
+     jobStatus是关键　我们看一下如何创建
+	 　　1 如果是周期的的设置周几最晚时间为当前时间+周期时间，宽限时间为５分钟，如果不是周期则设置　最早运行时间为
+	 　　2 设置最小延迟则earliestRunTimeElapsedMillis　＝　当前时间+job.getMinLatencyMillis() , 否则设置为0,latestRunTimeElapsedMillis 就是这只最早延迟，最晚延迟
+   2 job超过每个包的数量i则直接异常　因为之前多插入了
+   3 找到旧的jobid cancel掉
+   4 startTrackingJob 追踪job
+      1 添加job 到JobStore　
+	  2 遍历mControllers　执行
+	  　　1 maybeStopTrackingJobLocked　
+	         取消旧的track
+	  
+	  maybeStartTrackingJobLocked 开始新的
+
+	  　有如下几个controller 用于追中job状态
+	  　　　　Controller用于监控系统状态，当状态变化分别使用如下三个函数去回调JobSchedulerService 去调度jobs
+	             1 onControllerStateChanged  controller状态变化　要对所有job进行检查
+				 2 onRunJobNow 条件达到　运行job 这个函数参数有明确的job
+				 3 onDeviceIdleStateChanged device idle状态变化
+      
+　
+　　5 startTrack 之后要发送消息MSG_CHECK_JOB　对jobs进行检查　检查的时候有两种条件
+　　　　　1 当前是活跃状态　有一个不需要特权的服务在运行　(活跃设备有两种条件　1 从idel 变成非idel 2 有一个非特权任务在运行)
+　　　　　2 (2)如果活跃状态　
+　　　　　　　　　queueReadyJobsForExecutionLockedH　
+                         1 先对pendingJob 处理
+
+
+				　maybeQueueReadyJobsForExecutionLockedH
+				　　　noteJobsNonpending　
+				　　　　　　mJobPackageTracker.noteNonpending(job)　追踪package运行情况　
+				　　　　　　　　　mCurDataSet..decPending 减少pending 数量，当pending 数量为１的时候先设置pastPendingTime　花费在pending的时间，谁多个一块算的哈　pendingStartTime是添加第一个pending的时候设置的
+				　　　　　rebatchIfNeeded　重新批量如果需要
+				　　　　　　　　　处理pending时间如果大于30分钟分重新设置品良数据
+				　　　用MaybeReadyJobQueueFunctor处理job 添加到runnableJobs　中如果可以运

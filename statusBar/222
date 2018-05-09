@@ -1,0 +1,878 @@
+TASK com.miui.home id=161 userId=0
+  ACTIVITY com.miui.home/.launcher.Launcher 521b3d7 pid=3293
+    Local Activity 7b0d2d6 State:
+      mResumed=false mStopped=true mFinished=false
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw392dp w392dp h714dp 440dpi nrml long port finger -keyb/v/h -nav/h appBounds=Rect(0, 0 - 1080, 2030) s.8 themeChanged=0 themeChangedFlags=0}
+      mLoadersStarted=true
+      FragmentManager misc state:
+        mHost=android.app.Activity$HostCallbacks@fe7082b
+        mContainer=android.app.Activity$HostCallbacks@fe7082b
+        mCurState=3 mStateSaved=true mDestroyed=false
+    ViewRoot:
+      mAdded=true mRemoved=false
+      mConsumeBatchedInputScheduled=false
+      mConsumeBatchedInputImmediatelyScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false      mIsAmbientMode=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=49471900 (73312 ms ago)
+    View Hierarchy:
+      DecorView@898b84d[Launcher]
+        com.miui.internal.widget.ActionBarOverlayLayout{3c58c49 V.E...... .......D 0,0-1080,2160 #100b004e miui:id/action_bar_overlay_layout}
+          android.widget.FrameLayout{551294e V.E...... ......ID 0,0-1080,2160 #1020002 android:id/content}
+            com.miui.home.launcher.ForceTouchLayer{45c612d V.E...... .......D 0,0-1080,2160 #7f100077 app:id/force_touch_layer}
+              com.miui.home.launcher.Background{6aae8b0 V.ED..... ......ID 0,0-1080,2160 #7f10007a app:id/drag_layer_background}
+              com.miui.home.launcher.MinusOneScreenView{c8588e5 V.E...... ......ID 0,0-1080,2160 #7f100078 app:id/minus_one_layer}
+                android.widget.FrameLayout{5e4fe6b V.E...... ........ 0,0-1080,2160 #7f100079 app:id/minus_container}
+                  com.miui.home.launcher.assistant.ui.view.AssistHolderView{647cf6c V.E...... ........ 0,0-1080,2160}
+                    android.widget.FrameLayout{bd91f3b V.E...... ........ 0,0-1080,2030}
+                      com.miui.home.launcher.assistant.ui.view.AssistListView{60963b1 V.ED..C.. ........ 0,0-1080,2030 #1d0a0157 com.mi.android.globalpersonalassistant:id/assist_list_view}
+                com.miui.home.launcher.DragLayer{58ace61 V.E...... .......D 1080,0-2160,2160 #7f100026 app:id/drag_layer}
+                  android.widget.FrameLayout{7019d86 V.E...... .......D 0,0-1080,2160 #7f100027 app:id/screen}
+                    com.miui.home.launcher.ScreenContent{5531647 V.E...... .......D 0,0-1080,2160 #7f100028 app:id/screen_content}
+                      com.miui.home.launcher.Workspace{7144e74 V.E...... .......D 0,0-1080,2030 #7f100029 app:id/workspace}
+                        com.miui.home.launcher.CellScreen{220c283 V.E...... .......D 0,50-1080,2030}
+                          com.miui.home.launcher.CellLayout{788ec00 V.E...... .......D 0,0-1080,1980 #7f100016 app:id/cell_layout}
+                            com.miui.home.launcher.FolderIcon{f22a971 VFE...CL. .......D 45,1424-271,1668}
+                              android.widget.FrameLayout{fc8c356 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{e838fd7 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{b21f0c4 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.LinearLayout{676bad V.E...... ........ 32,37-158,163 #7f100040 app:id/preview_icons_container}
+                                    android.widget.LinearLayout{3a5bee2 V.E...... ........ 0,0-126,42}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{2875273 V.ED..... ........ 0,0-42,42 #7f100041 app:id/item1}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{6af5530 V.ED..... ........ 42,0-84,42 #7f100042 app:id/item2}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{7bc15a9 V.ED..... ........ 84,0-126,42 #7f100043 app:id/item3}
+                                    android.widget.LinearLayout{364e72e V.E...... ........ 0,42-126,84}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{bfaa2cf V.ED..... ........ 0,0-42,42 #7f100044 app:id/item4}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{26c945c V.ED..... ........ 42,0-84,42 #7f100045 app:id/item5}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{8976365 V.ED..... ........ 84,0-126,42 #7f100046 app:id/item6}
+                                    android.widget.LinearLayout{ddc483a V.E...... ........ 0,84-126,126}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{ba89ceb V.ED..... ........ 0,0-42,42 #7f100047 app:id/item7}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{f5c9a48 V.ED..... ........ 42,0-84,42 #7f100048 app:id/item8}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{d1fd0e1 V.ED..... ........ 84,0-126,42 #7f100049 app:id/item9}
+                                  android.widget.ImageView{736ae06 V.ED..... ......ID 11,16-179,184 #7f10004a app:id/cover}
+                                android.widget.TextView{9c512f4 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{97fa492 V.E...... ........ 46,186-180,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{a69be63 V.ED..... ........ 0,0-134,46 #7f10004b app:id/icon_title}
+                            com.miui.home.launcher.FolderIcon{8c0efd5 VFE...CL. .......D 555,1424-781,1668}
+                              android.widget.FrameLayout{6f733ea V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{28f2578 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{72db451 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.LinearLayout{30ca4b6 V.E...... .......D 32,37-158,163 #7f100040 app:id/preview_icons_container}
+                                    android.widget.LinearLayout{155c5b7 V.E...... .......D 0,0-126,42}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{64d2124 V.ED..... ........ 0,0-42,42 #7f100041 app:id/item1}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{4c8448d V.ED..... ........ 42,0-84,42 #7f100042 app:id/item2}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{365642 V.ED..... ......ID 84,0-126,42 #7f100043 app:id/item3}
+                                    android.widget.LinearLayout{e770653 V.E...... ........ 0,42-126,84}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{3cd2b90 V.ED..... ........ 0,0-42,42 #7f100044 app:id/item4}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{3019c89 V.ED..... ........ 42,0-84,42 #7f100045 app:id/item5}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{57948e V.ED..... ........ 84,0-126,42 #7f100046 app:id/item6}
+                                    android.widget.LinearLayout{861b4af V.E...... ........ 0,84-126,126}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{50170bc V.ED..... ........ 0,0-42,42 #7f100047 app:id/item7}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{f5e7845 V.ED..... ........ 42,0-84,42 #7f100048 app:id/item8}
+                                      com.miui.home.launcher.FolderIcon$PreviewIconView{e3c6b9a V.ED..... ........ 84,0-126,42 #7f100049 app:id/item9}
+                                  android.widget.ImageView{b9eeccb V.ED..... ......ID 11,16-179,184 #7f10004a app:id/cover}
+                                android.widget.TextView{ed2dca8 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{f353c1 V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{365a766 V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                            com.miui.home.launcher.LauncherAppWidgetHostView{9cd1b54 V.E...... R......D 45,44-1036,288}
+                              android.widget.FrameLayout{9b2d0f1 V.E...... ......ID 22,34-969,210 #7f110cc2 app:id/default_search_widget}
+                                android.widget.FrameLayout{a66c357 V.E...... .......D 21,21-926,155 #7f110634 app:id/search_plate_container}
+                                  android.widget.ImageView{98fde44 V.ED..... ......ID 0,0-905,134 #7f110cc8 app:id/search_widget_background_protection}
+                                  android.widget.ImageView{4928b2d V.ED..... ......ID 0,0-905,134 #7f110cc9 app:id/search_widget_background}
+                                  android.widget.FrameLayout{a9b2862 G.E...... ......I. 0,0-0,0 #7f110ccf app:id/more_container}
+                                    android.widget.ImageView{5ce9ab0 V.ED..... ......I. 0,0-0,0 #7f110cd0 app:id/customization_more_icon}
+                                  android.widget.LinearLayout{39ad29 V.E...... .......D 0,0-905,134 #7f1101a0 app:id/search_plate}
+                                    android.widget.FrameLayout{3a0c64f VFE...C.. ......ID 0,0-242,134 #7f110cc5 app:id/search_widget_google_logo}
+                                      android.widget.FrameLayout{7fab1dc G.E...... ......I. 0,0-0,0 #7f110cd1 app:id/super_g_fab_circ}
+                                        android.widget.ImageView{416f2e5 V.ED..... ......ID 0,0-0,0 #7f110cd2 app:id/super_g_fab_circ_fill}
+                                      android.widget.FrameLayout{de561ba G.E...... ......I. 0,0-0,0 #7f110cd3 app:id/super_g_fab_rect}
+                                        android.widget.ImageView{e4d786b V.ED..... ......ID 0,0-0,0 #7f110cd4 app:id/super_g_fab_rect_fill}
+                                      android.widget.ImageView{f6f0fc8 V.ED..... ......ID 0,0-242,134 #7f110cd5 app:id/search_widget_google_full}
+                                      android.widget.ImageView{5c8d861 G.ED..... ......I. 0,0-0,0 #7f110cc6 app:id/search_widget_super_g}
+                                    android.widget.ImageView{4c93047 G.ED..... ......ID 0,0-0,0 #7f110cca app:id/search_widget_glass}
+                                    android.widget.FrameLayout{b626e12 VFE...C.. ......ID 242,0-751,134 #7f11019e app:id/search_edit_frame}
+                                      android.widget.LinearLayout{a5e89e3 V.E...... ........ 0,0-509,134 #7f110cdd app:id/hint_text_alignment}
+                                        android.widget.TextView{d60fe0 V.ED..... ........ 487,0-509,134 #7f110cde app:id/search_widget_voice_hint}
+                                    android.widget.ImageButton{5bc4a0c GFED..C.. ......I. 0,0-0,0 #7f110cd6 app:id/search_widget_visual_search}
+                                    android.widget.ImageButton{639ad6a VFED..C.. ......ID 751,0-905,134 #7f110cc7 app:id/search_widget_voice_btn}
+                                    android.widget.LinearLayout{361525b G.E...... ......I. 0,0-0,0 #7f110cd7 app:id/search_widget_feed_button_container}
+                                      android.widget.ImageView{4e9faf8 V.ED..... ......ID 0,0-0,0 #7f110cd8 app:id/search_widget_feed_vertical_divider}
+                                      android.widget.ImageButton{9bd3636 VFED..C.. ......I. 0,0-0,0 #7f110cd9 app:id/search_widget_feed_button}
+                            com.miui.home.launcher.gadget.ClockGadgetDelegate{b6b7a49 VFE...C.. ........ 45,320-1036,840}
+                              android.widget.LinearLayout{d74397c G.E...... ......I. 0,0-0,0 #7f100070 app:id/error_display}
+                                android.widget.ImageView{5e87205 V.ED..... ......I. 0,0-0,0 #7f100071 app:id/gadget_icon}
+                                android.widget.TextView{b94425a V.ED..... ......ID 0,0-0,0}
+                              com.miui.home.launcher.gadget.ClockGadgetDelegate$2$1{108be0c VFED..C.. ........ 0,0-991,520}
+                                miui.maml.MiAdvancedView{d42c628 V.ED..C.. ........ 0,0-991,520}
+                              android.widget.LinearLayout{4897168 G.E...... ......I. 0,0-0,0}
+                                android.widget.ImageView{d832981 GFED..C.. ......I. 0,0-0,0}
+                            com.miui.home.launcher.ShortcutIcon{f8a87b9 VFE...CL. .......D 45,1148-271,1392}(天气)
+                              android.widget.FrameLayout{56c57fe V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{e650b5f V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{4f6f9ac I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{631f60a V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{1f8fe7b I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{be874f1 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{f0f0757 V.E...... ........ 65,186-161,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{1ecd244 V.ED..... ........ 0,0-96,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{e7e6f2d I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{247a227 VFE...CL. .......D 300,1148-526,1392}(相册)
+                              android.widget.FrameLayout{d121cd4 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{5770e7d V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{bc97172 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{58239c3 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{5de3240 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{294326c I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{951bcca V.E...... ........ 65,186-161,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{d8f1e3b V.ED..... ........ 0,0-96,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{dc80958 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{be8f221 VFE...CL. .......D 555,1148-781,1392}(设置)
+                              android.widget.FrameLayout{27b5646 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{2f14007 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{ea49534 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{bc18f5d V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{a0690d2 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{c8fd0a0 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{398e81e V.E...... ........ 65,186-161,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{40828ff V.ED..... ........ 0,0-96,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{83156cc I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{9da75c9 VFE...CL. .......D 810,1148-1036,1392}(个性主题)
+                              android.widget.FrameLayout{45d94ce V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{4834fef V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{1e0afc I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{f0ba585 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{e422fda I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{9bedae8 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{9a36fa6 V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{6ff4de7 V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{c1abd94 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{d1d4071 VFE...CL. .......D 300,1424-526,1668}(安全中心)
+                              android.widget.FrameLayout{77d0e56 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{7217ed7 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{f32b3c4 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{8f472ad V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{9d3b9e2 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{e894830 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{df7922e V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{e8771cf V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{972b75c I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{24af219 VFE...CL. .......D 810,1424-1036,1668}(Play 商店)
+                              android.widget.FrameLayout{802e2de V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{e6cbf V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{600af8c I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{60f96d5 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{2564eea I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{8cf3878 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{4c26fb6 V.E...... ........ 29,186-197,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{19734b7 V.ED..... ........ 0,0-168,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{bfb6424 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                        com.miui.home.launcher.CellScreen{53954da I.E...... .......D 1080,50-2160,2030}
+                          com.miui.home.launcher.CellLayout{bdfbd0b V.E...... .......D 0,0-1080,1980 #7f100016 app:id/cell_layout}
+                            com.miui.home.launcher.ShortcutIcon{3d513bc VFE...CL. .......D 45,44-271,288}(日历)
+                              android.widget.FrameLayout{d24df45 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{918469a V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{9f52bcb I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{abdafa8 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{2392ac1 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{128b9a7 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{6ecb1fd V.E...... ........ 65,186-161,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{7b10ef2 V.ED..... ........ 0,0-96,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{a1d4943 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{6221cee VFE...CL. .......D 300,44-526,288}(文件管理)
+                              android.widget.FrameLayout{f6b058f V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{7dd201c V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{a976425 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{c9719fa V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{79c6bab I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{3ff1da1 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{1341787 V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{bc356b4 V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{9cef2dd I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{1c9c276 VFE...CL. .......D 555,44-781,288}(小米快传)
+                              android.widget.FrameLayout{96bf077 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{943d4e4 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{9174d4d I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{f079002 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{7a51d13 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{6187149 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{a3a776f V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{a22dc7c V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{3edd905 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{32323bd VFE...CL. .......D 810,44-1036,288}(垃圾清理)
+                              android.widget.FrameLayout{c07fdb2 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{85f7103 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{643880 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{6e33eb9 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{7f442fe I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{8145cac I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{cd910a V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{173fd7b V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{dc09798 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{d36c1b0 VFE...CL. .......D 45,320-271,564}(音乐)
+                              android.widget.FrameLayout{d744829 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{13567ae V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{7e8594f I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{b3e48dc V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{9e03de5 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{afb3b6b I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{65bd361 V.E...... ........ 65,186-161,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{d86be86 V.ED..... ........ 0,0-96,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{2102347 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{485d55b VFE...CL. .......D 300,320-526,564}(小米视频)
+                              android.widget.FrameLayout{35fc1f8 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{aaf56d1 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{fc1d536 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{2426c37 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{ccb05a4 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{e4e0ec2 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{184d810 V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{bc50f09 V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{772550e I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{4d0d127 VFE...CL. .......D 555,320-781,564}(便签)
+                              android.widget.FrameLayout{7cd1fd4 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{401557d V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{84bac72 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{8ef58c3 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{4c66540 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{4a41dbe I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{34c956c V.E...... ........ 65,186-161,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{aaab735 V.ED..... ........ 0,0-96,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{68057ca I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{5f1726e VFE...CL. .......D 810,320-1036,564}(安全中心)
+                              android.widget.FrameLayout{7bf6d0f V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{856319c V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{a78d7a5 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{5c6477a V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{18fcb2b I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{f444921 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{3bdef07 V.E...... ........ 31,186-195,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{d1d1834 V.ED..... ........ 0,0-164,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{efb565d I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{d07f415 VFE...CL. .......D 45,596-271,840}(STARZ)
+                              android.widget.FrameLayout{5ff832a V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{43dd51b V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{32426b8 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{480bc91 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{d6aa7f6 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{350f664 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{7914d82 V.E...... ........ 48,186-178,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{307cc93 V.ED..... ........ 0,0-130,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{75914d0 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{4aade8 VFE...CL. .......D 300,596-526,840}(FIFA Mobile)
+                              android.widget.FrameLayout{a38ec01 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{beafaa6 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{dcf7ce7 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{b10c094 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{747473d I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{f8d0083 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{fe61a39 V.E...... ........ 11,186-215,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{20cb87e V.ED..... ........ 0,0-204,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{f1521df I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{5db6dd7 VFE...CL. .......D 555,596-781,840}(Mobile Number Locator)
+                              android.widget.FrameLayout{52f76c4 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{afd79ad V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{1cdb4e2 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{a7f1073 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{b0f3b30 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{b163d2e I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{3e4da5c V.E...... ........ 0,186-226,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{2213165 V.ED..... ........ 0,0-226,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{e4cfe3a I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{4911a92 VFE...CL. .......D 810,596-1036,840}(影梭)
+                              android.widget.FrameLayout{6ccfc63 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{1bfd060 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{a692919 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{ba24dde V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{f88fbbf I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{75a3dd5 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{bdb94db V.E...... ........ 65,186-161,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{3b4b78 V.ED..... ........ 0,0-96,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{10de251 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{6f98a89 VFE...CL. .......D 45,872-271,1116}(Billiards City)
+                              android.widget.FrameLayout{f6bea8e V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{a3e52af V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{c14b6bc I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{5e74645 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{940219a I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{ad482a8 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{9eebd66 V.E...... ........ 6,186-220,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{b3fe8a7 V.ED..... ........ 0,0-214,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{b432154 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{c5146ec VFE...CL. .......D 300,872-526,1116}(Word Connect)
+                              android.widget.FrameLayout{8bf4ab5 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{f34254a V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{dcc9cbb I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{b81e5d8 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{766dd31 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{91e4997 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{91b1b6d V.E...... ........ 0,186-226,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{63413a2 V.ED..... ........ 0,0-226,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{373e833 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                            com.miui.home.launcher.ShortcutIcon{75a2aab VFE...CL. .......D 555,872-781,1116}(WordConnect)
+                              android.widget.FrameLayout{5a67508 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                                android.widget.FrameLayout{bb874a1 V.E...... .......D 0,0-190,184}
+                                  android.widget.ImageView{698e6c6 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                                  android.widget.ImageView{88ec687 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                                  android.widget.ImageView{8b1d9b4 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                                android.widget.TextView{daca952 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                              com.miui.home.launcher.ItemIconTitleContainer{76cdd20 V.E...... ........ 0,186-226,244 #7f100075 app:id/icon_title_container}
+                                android.widget.TextView{b7a16d9 V.ED..... ........ 0,0-226,46 #7f10004b app:id/icon_title}
+                              android.widget.CheckBox{ac8089e I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                        com.miui.home.launcher.ScreenView$SeekBarIndicator{544ef9d V.E...... .......D 0,1751-1080,1806}
+                          android.widget.ImageView{fce27e VFED..C.. ..S...ID 503,9-540,46}
+                          android.widget.ImageView{c10ba94 VFED..C.. ......ID 540,9-577,46}
+                      com.miui.home.launcher.WorkspaceThumbnailView{685e899 I.E...... ......I. 0,1699-1080,2030 #7f10002a app:id/workspace_preview}
+                      com.miui.home.launcher.EditingEntryThumbnailView{338d75e I.E...... ......I. 56,1650-1024,2024 #7f10002b app:id/editing_entry_view}
+                      com.miui.home.launcher.TransitionEffectThumbnailView{d36f80c I.E...... ......I. 24,1696-1056,2006 #7f10002c app:id/transition_thumbnail_view}
+                        com.miui.home.launcher.ScreenView$SlideBar{5437555 I.E...... ......I. 0,255-1032,310}
+                          android.widget.FrameLayout{ae6585b V.E...... ......ID 0,55-1032,55}
+                        com.miui.home.launcher.ScreenView$SeekBarIndicator{46188f8 V.E...... ......ID 516,255-516,310}
+                      android.widget.LinearLayout{9327436 GFE...C.. ......I. 0,0-0,0 #7f10002d app:id/launcher_menu_container}
+                        com.miui.home.launcher.LauncherMenu{7a99dc2 V.ED..... ......I. 0,0-0,0 #7f10007b app:id/menu}
+                          android.widget.LinearLayout{c77d40e VFE...C.. ......I. 0,0-0,0 #7f10007c app:id/menu_trans_effect}
+                            android.widget.TextView{275be2f V.ED..... ......ID 0,0-0,0}
+                          android.widget.LinearLayout{24d5dc5 VFE...C.. ......I. 0,0-0,0 #7f10007d app:id/menu_default_screen_preview}
+                            android.widget.TextView{8e1231a V.ED..... ......ID 0,0-0,0}
+                          android.widget.LinearLayout{aa0e4b G.E...... ......I. 0,0-0,0 #7f10007e app:id/menu_cells_setting}
+                            android.widget.TextView{1c52028 V.ED..... ......ID 0,0-0,0}
+                            android.widget.Button{bd6807d VFED..C.. ......I. 0,0-0,0 #7f10007f app:id/cell_type_1}
+                            android.widget.Button{24fa779 VFED..C.. ......I. 0,0-0,0 #7f100080 app:id/cell_type_2}
+                          android.widget.LinearLayout{1875cbe VFE...C.. ......I. 0,0-0,0 #7f100081 app:id/menu_auto_fill}
+                            android.widget.TextView{dd8911f V.ED..... ......ID 0,0-0,0}
+                            miui.widget.SlidingButton{e676c6c V.ED..... ......ID 0,0-0,0 #7f100082 app:id/auto_fill_sliding_button}
+                          android.widget.LinearLayout{d20dd04 VFE...C.. ......I. 0,0-0,0 #7f100083 app:id/menu_lock}
+                            android.widget.TextView{f6d82ed V.ED..... ......ID 0,0-0,0}
+                            miui.widget.SlidingButton{fd32522 V.ED..... ......ID 0,0-0,0 #7f100084 app:id/lock_sliding_button}
+                          android.widget.LinearLayout{5ce000f VFE...C.. ......I. 0,0-0,0 #7f100085 app:id/menu_more}
+                            android.widget.TextView{754c89c V.ED..... ......ID 0,0-0,0}
+                      com.miui.home.launcher.HotSeats{8e122a5 V.E...... .......D 0,1842-1080,2030 #7f10002e app:id/hot_seats}
+                        com.miui.home.launcher.ShortcutIcon{c5917e4 VFE...CL. .......D 45,0-271,188}(电话)
+                          android.widget.FrameLayout{58ed44d V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                            android.widget.FrameLayout{30e0b02 V.E...... .......D 0,0-190,184}
+                              android.widget.ImageView{9e17c13 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                              android.widget.ImageView{281ce50 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                              android.widget.ImageView{16849 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                            android.widget.TextView{d5dc66f I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                          com.miui.home.launcher.ItemIconTitleContainer{8ef4005 V.E...... ......ID 65,130-161,188 #7f100075 app:id/icon_title_container}
+                            android.widget.TextView{c3df85a V.ED..... ......ID 0,0-96,46 #7f10004b app:id/icon_title}
+                          android.widget.CheckBox{7aa5a8b I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                        com.miui.home.launcher.ShortcutIcon{a082dfe VFE...CL. .......D 300,0-526,188}(短信)
+                          android.widget.FrameLayout{3f3295f V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                            android.widget.FrameLayout{39dbfac V.E...... .......D 0,0-190,184}
+                              android.widget.ImageView{5993475 I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                              android.widget.ImageView{7b52c0a V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                              android.widget.ImageView{54afc7b I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                            android.widget.TextView{755a2f1 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                          com.miui.home.launcher.ItemIconTitleContainer{882e557 V.E...... ......ID 65,130-161,188 #7f100075 app:id/icon_title_container}
+                            android.widget.TextView{9e65844 V.ED..... ......ID 0,0-96,46 #7f10004b app:id/icon_title}
+                          android.widget.CheckBox{e907d2d I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                        com.miui.home.launcher.ShortcutIcon{a75c986 VFE...CL. .......D 555,0-781,188}(浏览器)
+                          android.widget.FrameLayout{b31d247 V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                            android.widget.FrameLayout{c325a74 V.E...... .......D 0,0-190,184}
+                              android.widget.ImageView{2b80b9d I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                              android.widget.ImageView{454f812 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                              android.widget.ImageView{baf4be3 I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                            android.widget.TextView{e0ec499 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                          com.miui.home.launcher.ItemIconTitleContainer{500c33f V.E...... ......ID 48,130-178,188 #7f100075 app:id/icon_title_container}
+                            android.widget.TextView{e8a840c V.ED..... ......ID 0,0-130,46 #7f10004b app:id/icon_title}
+                          android.widget.CheckBox{27e1155 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                        com.miui.home.launcher.ShortcutIcon{2fd0609 VFE...CL. .......D 810,0-1036,188}(相机)
+                          android.widget.FrameLayout{188800e V.E...... .......D 18,0-208,184 #7f100010 app:id/icon_container}
+                            android.widget.FrameLayout{6f6fa2f V.E...... .......D 0,0-190,184}
+                              android.widget.ImageView{6bd083c I.ED..... ......I. 11,16-179,184 #7f100011 app:id/icon_folder_creation_bg}
+                              android.widget.ImageView{166f9c5 V.ED..... ......ID 11,16-179,184 #7f100012 app:id/icon_icon}
+                              android.widget.ImageView{c508f1a I.ED..... ......I. 11,16-11,16 #7f100013 app:id/icon_tile}
+                            android.widget.TextView{9706c28 I.ED..... ......I. 190,0-190,38 #7f100074 app:id/icon_msg}
+                          com.miui.home.launcher.ItemIconTitleContainer{55882e6 V.E...... ......ID 65,130-161,188 #7f100075 app:id/icon_title_container}
+                            android.widget.TextView{2760027 V.ED..... ......ID 0,0-96,46 #7f10004b app:id/icon_title}
+                          android.widget.CheckBox{57422d4 I.ED..C.. ......I. 137,0-220,83 #7f100014 app:id/edit_mode_checkbox}
+                      com.miui.home.launcher.DefaultScreenPreviewView{3664421 GFED..... ......I. 0,0-0,0 #7f10002f app:id/default_screen_preview}
+                        android.widget.LinearLayout{dd34046 V.E...... ......I. 0,0-0,0}
+                          android.widget.TextView{cabe207 V.ED..... ......ID 0,0-0,0 #7f10001a app:id/default_screen_preview_title}
+                          com.miui.home.launcher.view.FixedChildSizeGridView{c778f34 V.E...... ......I. 0,0-0,0 #7f10001b app:id/preview_container}
+                    com.miui.home.launcher.FolderCling{3f31ad2 IFE...C.. ......ID 0,0-1080,2160 #7f10003a app:id/folder_cling}
+                      com.miui.home.launcher.FitSystemWindowView{11a97a3 V.E...... ......ID 0,0-1080,2160}
+                        com.miui.home.launcher.Folder{2225659 VFE...C.. ......ID 66,959-1013,1201 #7f100039 app:id/folder}
+                          android.widget.FrameLayout{2350aff V.E...... ......ID 0,0-947,117 #7f10003e app:id/folder_header}
+                            android.widget.TextView{a2990cc VFED..C.. ......ID 404,0-542,95 #7f100008 app:id/title}
+                            android.widget.LinearLayout{798ff15 V.E...... ......ID 0,0-947,95}
+                              miui.widget.ClearableEditText{59581b IFED..CL. ......I. 0,0-947,95 #7f10003f app:id/rename_edit}
+                          com.miui.home.launcher.FolderContainer{57c79da V.E...... ......ID 0,117-947,242}
+                            android.widget.FrameLayout{f46701 V.E...... ......ID 0,0-947,125 #7f10003b app:id/background}
+                              com.miui.home.launcher.FolderGridView{b3859a6 V.ED.VCL. ......ID 72,48-875,76 #7f10003c app:id/folder_content}
+                              com.miui.home.launcher.view.BottomClippedImageView{6b4a383 I.ED..... ......I. 72,48-875,76 #7f10003d app:id/folder_animation_fake_icon}
+                            com.miui.home.launcher.NonOverlapLinearLayout{3c6f77e G.E...... ......I. 0,0-0,0 #7f1000a1 app:id/recommend_apps_switch}
+                              android.widget.TextView{493f4df V.ED..... ......I. 0,0-0,0 #7f1000a2 app:id/switch_title}
+                              miui.widget.SlidingButton{8f7abf5 V.ED..... ......I. 0,0-0,0 #7f1000a3 app:id/switch_button}
+                        com.miui.home.launcher.recommend.smallIcons.view.SmallIconsRecommendScreen{709d3cf IFE...C.. ......ID 0,1779-1080,2160 #7f1000a4 app:id/recommend_screen}
+                          android.widget.FrameLayout{2835295 V.E...... ......ID 0,0-1080,78 #7f10009d app:id/folder_recommend_header}
+                            android.widget.TextView{951bfaa V.ED..... ......ID 185,9-927,62 #7f10009e app:id/recommend_title}
+                            android.widget.ImageView{7b0979b VFED..C.. ......ID 855,0-927,72 #7f10009f app:id/refresh}
+                          com.miui.home.launcher.recommend.smallIcons.view.RecommendAppsThumbnailView{c938311 V.E...... ......ID 138,78-941,353 #7f1000a5 app:id/recommend_apps}
+                        com.miui.home.launcher.recommend.wideBoard.view.WideBoardRecommendScreen{bf71277 IFED..... ......I. 0,1934-1080,2160 #7f1000b6 app:id/wide_board_recommend_screen_item}
+                    com.miui.home.launcher.EditModeTopMenu{a9c3f4d G.E...... ......I. 0,0-0,0 #7f100032 app:id/edit_mode_top_menu}
+                      android.widget.LinearLayout{25e9a02 GFE...C.. ......I. 0,0-0,0 #7f100033 app:id/edit_mode_uninstall}
+                        android.widget.ImageView{4c05f13 V.ED..... ......ID 0,0-0,0 #7f100034 app:id/edit_mode_uninstall_icon}
+                        android.widget.TextView{edf0b05 V.ED..... ......ID 0,0-0,0 #7f100035 app:id/edit_mode_uninstall_text}
+                      android.widget.Space{d229d8b I.ED..... ......I. 0,0-0,0}
+                      android.widget.LinearLayout{83f9e68 VFE...C.. ......I. 0,0-0,0 #7f100036 app:id/edit_mode_group}
+                        android.widget.ImageView{1ca5281 V.ED..... ......ID 0,0-0,0 #7f100037 app:id/edit_mode_group_icon}
+                        android.widget.TextView{d1b8767 V.ED..... ......ID 0,0-0,0 #7f100038 app:id/edit_mode_group_text}
+                  com.miui.home.launcher.DeleteZone{e6dd0b9 V.E...... ........ 0,0-1080,627 #7f10001c app:id/delete_zone}
+                    com.miui.home.launcher.UninstallDialog{587fc5f V.E...... ......ID 0,0-1080,0 #7f10001d app:id/uninstall_dialog}
+                      android.widget.LinearLayout{a4596ac V.E...... ......ID 0,41-1080,572}
+                        android.widget.LinearLayout{891bf75 V.E...... ......ID 0,0-1080,365}
+                          com.miui.home.launcher.UninstallDialog$DeleteIconContainer{7e25b0a V.E...... ......ID 402,28-677,254 #7f10001e app:id/delete_icon_container}
+                          android.widget.LinearLayout{6d9ff7b V.E...... ......ID 0,254-1080,365 #7f10001f app:id/messages}
+                            android.widget.TextView{acb7198 V.ED..... ......ID 540,0-540,53 #7f100008 app:id/title}
+                            android.widget.TextView{8cbddf1 V.ED..... ......ID 284,53-795,111 #7f100020 app:id/description_text}
+                        android.widget.LinearLayout{5d31dd6 V.E...... ......ID 265,448-815,531 #7f100021 app:id/buttons}
+                          android.widget.Button{6f2e2f3 VFED..C.. ......ID 0,0-275,83 #7f100022 app:id/btnCancel}
+                          android.widget.Button{13202dc VFED..C.. ......ID 275,0-550,83 #7f100023 app:id/btnOk}
+                    android.widget.FrameLayout{1526fe5 V.E...... ........ 356,0-723,180}
+                      android.widget.ImageView{ee5bd6b I.ED..... ......I. 0,0-367,180 #7f100024 app:id/trash}
+                      android.widget.TextView{7bf2561 I.ED..... ......I. 183,0-183,82 #7f100025 app:id/editing_tips}
+                  com.miui.home.launcher.ErrorBar{3cca886 I.ED..... ......I. 0,0-1080,74 #7f100015 app:id/error}
+                  android.widget.FrameLayout{31a6ee3 V.E...... ........ 0,0-1,2160}
+                    android.widget.FrameLayout{69c90e0 VFE...... .F...... 0,50-1,2160 #7f100030 app:id/default_position}
+                  com.miui.home.launcher.widget.WidgetThumbnailView{6fa425e G.ED..CL. ......I. 0,0-0,0 #7f100031 app:id/widgets_view}
+              com.miui.home.launcher.ForceTouchPressureCircle{7e9db0c GFED..C.. ......I. 0,0-0,0 #7f10004c app:id/force_touch_pressure_circle}
+              android.widget.ImageView{6981c55 G.ED..... ......I. 0,0-0,0 #7f10004d app:id/force_touch_icon}
+              android.widget.LinearLayout{624266a G.ED..... ......I. 0,0-0,0 #7f10004e app:id/force_touch_menu}
+                android.widget.LinearLayout{c8b28d1 V.E...... ......I. 0,0-0,0}
+                  android.widget.ImageView{563f36 V.ED..... ......I. 0,0-0,0 #7f10004f app:id/force_touch_item_icon}
+                  android.widget.LinearLayout{5bf8e37 V.E...... ......I. 0,0-0,0}
+                    android.widget.TextView{56e7fa4 V.ED..... ......ID 0,0-0,0 #7f100050 app:id/force_touch_item_title}
+                    android.widget.TextView{7c8810d V.ED..... ......ID 0,0-0,0 #7f100051 app:id/force_touch_item_desc}
+                android.widget.LinearLayout{4bf18c2 V.E...... ......I. 0,0-0,0}
+                  android.widget.ImageView{6f4d6d3 V.ED..... ......I. 0,0-0,0 #7f10004f app:id/force_touch_item_icon}
+                  android.widget.LinearLayout{9e5f210 V.E...... ......I. 0,0-0,0}
+                    android.widget.TextView{f092109 V.ED..... ......ID 0,0-0,0 #7f100050 app:id/force_touch_item_title}
+                    android.widget.TextView{4e9ff0e V.ED..... ......ID 0,0-0,0 #7f100051 app:id/force_touch_item_desc}
+                android.widget.LinearLayout{62c0d2f V.E...... ......I. 0,0-0,0}
+                  android.widget.ImageView{e201f3c V.ED..... ......I. 0,0-0,0 #7f10004f app:id/force_touch_item_icon}
+                  android.widget.LinearLayout{199c4c5 V.E...... ......I. 0,0-0,0}
+                    android.widget.TextView{dcafe1a V.ED..... ......ID 0,0-0,0 #7f100050 app:id/force_touch_item_title}
+                    android.widget.TextView{af64d4b V.ED..... ......ID 0,0-0,0 #7f100051 app:id/force_touch_item_desc}
+                android.widget.LinearLayout{96df328 V.E...... ......I. 0,0-0,0}
+                  android.widget.ImageView{cd6e841 V.ED..... ......I. 0,0-0,0 #7f10004f app:id/force_touch_item_icon}
+                  android.widget.LinearLayout{58ae1e6 V.E...... ......I. 0,0-0,0}
+                    android.widget.TextView{ada7327 V.ED..... ......ID 0,0-0,0 #7f100050 app:id/force_touch_item_title}
+                    android.widget.TextView{54319d4 V.ED..... ......ID 0,0-0,0 #7f100051 app:id/force_touch_item_desc}
+          com.miui.internal.widget.ActionBarContainer{45af37c V.ED..... ........ 0,0-0,0 #100b004f miui:id/action_bar_container}
+            com.miui.internal.widget.ActionBarView{c21cb68 V.E...... ......ID 0,66-0,66 #100b0050 miui:id/action_bar}
+              android.widget.LinearLayout{9e51426 GFE...C.. ......I. 0,0-0,0}
+                android.widget.ImageView{e115867 V.ED..... ......I. 0,0-0,0 #100b0024 miui:id/up}
+                android.widget.LinearLayout{7e4cb2 V.E...... ......I. 0,0-0,0}
+                  android.widget.TextView{4d11403 V.ED..... ......ID 0,0-0,0 #100b0028 miui:id/action_bar_title}
+                  android.widget.TextView{38d19b9 G.ED..... ......I. 0,0-0,0 #100b0029 miui:id/action_bar_subtitle}
+            com.miui.internal.widget.ActionBarContextView{346ed5f G.E...... ......ID 0,0-0,0 #100b0051 miui:id/action_context_bar}
+          com.miui.internal.widget.ActionBarContainer{adc9875 G.ED..... ......I. 0,0-0,0 #100b0052 miui:id/split_action_bar}
+          android.view.View{17007b GFED..C.. ......I. 0,0-0,0 #100b0053 miui:id/content_mask}
+    Looper (main, tid 2) {61dc488}
+      (Total messages: 0, polling=false, quitting=false)
+    AutofillManager:
+      sessionId: -2147483648
+      state: STATE_UNKNOWN
+      enabled: true
+      hasService: true
+      hasCallback: false
+      last autofilled data: null
+      tracked views: null
+      fillable ids: null
+
+TASK com.android.systemui id=164 userId=0
+  ACTIVITY com.android.systemui/.recents.RecentsActivity 459bd7d pid=2314
+    Local Activity d16ecce State:
+      mResumed=false mStopped=true mFinished=false
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw392dp w392dp h714dp 440dpi nrml long port finger -keyb/v/h -nav/h appBounds=Rect(0, 0 - 1080, 2030) s.8 themeChanged=0 themeChangedFlags=0}
+      mLoadersStarted=true
+      FragmentManager misc state:
+        mHost=android.app.Activity$HostCallbacks@dee8300
+        mContainer=android.app.Activity$HostCallbacks@dee8300
+        mCurState=3 mStateSaved=true mDestroyed=false
+    ViewRoot:
+      mAdded=true mRemoved=false
+      mConsumeBatchedInputScheduled=false
+      mConsumeBatchedInputImmediatelyScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false      mIsAmbientMode=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=49530356 (14866 ms ago)
+    View Hierarchy:
+      DecorView@31322fc[RecentsActivity]
+        android.widget.LinearLayout{2ed72e8 V.E...... .......D 0,0-1080,1098}
+          android.view.ViewStub{de9a942 G.E...... ......I. 0,0-0,0 #102018b android:id/action_mode_bar_stub}
+          android.widget.FrameLayout{f8ccd01 V.E...... .......D 0,0-1080,1098 #1020002 android:id/content}
+            android.widget.FrameLayout{478383d V.E...... .......D 0,0-1080,1098}
+              com.android.systemui.statusbar.AlphaOptimizedView{480b832 V.ED..... ......ID 0,0-1080,1098 #7f0f004f app:id/background}
+              com.android.systemui.recents.views.RecentsView{b99d983 V.ED..... .......D 0,0-1080,1098 #7f0f00fa app:id/recents_view}
+                android.widget.TextView{db51b39 IFED..C.. ......I. 0,0-1080,1098}
+                com.android.systemui.recents.views.TaskStackView{d1743c7 V.E...... ......ID 0,0-1080,1098}
+                  com.android.systemui.recents.views.TaskView{ab6b538 VFE...CL. ......ID -270,258-259,842}
+                    com.android.systemui.recents.views.TaskViewHeader{f401a76 V.ED..... ......ID 0,0-529,110 #7f0f010b app:id/task_view_bar}
+                      com.android.systemui.recents.views.FixedSizeImageView{39f6877 V.ED...L. ......ID 0,0-110,110 #7f0f002e app:id/icon}
+                      com.android.systemui.statusbar.AlphaOptimizedTextView{fbdece4 V.ED..... ......ID 110,30-330,79 #7f0f003b app:id/title}
+                      com.android.systemui.recents.views.FixedSizeImageView{e63854d I.ED..... ......ID 412,0-529,110 #7f0f010c app:id/locked_flag}
+                      com.android.systemui.recents.views.FixedSizeImageView{fdef350 G.ED..... ......ID 0,0-0,0 #7f0f010d app:id/dismiss_task}
+                      android.view.ViewStub{f891105 G.E...... ......I. 0,0-0,0 #7f0f010e app:id/focus_timer_indicator_stub}
+                      android.view.ViewStub{f69f55a G.E...... ......I. 0,0-0,0 #7f0f0110 app:id/app_overlay_stub}
+                    com.android.systemui.recents.views.TaskViewThumbnail{ff02949 V.ED..... ......ID 0,0-529,584 #7f0f0107 app:id/task_view_thumbnail}
+                    com.android.systemui.statusbar.AlphaOptimizedFrameLayout{864ef6f GFE...C.. ......ID 0,0-0,0 #7f0f0108 app:id/lock_to_app_fab}
+                      android.widget.ImageView{2c7f47c V.ED..... ......ID 0,0-0,0}
+                    android.view.ViewStub{67b138b G.E...... ......I. 0,0-0,0 #7f0f0109 app:id/incompatible_app_toast_stub}
+                  com.android.systemui.recents.views.TaskView{97dfe31 VFE...CL. ......ID 270,258-799,842}
+                    com.android.systemui.recents.views.TaskViewHeader{74d297 V.ED..... ......ID 0,0-529,110 #7f0f010b app:id/task_view_bar}
+                      com.android.systemui.recents.views.FixedSizeImageView{e16381c V.ED...L. ......ID 0,0-110,110 #7f0f002e app:id/icon}
+                      com.android.systemui.statusbar.AlphaOptimizedTextView{6369c25 V.ED..... ........ 110,30-419,79 #7f0f003b app:id/title}
+                      com.android.systemui.recents.views.FixedSizeImageView{39a63ab I.ED..... ......ID 412,0-529,110 #7f0f010c app:id/locked_flag}
+                      com.android.systemui.recents.views.FixedSizeImageView{d076eb4 G.ED..... ......ID 0,0-0,0 #7f0f010d app:id/dismiss_task}
+                      android.view.ViewStub{1e5e04c G.E...... ......I. 0,0-0,0 #7f0f010e app:id/focus_timer_indicator_stub}
+                      android.view.ViewStub{fffd895 G.E...... ......I. 0,0-0,0 #7f0f0110 app:id/app_overlay_stub}
+                    com.android.systemui.recents.views.TaskViewThumbnail{31d2add V.ED..... ......ID 0,0-529,584 #7f0f0107 app:id/task_view_thumbnail}
+                    com.android.systemui.statusbar.AlphaOptimizedFrameLayout{406c220 GFE...C.. ......ID 0,0-0,0 #7f0f0108 app:id/lock_to_app_fab}
+                      android.widget.ImageView{ac697d9 V.ED..... ......ID 0,0-0,0}
+                    android.view.ViewStub{c2acdaa G.E...... ......I. 0,0-0,0 #7f0f0109 app:id/incompatible_app_toast_stub}
+                  com.android.systemui.recents.views.FixedSizeImageView{31a991d G.ED..... ......I. 0,0-0,0 #7f0f00f9 app:id/lock_view_swipe}
+                  com.android.systemui.recents.views.TaskView{1c38d7d VFE...CL. ......I. 810,258-1339,842}
+                    com.android.systemui.recents.views.TaskViewHeader{10d8472 V.ED..... ......ID 0,0-529,110 #7f0f010b app:id/task_view_bar}
+                      com.android.systemui.recents.views.FixedSizeImageView{34850c3 V.ED...L. ......ID 0,0-110,110 #7f0f002e app:id/icon}
+                      com.android.systemui.statusbar.AlphaOptimizedTextView{837fd40 V.ED..... ........ 110,30-339,79 #7f0f003b app:id/title}
+                      com.android.systemui.recents.views.FixedSizeImageView{e808479 I.ED..... ......ID 412,0-529,110 #7f0f010c app:id/locked_flag}
+                      com.android.systemui.recents.views.FixedSizeImageView{83fad6c G.ED..... ......ID 0,0-0,0 #7f0f010d app:id/dismiss_task}
+                      android.view.ViewStub{28949b1 G.E...... ......I. 0,0-0,0 #7f0f010e app:id/focus_timer_indicator_stub}
+                      android.view.ViewStub{8ce7e96 G.E...... ......I. 0,0-0,0 #7f0f0110 app:id/app_overlay_stub}
+                    com.android.systemui.recents.views.TaskViewThumbnail{77bef35 V.ED..... ......ID 0,0-529,584 #7f0f0107 app:id/task_view_thumbnail}
+                    com.android.systemui.statusbar.AlphaOptimizedFrameLayout{d21153b GFE...C.. ......ID 0,0-0,0 #7f0f0108 app:id/lock_to_app_fab}
+                      android.widget.ImageView{2303458 V.ED..... ......ID 0,0-0,0}
+                    android.widget.LinearLayout{6be1749 I.E...... ........ 29,132-499,333 #7f0f010a app:id/incompatible_app_toast}
+                      android.widget.TextView{57e584e V.ED..... ........ 103,78-367,123 #102000b android:id/message}
+              com.android.systemui.statusbar.AlphaOptimizedFrameLayout{bf0d894 V.ED..... ......ID 0,0-1080,352 #7f0f00fc app:id/incompatible_app_overlay}
+                android.widget.TextView{e017f3d V.ED..... ........ 384,105-696,246}
+              com.android.systemui.statusbar.AlphaOptimizedImageView{382f5fb G.ED..... ......I. 0,0-0,0 #7f0f00fd app:id/nav_bar_scrim}
+              android.widget.LinearLayout{acf6656 V.E...... ........ 0,766-1080,968 #7f0f0100 app:id/memoryAndClearContainer}
+                com.android.systemui.taskmanager.CircleAndTickAnimView{800f6d7 VFED..CL. ........ 483,0-597,114 #7f0f0101 app:id/clearAnimView}
+                android.widget.LinearLayout{588e030 I.E...... ......ID 442,128-637,169 #7f0f0102 app:id/txtMemoryContainer}
+                  android.widget.TextView{4b644a9 VFED..C.. ......ID 0,0-143,41 #7f0f0103 app:id/txtMemoryInfo1}
+                  android.view.View{e3cea2e VFED..C.. ......ID 143,5-144,35 #7f0f0104 app:id/separatorForMemoryInfo}
+                  android.widget.TextView{cdde9cf VFED..C.. ......ID 144,0-195,41 #7f0f0105 app:id/txtMemoryInfo2}
+              android.widget.TextView{cd3cf5c VFED..C.. .......D 0,0-342,170 #7f0f00fe app:id/btnDock}
+              android.widget.TextView{b50dfe1 I.ED..... ........ 441,55-639,99 #7f0f00ff app:id/tip}
+    Looper (main, tid 2) {c77f739}
+      (Total messages: 0, polling=false, quitting=false)
+    AutofillManager:
+      sessionId: -2147483648
+      state: STATE_UNKNOWN
+      enabled: false
+      hasService: true
+      hasCallback: false
+      last autofilled data: null
+      tracked views: null
+      fillable ids: null
+    Registered class types:
+      DividerView
+      ForcedResizableInfoActivityController
+      NavStubView
+      PipManager
+      PipMenuActivityController
+      Recents
+      RecentsActivity
+      RecentsImpl
+      RecentsTaskLoader
+      RecentsView
+      RecentsViewTouchHandler
+      SystemServicesProxy
+      TaskStackView
+      TaskView
+    Event map:
+      ActivitySetDummyTranslucentEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      AllTaskViewsDismissedEvent -> 
+        RecentsView [0xb99d983, #3]
+        RecentsActivity [0xd16ecce, #2]
+      AnimFirstTaskViewAlphaEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      AppTransitionFinishedEvent -> 
+        ForcedResizableInfoActivityController [0x1b6542c, #1]
+      CancelEnterRecentsWindowAnimationEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      ChangeTaskLockStateEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      CleanInRecentsEvents -> 
+        RecentsActivity [0xd16ecce, #2]
+      ClickTaskViewToLaunchTaskEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      ConfigurationChangedEvent -> 
+        RecentsViewTouchHandler [0xb3fa401, #4]
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+        Recents [0xd30bac6, #1]
+      DebugFlagsChangedEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      DeleteTaskDataEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      DismissAllTaskViewsEndEvent -> 
+        RecentsImpl [0x21f148a, #1]
+      DismissAllTaskViewsEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+        RecentsImpl [0x21f148a, #1]
+      DismissFocusedTaskViewEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      DismissRecentsToHomeAnimationStarted -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+        RecentsActivity [0xd16ecce, #2]
+      DismissTaskViewEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      DockedFirstAnimationFrameEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      DockedTopTaskEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+        DividerView [0x54ddfdc, #1]
+        Recents [0xd30bac6, #1]
+      DragDropTargetChangedEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+      DragEndCancelledEvent -> 
+        TaskView [0x1c38d7d, #3]
+        TaskView [0xadddc68, #3]
+        TaskView [0xab6b538, #3]
+        TaskView [0x97dfe31, #3]
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+      DragEndEvent -> 
+        RecentsViewTouchHandler [0xb3fa401, #4]
+        TaskView [0x1c38d7d, #3]
+        TaskView [0xadddc68, #3]
+        TaskView [0xab6b538, #3]
+        TaskView [0x97dfe31, #3]
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+      DragStartEvent -> 
+        RecentsViewTouchHandler [0xb3fa401, #4]
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+      DragStartInitializeDropTargetsEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      DraggingInRecentsEndedEvent -> 
+        RecentsView [0xb99d983, #3]
+      DraggingInRecentsEvent -> 
+        RecentsView [0xb99d983, #3]
+      EnterRecentsWindowAnimationCompletedEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+        RecentsActivity [0xd16ecce, #2]
+      EnterRecentsWindowLastAnimationFrameEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      ExitMultiModeEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      ExitRecentsWindowFirstAnimationFrameEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      ExpandPipEvent -> 
+        PipManager [0xb7dd17e, #1]
+      FocusNextTaskViewEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      FocusPreviousTaskViewEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      FsGestureEnterRecentsCompleteEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      FsGestureEnterRecentsEvent -> 
+        RecentsImpl [0x21f148a, #1]
+      FsGestureLaunchTargetTaskViewRectEvent -> 
+        NavStubView [0xe8771cf, #1]
+      FsGestureRecentsViewWrapperEvent -> 
+        NavStubView [0xe8771cf, #1]
+      FsGestureShowStateEvent -> 
+        RecentsImpl [0x21f148a, #1]
+      FsGestureSlideInEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      FsGestureSlideOutEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      HideIncompatibleAppOverlayEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      HideNavStubForBackWindow -> 
+        RecentsImpl [0x21f148a, #1]
+      HidePipMenuEvent -> 
+        PipMenuActivityController [0xfdac6df, #1]
+      HideRecentsEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      HideStackActionButtonEvent -> 
+        RecentsView [0xb99d983, #3]
+      IterateRecentsEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsActivity [0xd16ecce, #2]
+      LaunchNextTaskRequestEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      LaunchTaskEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+      LaunchTaskFailedEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      LaunchTaskStartedEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      LaunchTaskSucceededEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      MemoryCheckServiceBoundEvent -> 
+        TaskView [0x1c38d7d, #3]
+        TaskView [0xadddc68, #3]
+        TaskView [0xab6b538, #3]
+        TaskView [0x97dfe31, #3]
+      MultiWindowStateChangedEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsView [0xb99d983, #3]
+        DividerView [0x54ddfdc, #1]
+        NavStubView [0xe8771cf, #1]
+      PackagesChangedEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsTaskLoader [0x838cf2c, #1]
+      RecentsActivityStartingEvent -> 
+        DividerView [0x54ddfdc, #1]
+        Recents [0xd30bac6, #1]
+      RecentsDrawnEvent -> 
+        DividerView [0x54ddfdc, #1]
+        Recents [0xd30bac6, #1]
+      RecentsGrowingEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      RecentsVisibilityChangedEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        NavStubView [0xe8771cf, #1]
+        Recents [0xd30bac6, #1]
+      ScreenPinningRequestEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+        Recents [0xd30bac6, #1]
+      ShowApplicationInfoEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      ShowIncompatibleAppOverlayEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      ShowNavStubForBackWindow -> 
+        RecentsImpl [0x21f148a, #1]
+      ShowStackActionButtonEvent -> 
+        RecentsView [0xb99d983, #3]
+      StackViewScrolledEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      StartedDragingEvent -> 
+        ForcedResizableInfoActivityController [0x1b6542c, #1]
+      StoppedDragingEvent -> 
+        ForcedResizableInfoActivityController [0x1b6542c, #1]
+      TaskViewDismissedEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      ToggleRecentsEvent -> 
+        RecentsActivity [0xd16ecce, #2]
+      UndockingTaskEvent -> 
+        DividerView [0x54ddfdc, #1]
+      UpdateFreeformTaskViewVisibilityEvent -> 
+        TaskStackView [0xd1743c7, #3]
+      UserInteractionEvent -> 
+        TaskStackView [0xd1743c7, #3]
+        RecentsActivity [0xd16ecce, #2]
+
+    RecentsTaskLoader
+    Icon Cache
+      TaskKeyLruCache numEntries=10
+        id=118 stackId=-1 user=0 lastActiveTime=1516590161333
+        id=119 stackId=-1 user=0 lastActiveTime=1516590243288
+        id=138 stackId=-1 user=0 lastActiveTime=1516709032884
+        id=152 stackId=-1 user=0 lastActiveTime=1516762274903
+        id=157 stackId=-1 user=0 lastActiveTime=1516766260303
+        id=158 stackId=-1 user=0 lastActiveTime=1516787482024
+        id=160 stackId=-1 user=0 lastActiveTime=1516795678306
+        id=163 stackId=1 user=0 lastActiveTime=1516845896567
+        id=166 stackId=-1 user=0 lastActiveTime=1516845891449
+        id=167 stackId=1 user=0 lastActiveTime=1516845937613
+    Thumbnail Cache
+      TaskKeyLruCache numEntries=5
+        id=118 stackId=-1 user=0 lastActiveTime=1516590161333
+        id=119 stackId=-1 user=0 lastActiveTime=1516590243288
+        id=158 stackId=-1 user=0 lastActiveTime=1516787482024
+        id=160 stackId=-1 user=0 lastActiveTime=1516795678306
+        id=166 stackId=-1 user=0 lastActiveTime=1516845891449
+    RecentsActivity visible=N [0xd16ecce]
+    RecentsView awaitingFirstLayout=N insets=0,0-0,130 [0xb99d983]
+      TaskStack numStackTasks=15
+        id=169 stackId=1 user=0 lastActiveTime=1516845968523 WordConnect
+        id=167 stackId=1 user=0 lastActiveTime=1516845937613 Word Connect - Word Puzzle Games
+        id=163 stackId=1 user=0 lastActiveTime=1516845896567 dockable=N Word Connect
+        id=166 stackId=-1 user=0 lastActiveTime=1516845891449 应用信息
+        id=160 stackId=-1 user=0 lastActiveTime=1516795678306 设置
+        id=158 stackId=-1 user=0 lastActiveTime=1516787482024 照片
+        id=157 stackId=-1 user=0 lastActiveTime=1516766260303 相册
+        id=152 stackId=-1 user=0 lastActiveTime=1516762274903 Billiards City
+        id=138 stackId=-1 user=0 lastActiveTime=1516709032884 影梭
+        id=128 stackId=-1 user=0 lastActiveTime=1516708970912 dockable=N 小米快传
+        id=127 stackId=-1 user=0 lastActiveTime=1516592228045 Google
+        id=134 stackId=-1 user=0 lastActiveTime=1516592765388 Mobile Number Locator
+        id=129 stackId=-1 user=0 lastActiveTime=1516592515254 dockable=N FIFA Mobile
+        id=119 stackId=-1 user=0 lastActiveTime=1516590243288 dockable=N 个性主题
+        id=118 stackId=-1 user=0 lastActiveTime=1516590161333 浏览器
+      TaskStackView hasDefRelayout=N clipDirty=Y awaitingFirstLayout=N initialState=0 inMeasureLayout=N enterAnimCompleted=Y touchExplorationOn=N screenPinningOn=N numIgnoreTasks=0 numViewPool=1 stableStackBounds=0,0-1080,1098 stackBounds=0,0-1080,1098 stableWindow=0,0-1080,1098 window=0,0-1080,1098 display=0,0-1080,2160 orientation=1 [0xd1743c7]
+        Focused task: id=119 stackId=-1 user=0 lastActiveTime=1516590243288 dockable=N 个性主题
+        TaskStackLayoutAlgorithm numStackTasks=
+          insets=0,0-0,130 stack=0,44-1080,1098 task=276,258-805,842 freeform=0,44-1080,44 actionButton=0,0-1080,176
+          minScroll=0.0 maxScroll=14.0 initialScroll=1.0
+          focusState=0
+          taskId= 119 x= 13.0 overrideX= 1.0
+          taskId= 118 x= 14.0 overrideX= 1.0
+        TaskStackViewScroller stackScroll:1.0
+
+TASK com.crossword.bible.cookies.find.english id=169 userId=0
+  ACTIVITY com.crossword.bible.cookies.find.english/com.unity3d.player.UnityPlayerNativeActivity c318eaa pid=30713
+    Local Activity 4180013 State:
+      mResumed=true mStopped=false mFinished=false
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw392dp w392dp h714dp 440dpi nrml long port finger -keyb/v/h -nav/h appBounds=Rect(0, 0 - 1080, 2030) s.8 themeChanged=0 themeChangedFlags=0}
+      mLoadersStarted=true
+      FragmentManager misc state:
+        mHost=android.app.Activity$HostCallbacks@125c453
+        mContainer=android.app.Activity$HostCallbacks@125c453
+        mCurState=5 mStateSaved=false mDestroyed=false
+    ViewRoot:
+      mAdded=true mRemoved=false
+      mConsumeBatchedInputScheduled=false
+      mConsumeBatchedInputImmediatelyScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false      mIsAmbientMode=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=49536923 (8315 ms ago)
+    View Hierarchy:
+      DecorView@a181190[UnityPlayerNativeActivity]
+        android.widget.LinearLayout{6f98a89 V.E...... ........ 0,0-1080,2160}
+          android.view.ViewStub{f6bea8e G.E...... ......I. 0,0-0,0 #102018b android:id/action_mode_bar_stub}
+          android.widget.FrameLayout{a3e52af V.E...... ........ 0,0-1080,2160 #1020002 android:id/content}
+            com.unity3d.player.UnityPlayer{c14b6bc V.E...... ........ 0,0-1080,2160}
+              android.view.SurfaceView{5e74645 VFE...... .F...... 0,0-1080,2160}
+        android.view.View{940219a I.ED..... ......ID 0,2030-1080,2160 #1020030 android:id/navigationBarBackground}
+    Looper (main, tid 2) {59f698e}
+      Message 0: { when=+15s490ms what=2 target=org.chromium.base.SystemMessageHandler }
+      Message 1: { when=+18s131ms callback=com.utility.ad.interstitial.RetryableInterstitialAd$1 target=android.os.Handler }
+      Message 2: { when=+18s174ms callback=com.utility.ad.interstitial.RetryableInterstitialAd$1 target=android.os.Handler }
+      Message 3: { when=+19s260ms callback=com.google.android.gms.ads.internal.cache.b target=com.google.android.gms.ads.internal.util.f }
+      Message 4: { when=+19s808ms callback=com.google.android.gms.ads.internal.bi target=com.google.android.gms.ads.internal.util.f }
+      (Total messages: 5, polling=false, quitting=false)
+    AutofillManager:
+      sessionId: -2147483648
+      state: STATE_UNKNOWN
+      enabled: false
+      hasService: true
+      hasCallback: true
+      last autofilled data: null
+      tracked views: null
+      fillable ids: null

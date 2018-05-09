@@ -1,0 +1,16 @@
+4 过滤一些不合理请求，分配userid,创建/data/system/users/${userid}目录
+创建UserData交个mUsers维护
+userdata写到data/system/users/${userid}.xml
+更新data/system/users/userlist.xml
+更新父data/system/users/${userid}.xml
+
+5 /data/misc/vold/user_keys/ce/{$userid} ...　主要创建了一些文件用于授权
+8 在data下面创建一系列文件夹
+10 创建　/data/misc/user/{$userid}
+16 修改相应应用对应的pakcageSetting的user状态
+18 主要创建/data/{$userid}/{$package}/cache|cache_code
+
+这两个值需要注意StorageManager.FLAG_STORAGE_DE | StorageManager.FLAG_STORAGE_CE
+
+
+todo 详细去看　vold的逻辑

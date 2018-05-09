@@ -1,0 +1,52 @@
+06-30 18:39:12.375  1450  2154 I WindowStateAnimator: createSurface WindowStateAnimator{60090e PopupWindow:a248ca6}: mDrawState=DRAW_PENDING
+06-30 18:39:12.375  1450  2154 V WindowStateAnimator: Creating surface in session android.view.SurfaceSession@c4f9037 window WindowStateAnimator{60090e PopupWindow:a248ca6} w=1 h=1 x=0.0 y=0.0 format=-1 flags=4
+06-30 18:39:12.377  1450  2154 I WindowStateAnimator:   CREATE SURFACE Surface(name=PopupWindow:a248ca6) IN SESSION android.view.SurfaceSession@c4f9037: pid=6491 format=-1 flags=0x404 / WindowStateAnimator{60090e PopupWindow:a248ca6}
+06-30 18:39:12.377  1450  2154 I WindowStateAnimator: >>> OPEN TRANSACTION createSurfaceLocked
+06-30 18:39:12.377  1450  2154 I WindowManager:   SURFACE CREATE pos=(0,0) (0x0), layer=21015 HIDE: Window{9c91309 u0 PopupWindow:a248ca6}
+06-30 18:39:12.378  1450  2154 I WindowStateAnimator: <<< CLOSE TRANSACTION createSurfaceLocked
+06-30 18:39:12.378  1450  2154 I WindowManager:   OUT SURFACE Surface(name=null)/@0xa7a4f2f: copied
+06-30 18:39:12.378  1450  2154 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.378  1450  2154 I WindowManager:   SURFACE SIZE 720x1280: Window{9c91309 u0 PopupWindow:a248ca6}
+06-30 18:39:12.379  1450  2154 I WindowManager:   SURFACE CROP [0,0][720,1280]: Window{9c91309 u0 PopupWindow:a248ca6}
+06-30 18:39:12.379  1450  2154 V WindowManager: Eval win Window{9c91309 u0 PopupWindow:a248ca6}: isDrawn=false, isAnimating=false
+06-30 18:39:12.379  1450  2154 V WindowManager: Not displayed: s=Surface(name=PopupWindow:a248ca6) pv=true mDrawState=DRAW_PENDING ah=false th=false a=false
+06-30 18:39:12.379  1450  2154 V WindowManager: Eval win Window{afd0936 u0 yumin.com.fuck/yumin.com.fuck.MainActivity}: isDrawn=true, isAnimating=false
+06-30 18:39:12.379  1450  2154 V WindowManager: tokenMayBeDrawn: AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}} freezingScreen=false mAppFreezing=false
+06-30 18:39:12.397  1450  2154 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.399  1450  2154 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.399  1450  2154 V WindowManager: Eval win Window{9c91309 u0 PopupWindow:a248ca6}: isDrawn=false, isAnimating=false
+06-30 18:39:12.400  1450  2154 V WindowManager: Not displayed: s=Surface(name=PopupWindow:a248ca6) pv=true mDrawState=DRAW_PENDING ah=false th=false a=false
+06-30 18:39:12.400  1450  2154 V WindowManager: Eval win Window{afd0936 u0 yumin.com.fuck/yumin.com.fuck.MainActivity}: isDrawn=true, isAnimating=false
+06-30 18:39:12.400  1450  2154 V WindowManager: tokenMayBeDrawn: AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}} freezingScreen=false mAppFreezing=false
+06-30 18:39:12.401  1450  2154 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.402  1450  2154 V WindowManager: Update reported visibility: AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}}
+06-30 18:39:12.402  1450  2154 V WindowManager: Win Window{afd0936 u0 yumin.com.fuck/yumin.com.fuck.MainActivity}: isDrawn=true, isAnimating=false
+06-30 18:39:12.402  1450  2154 V WindowManager: Win Window{9c91309 u0 PopupWindow:a248ca6}: isDrawn=false, isAnimating=false
+06-30 18:39:12.402  1450  2154 V WindowManager: Not displayed: s=Surface(name=PopupWindow:a248ca6) pv=true mDrawState=1 ah=false th=false a=false
+06-30 18:39:12.402  1450  2154 V WindowManager: VIS AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}}: interesting=2 visible=1
+06-30 18:39:12.413  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:39:12.414  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=21015 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{9c91309 u0 PopupWindow:a248ca6}
+06-30 18:39:12.414  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:39:12.434  1450  2776 V WindowStateAnimator: finishDrawingLocked: mDrawState=COMMIT_DRAW_PENDING WindowStateAnimator{60090e PopupWindow:a248ca6} in Surface(name=PopupWindow:a248ca6)
+06-30 18:39:12.436  1450  1712 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.437  1450  1712 I WindowStateAnimator: commitFinishDrawingLocked: mDrawState=READY_TO_SHOW Surface(name=PopupWindow:a248ca6)
+06-30 18:39:12.437  1450  1712 V WindowManager: Eval win Window{9c91309 u0 PopupWindow:a248ca6}: isDrawn=true, isAnimating=false
+06-30 18:39:12.437  1450  1712 V WindowManager: tokenMayBeDrawn: AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}} freezingScreen=false mAppFreezing=false
+06-30 18:39:12.437  1450  1712 V WindowManager: Eval win Window{afd0936 u0 yumin.com.fuck/yumin.com.fuck.MainActivity}: isDrawn=true, isAnimating=false
+06-30 18:39:12.437  1450  1712 V WindowManager: tokenMayBeDrawn: AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}} freezingScreen=false mAppFreezing=false
+06-30 18:39:12.437  1450  1712 V WindowManager: allDrawn: AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}} interesting=2 drawn=2
+06-30 18:39:12.438  1450  1712 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.440  1450  1712 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.441  1450  1712 I WindowStateAnimator: commitFinishDrawingLocked: mDrawState=READY_TO_SHOW Surface(name=PopupWindow:a248ca6)
+06-30 18:39:12.441  1450  1712 V WindowStateAnimator: performShow on WindowStateAnimator{60090e PopupWindow:a248ca6}: mDrawState=READY_TO_SHOW readyForDisplay=true starting=false during animation: policyVis=true attHidden=false tok.hiddenRequested=false tok.hidden=false animating=false tok animating=false Callers=com.android.server.wm.WindowStateAnimator.commitFinishDrawingLocked:547 com.android.server.wm.WindowManagerService.performLayoutAndPlaceSurfacesLockedInner:10254 com.android.server.wm.WindowManagerService.performLayoutAndPlaceSurfacesLockedLoop:9131 
+06-30 18:39:12.442  1450  1712 I WindowManager:   SURFACE SHOW (performShowLocked): Window{9c91309 u0 PopupWindow:a248ca6}
+06-30 18:39:12.442  1450  1712 V WindowStateAnimator: Showing WindowStateAnimator{60090e PopupWindow:a248ca6} during animation: policyVis=true attHidden=false tok.hiddenRequested=false tok.hidden=false animating=false tok animating=false
+06-30 18:39:12.443  1450  1712 V WindowStateAnimator: applyAnimation: win=WindowStateAnimator{60090e PopupWindow:a248ca6} anim=0 attr=0x0 a=null transit=1 isEntrance=true Callers com.android.server.wm.WindowStateAnimator.applyEnterAnimationLocked:1827 com.android.server.wm.WindowStateAnimator.performShowLocked:1732 com.android.server.wm.WindowStateAnimator.commitFinishDrawingLocked:547 
+06-30 18:39:12.443  1450  1712 V WindowStateAnimator: performShowLocked: mDrawState=HAS_DRAWN in WindowStateAnimator{60090e PopupWindow:a248ca6}
+06-30 18:39:12.443  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}}
+06-30 18:39:12.443  1450  1712 V WindowManager: Win Window{afd0936 u0 yumin.com.fuck/yumin.com.fuck.MainActivity}: isDrawn=true, isAnimating=false
+06-30 18:39:12.443  1450  1712 V WindowManager: Win Window{9c91309 u0 PopupWindow:a248ca6}: isDrawn=true, isAnimating=false
+06-30 18:39:12.443  1450  1712 V WindowManager: VIS AppWindowToken{919314 token=Token{ea1e926 ActivityRecord{3d48481 u0 yumin.com.fuck/.MainActivity t17}}}: interesting=2 visible=2
+06-30 18:39:12.444  1450  1712 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:39:12.449  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:39:12.449  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=21015 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{9c91309 u0 PopupWindow:a248ca6

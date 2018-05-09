@@ -1,0 +1,44 @@
+handleMessageTransaction过程
+
+1 handleMessageTransaction
+   如果有设置TransactionFlags则执行handleTransaction(transactionFlags) 用于更新事物
+   
+2 handleTransaction
+   获取mTransactionFlags并清除标志,注意这里有锁的保护 保证事物提交之前不会被修改
+3 handleTransactionLocked
+    1 遍历mCurrentState中的layer执行currentLayers[i]->notifyAvailableFrames()
+    2 编译需要做事务的layer 执行doTransaction
+4 Layer->doTransaction  在layer中执行 一下变量都描述layer下的变量
+    1 requestSize发生变化设置消费者默认窗口大小 
+    2 设置currentState.active = currentState.request 这里采用active和request主要是有些request的数据在某种情况不需要复制到activie中,否则只需要request就够了,这个状态主要是由mFreezePositionUpdates控制的不许愿位置变化
+    3  如果s.active != c.active  设置flags |= Layer::eVisibleRegion; 
+    4 c.sequence != s.sequence则设置flags |= Layer::eVisibleRegion , contentDirty = true 设置mNeedsFiltering变量
+如果有一个layer可见区域发生变化则mVisibleRegionsDirty = true
+
+5 display发生变化
+   如果DisplayDevState发生变化则进行一下操作 
+   1 设置mVisibleRegionsDirty = true
+   2 找到减少的DisplayDevState 如果内置屏幕移除 调用hwc.disconnect模块,调用mEventThread->onHotplugReceived(draw[i].type, false),从mDisplays中移除设备
+   3 如果设备没有不见,则一定是设备状态发生了变化,移除设备和drawing state,因为它会之后被添加
+      剩下对如下状态变化做出处理  layerStack | orientation|viewport | frame | width | height 
+   4 对新加的设display做处理
+      1 创建生产者消费者
+      2 如果是虚拟设备进行处理  反正就是创建surfac分配id等 时间有限这里我们不做进一步分析
+6 根据layerStack找到对应的display 更新layer的orientation
+7 layer的个数变化 设置mVisibleRegionsDirty
+8 如果有layer被移除,设置mVisibleRegionsDirty,更新设备dirtyRegion
+9 commitTransaction 提交事务 交换如下变量
+   mAnimCompositionPending = mAnimTransactionPending;
+    mDrawingState = mCurrentState;
+    mTransactionPending = false;
+    mAnimTransactionPending = false;
+    mTransactionCV.broadcast();
+
+10 updateCursorAsync 更新cursor position
+11 invalidateHwcGeometry 设置mHwWorkListDirty = true
+
+
+   
+    
+   
+

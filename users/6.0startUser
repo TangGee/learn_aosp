@@ -1,0 +1,242 @@
+startInBackGround 
+
+
+注意广播都是在MainHandler中执行
+1
+if (uss.mState == UserState.STATE_BOOTING) {
+                    // Booting up a new user, need to tell system services about it.
+                    // Note that this is on the same handler as scheduling of broadcasts,
+                    // which is important because it needs to go first.
+                    mHandler.sendMessage(mHandler.obtainMessage(SYSTEM_USER_START_MSG, userId, 0));
+                }
+startUser之前肯定是要createUser的,创建相应的存储空间和pms相关的数据
+到这里执行系统初始化第一步骤,通知系统的其他服务SYSTEM_USER_START_MSG,这个消息在系统的MainHandler线程中处理,调用
+mBatteryStatsService.noteEvent(BatteryStats.HistoryItem.EVENT_USER_RUNNING_START,
+                        Integer.toString(msg.arg1), msg.arg1);
+                mSystemServiceManager.startUser(msg.arg1); 通知系统各个服务做准备
+
+2 第一次启动user会把这个user方到mStartedUsers中
+所以能确定是不是第一次启动通过mStartedUsers中是否包含这个用户
+
+3 第一次启动应用发送广播android.intent.action.USER_STARTED 通知给关心该事件的服务处理,system_server没有关注该广播
+
+4 第一次启动应用还需要执行初始化操作, 发送广播android.intent.action.USER_INITIALIZE,最终执行函数onUserInitialized(uss, foreground, oldUserId, userIdFinal) 进行初始化 稍后分析
+
+
+5 mStackSupervisor.startBackgroundUserLocked(userId, uss) 
+ 添加到ActivityStackSupervisor 栈大管家的mStartingBackgroundUsers 数据中
+
+6 第一次启动发送android.intent.action.USER_STARTING广播. 通知user启动 
+
+
+
+
+
+这个函数啥都没干在user后台启动的时候
+void onUserInitialized(UserState uss, boolean foreground, int oldUserId, int newUserId)
+   mStackSupervisor.switchUserLocked(newUserId, uss)
+
+
+
+
+public boolean switchUser(final int userId) 
+1  mTargetUserId = userId
+2  启动UserSwitchingDialog等到可见的时候调用,这里移除MSG_START_USER消息这个消息用于界面超时的时候去启动,保险行为
+void startUser() {
+        synchronized (this) {
+            if (!mStartedUser) {
+                mService.startUserInForeground(mUserId, this);
+                mStartedUser = true;
+                final View decorView = getWindow().getDecorView();
+                if (decorView != null) {
+                    decorView.getViewTreeObserver().removeOnWindowShownListener(this);
+                }
+                mHandler.removeMessages(MSG_START_USER);
+            }
+        }
+    }
+
+
+UI线程
+3 boolean startUserInForeground(final int userId, Dialog dlg) {
+        boolean result = startUser(userId, /* foreground */ true);
+        dlg.dismiss();
+        return result;
+    }
+先startUser后关闭dialog ,这里是前台启动
+
+
+
+
+ private boolean startUser(int userId, final boolean foreground)
+1 检查INTERACT_ACROSS_USERS_FULL权限
+2 清除LockTaskMode
+3 UserInfo
+4 startFreezingScreen 冻结屏幕(屏幕冻结最多5s) 冻结屏幕的过程中不能接收输入事件和执行app切换动画
+5添加到mStartedUsers中
+if (mStartedUsers.get(userId) == null) {
+                    mStartedUsers.put(userId, new UserState(new UserHandle(userId), false));
+                    updateStartedUserArrayLocked();
+                    needStart = true;
+                }
+6 更新mUserLru
+7 更新
+ mCurrentUserId = userId;
+                    mTargetUserId = UserHandle.USER_NULL;   这里mCurrentUserId已经设置为userId,所以重置mTargetUserId
+8 锁屏
+9  mHandler.sendMessage(mHandler.obtainMessage(SYSTEM_USER_START_MSG, userId, 0)); 
+10  mHandler.sendMessage(mHandler.obtainMessage(SYSTEM_USER_CURRENT_MSG, userId,
+                            oldUserId));
+	通知SystemService
+
+                    mHandler.removeMessages(REPORT_USER_SWITCH_MSG);  // 
+                    mHandler.removeMessages(USER_SWITCH_TIMEOUT_MSG);
+                    mHandler.sendMessage(mHandler.obtainMessage(REPORT_USER_SWITCH_MSG,
+                            oldUserId, userId, uss));
+                    mHandler.sendMessageDelayed(mHandler.obtainMessage(USER_SWITCH_TIMEOUT_MSG,
+                            oldUserId, userId, uss), USER_SWITCH_TIMEOUT);  //值得注意的超时消息
+发送一系列消息到MainHandler处理
+
+11 第一次启动android.intent.action.USER_STARTED 广播
+   Intent intent = new Intent(Intent.ACTION_USER_STARTED);
+                    intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY
+                            | Intent.FLAG_RECEIVER_FOREGROUND);
+                    intent.putExtra(Intent.EXTRA_USER_HANDLE, userId);
+                    broadcastIntentLocked(null, null, intent,
+                            null, null, 0, null, null, null, AppOpsManager.OP_NONE,
+                            null, false, false, MY_PID, Process.SYSTEM_UID, userId);
+
+12 第一次启动 android.intent.action.USER_INITIALIZE  初始化广播 | USER_OWNER则执行 getUserManagerLocked().makeInitialized(userInfo.id)直接初始化
+
+13 如果是前台并且初始化完成moveUserToForeground(uss, oldUserId, userId) 切换他的界面到前台
+
+14 第一次启动完成android.intent.action.USER_STARTING 用于通知系统应用
+
+
+
+初始化过程
+    void onUserInitialized(UserState uss, boolean foreground, int oldUserId, int newUserId) {
+        synchronized (this) {
+            if (foreground) {
+                moveUserToForeground(uss, oldUserId, newUserId);
+            }
+        }
+
+        completeSwitchAndInitialize(uss, newUserId, true, false);
+    } 
+
+如果是前台启动移动user到前台 
+  void moveUserToForeground(UserState uss, int oldUserId, int newUserId) {
+        boolean homeInFront = mStackSupervisor.switchUserLocked(newUserId, uss);
+        if (homeInFront) {
+            startHomeActivityLocked(newUserId, "moveUserToFroreground");
+        } else {
+            mStackSupervisor.resumeTopActivitiesLocked();
+        }
+        EventLogTags.writeAmSwitchUser(newUserId);
+        getUserManagerLocked().onUserForeground(newUserId);
+        sendUserSwitchBroadcastsLocked(oldUserId, newUserId);
+    }
+
+这里有几段操作
+1mUserStackInFront.put(mCurrentUser, mFocusedStack.getStackId());
+        final int restoreStackId = mUserStackInFront.get(userId, HOME_STACK_ID);
+        mCurrentUser = userId;
+2 清除那些不属于这个用户的task
+3 如果homeStack在前边 则启动HomeActivity
+4 否则resumeActivity
+5 void sendUserSwitchBroadcastsLocked(int oldUserId, int newUserId) {
+   1 广播通知user进入后台android.intent.action.USER_BACKGROUND
+   2 广播通知新的user进入前台android.intent.action.USER_FOREGROUND
+   3 广播通知android.intent.action.USER_SWITCHED
+6 void completeSwitchAndInitialize(UserState uss, int newUserId,
+            boolean clearInitializing, boolean clearSwitching)
+  if (clearInitializing) {
+                uss.initializing = false;
+                getUserManagerLocked().makeInitialized(uss.mHandle.getIdentifier());
+            }
+            if (clearSwitching) {
+                uss.switching = false;
+            }
+            if (!uss.switching && !uss.initializing) {
+                mWindowManager.stopFreezingScreen();
+                unfrozen = true;
+            }
+初始化完成,结束屏幕冻结
+6 REPORT_USER_SWITCH_COMPLETE_MSG
+7 stop其他guest user
+
+ void dispatchUserSwitchComplete(int userId) {
+        final int observerCount = mUserSwitchObservers.beginBroadcast();
+        for (int i = 0; i < observerCount; i++) {
+            try {
+                mUserSwitchObservers.getBroadcastItem(i).onUserSwitchComplete(userId);
+            } catch (RemoteException e) {
+            }
+        }
+        mUserSwitchObservers.finishBroadcast();
+    }
+
+
+
+
+超时处理
+ timeoutUserSwitch((UserState) msg.obj, msg.arg1, msg.arg2)
+void sendContinueUserSwitchLocked(UserState uss, int oldUserId, int newUserId) {
+        mCurUserSwitchCallback = null;
+        mHandler.removeMessages(USER_SWITCH_TIMEOUT_MSG);
+        mHandler.sendMessage(mHandler.obtainMessage(CONTINUE_USER_SWITCH_MSG,
+                oldUserId, newUserId, uss));
+    }
+
+调用completeSwitchAndInitialize检查状态
+
+void dispatchUserSwitch(final UserState uss, final int oldUserId,
+            final int newUserId) {
+        final int N = mUserSwitchObservers.beginBroadcast();
+        if (N > 0) {
+            final IRemoteCallback callback = new IRemoteCallback.Stub() {
+                int mCount = 0;
+                @Override
+                public void sendResult(Bundle data) throws RemoteException {
+                    synchronized (ActivityManagerService.this) {
+                        if (mCurUserSwitchCallback == this) {
+                            mCount++;
+                            if (mCount == N) {
+                                sendContinueUserSwitchLocked(uss, oldUserId, newUserId);
+                            }
+                        }
+                    }
+                }
+            };
+            synchronized (this) {
+                uss.switching = true;
+                mCurUserSwitchCallback = callback;
+            }
+            for (int i=0; i<N; i++) {
+                try {
+                    mUserSwitchObservers.getBroadcastItem(i).onUserSwitching(
+                            newUserId, callback);
+                } catch (RemoteException e) {
+                }
+            }
+        } else {
+            synchronized (this) {
+                sendContinueUserSwitchLocked(uss, oldUserId, newUserId);
+            }
+        }
+        mUserSwitchObservers.finishBroadcast();
+    }
+   
+这里每个mUserSwitchObservers的mUserSwitchObservers执行完成都会回调callback,当所有的Observers都执行了callbasck之后就会发送sendContinueUserSwitchLocked 请求,向下执行,这里最后执行到的是
+void continueUserSwitch(UserState uss, int oldUserId, int newUserId) {
+        completeSwitchAndInitialize(uss, newUserId, false, true);
+    }
+这个函数最终执行的是completeSwitchAndInitialize函数,在user初始化完成的时候也会执行这个函数,不过少了一个startHomeActivityLocked 函数.
+
+另外超时的时候会设置mCurUserSwitchCallback == null,所以不会执行sendContinueUserSwitchLocked(uss, oldUserId, newUserId),而是在处理超时的时候直接调用sendContinueUserSwitchLocked(uss, oldUserId, newUserId)去处理,其实超时的时候只是为了提前调用stopGuestUserIfBackground(),最终的解冻屏幕等操作还是要在初始化的广播中完成
+
+
+
+
+

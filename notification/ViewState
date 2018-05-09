@@ -1,0 +1,25 @@
+float alpha;
+float yTranslation;
+float zTranslation;
+int height;
+boolean gone;
+float scale;
+boolean dimmed;
+
+
+
+public float alpha;
+public float yTranslation;
+public float zTranslation;
+public boolean gone;
+public boolean hidden; -----
+
+    public int height;
+	    public boolean dimmed;
+		    public boolean dark;
+			    public boolean hideSensitive;
+				    public boolean belowSpeedBump;
+					    public float shadowAlpha;
+
+
+

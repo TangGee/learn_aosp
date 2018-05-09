@@ -1,0 +1,10 @@
+getBatteryUptime() 电池的使用时间 Uptime
+getBatteryRealtime() 电池使用时间Uptime
+getDischargeStartLevel() 拔掉电源时候的电量　　
+getDischargeCurrentLevel()没有插电时候的值　一直更新
+mLowDischargeAmountSinceCharge += mDischargeUnplugLevel-level-1;　从设备启动到现在总消耗
+mHighDischargeAmountSinceCharge += mDischargeUnplugLevel-level;　总耗电　二者相差１　不知都什么鬼
+getDischargeAmount() 
+
+
+

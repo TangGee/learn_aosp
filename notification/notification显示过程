@@ -1,0 +1,63 @@
+首先　点击顶部状态栏　之后会发生的事情就是调用PhoneStatusBarView.onTouchEvent|onInterceptTouchEvent,传递给PhoneStatusBar的onInterceptTouchEvent处理
+
+设置statusBar为活跃状态（当statusBar没有被拉下来，且事件是cancle up则不做处理）
+设置活跃的view为StatusBarManager.WINDOW_STATUS_BAR
+
+根据是否有活跃的view决定暂停自动挂起或者恢复自动挂起　注意恢复自动挂起的时候是cancel和up且没有显示　如果是nativatebar状态发生变化　且切换为活跃状态则dismiss声音dialog
+checkBarModes()
+
+我们来看下暂停挂起和恢复自动挂起
+
+suspendAutohide　暂停自动挂起：
+　　mAutohide　mCheckBarModes　删除这两个callBack,设置mAutohideSuspended为，设置mAutohideSuspended为正在挂起的空间顺态如View.STATUS_BAR_TRANSIENT | View.NAVIGATION_BAR_TRANSIENT;
+resumeSuspendedAutohide　恢复暂停挂起
+　　如果现在是自动挂起状态　首先删除mAutohide任务，三秒后执行mAutohide，５００毫秒执行mCheckBarModes
+
+checkBarModes：
+　　切换下mode状态　这个主要是改变上边状态栏颜色没啥好看的　被这里坑爹了几分钟
+
+最后还得是supter.onTouchEvent|onInterceptTouchEvent 进行处理　就是panelbar
+下面我们再次进行分析
+最后调用了NotificationPanelView.onTouchEvent 就是notification_panel这个view　布局是/home/mi/d2a/frameworks/base/packages/SystemUI/res/layout/status_bar_expanded.xml
+NotificationPanelView
+我们看一下他的onToucheEvent方法　沒有必要　　我們來看一下
+
+首先对于点击事件　ACTION_DOWN （view还没有展开）设置mGestureWaitForTouchSlop= true mIgnoreXTouchSlop=true忽略x坐标
+
+下面按照点击事件　移动事件　抬起进行分析
+
+1 ACTION_DOWN 
+   startExpandMotion 
+     设置mInitialOffsetOnTouch=开始高度　为0
+	    mInitialTouchY = down_Y
+		mInitialTouchX= down_X
+
+   mJustPeeked = false;
+   mPanelClosedOnDown = true
+   mHasLayoutedSinceDown = false
+   用mVelocityTracker　追踪坐标　注意这里的坐标转换成了原始坐标
+ 　最重要的调用schedulePeek应该是用于拉出notification 在move应该会取消这个任务mPeekRunnable
+
+2 ACTION_MOVE
+    首先记录举例　
+	计算滑动距离　如果达到阀值则设置mTouchSlopExceeded= true 
+	remove(mPeekRunnable）移除peek偷看回调
+	用mVelocityTracker　追踪坐标　注意这里的坐标转换成了原始坐标
+	去过高度大于peek高度取消peek动画
+	setExpandedHeightInternal 增加高度
+	trackMovement　增加track
+
+	mTouchAboveFalsingThreshold快速向上滑　
+
+	setExpandedHeightInternal增加高度的逻辑
+	　　
+
+3 ACTION_UP 
+  endMotionEvent  这里主要根据之前追踪的速度判断是否快速下滑执行打开或则关闭flingToHeight
+NotificationPanelView onHeightUpdated
+
+对应三种模式说明:
+1 UNSPECIFIED 不限制大小　这个一般出现在可以滚动的view的子view 
+2 EXACTLY 严格限制代销　EXACTLY+height 组合出一个高度　这个是父控件给子控件的　也就是说子控件不能超过父亲给定的高度　　match_parent
+3 AT_MOST 说明父控件也不知道到底能获取多大，但是这个大小还是有限制的　就是父控件给定的高度　warp
+

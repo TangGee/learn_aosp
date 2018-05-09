@@ -1,0 +1,2 @@
+多用户的疑问　
+1 为什么　user信息放在mUsers中以map的形式保存　而User状态却保存在mUserStates map中????

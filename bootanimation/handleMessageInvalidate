@@ -1,0 +1,5 @@
+handleMessageInvalidate
+
+1 handlePageFlip() 处理页面翻转
+2 第一步收集layersWithQueuedFrames
+   

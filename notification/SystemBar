@@ -1,0 +1,7 @@
+systemBar初始化过程
+在SsystemService之后，启动SystemBar 之后我门调用createStatusBarFromConfig从
+config_statusBarComponent读取出StatusBar的实体
+<string name="config_statusBarComponent" translatable="false">com.android.systemui.statusbar.phone.PhoneStatusBar</string>
+
+之后调用BaseStatusBar.start()
+addStatusBarWindow()->makeStatusBarView 创建视图

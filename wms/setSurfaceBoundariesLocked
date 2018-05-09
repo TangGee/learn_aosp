@@ -1,0 +1,234 @@
+void setSurfaceBoundariesLocked(final boolean recoveringMemory) {
+        if (mSurfaceController == null) { //1 不存在surface controller 直接返回
+            return;
+        }
+
+        final WindowState w = mWin;
+        final LayoutParams attrs = mWin.getAttrs();
+        final Task task = w.getTask();
+
+	//2 正在调整大小,需要重新创建window的情况直接返回
+        // We got resized, so block all updates until we got the new surface.
+        if (w.isResizedWhileNotDragResizing() && !w.isGoneForLayoutLw()) {
+            return;
+        }
+	//3 根据缩放模式兼容模式调整bottom和right
+        mTmpSize.set(w.mShownPosition.x, w.mShownPosition.y, 0, 0);
+        calculateSurfaceBounds(w, attrs);
+
+        mExtraHScale = (float) 1.0;
+        mExtraVScale = (float) 1.0;
+
+        boolean wasForceScaled = mForceScaleUntilResize;
+        boolean wasSeamlesslyRotated = w.mSeamlesslyRotated;
+
+        // Once relayout has been called at least once, we need to make sure
+        // we only resize the client surface during calls to relayout. For
+        // clients which use indeterminate measure specs (MATCH_PARENT),
+        // we may try and change their window size without a call to relayout.
+        // However, this would be unsafe, as the client may be in the middle
+        // of producing a frame at the old size, having just completed layout
+        // to find the surface size changed underneath it.
+	//4 只有在第一次或者layout过程中采取设置surface大小,否则可能引起客户端的问题
+	// 那么问题来了,在layout过程中,dequeueBuffer会不会有问题吗???
+        if (!w.mRelayoutCalled || w.mInRelayout) {
+            mSurfaceResized = mSurfaceController.setSizeInTransaction(
+                    mTmpSize.width(), mTmpSize.height(), recoveringMemory);
+        } else {
+            mSurfaceResized = false;
+        }
+        mForceScaleUntilResize = mForceScaleUntilResize && !mSurfaceResized;
+        // If we are undergoing seamless rotation, the surface has already
+        // been set up to persist at it's old location. We need to freeze
+        // updates until a resize occurs.
+        mService.markForSeamlessRotation(w, w.mSeamlesslyRotated && !mSurfaceResized);
+
+        Rect clipRect = null, finalClipRect = null;
+        if (calculateCrop(mTmpClipRect)) {
+            clipRect = mTmpClipRect;
+        }
+        if (calculateFinalCrop(mTmpFinalClipRect)) {
+            finalClipRect = mTmpFinalClipRect;
+        }
+
+        float surfaceWidth = mSurfaceController.getWidth();
+        float surfaceHeight = mSurfaceController.getHeight();
+
+        if (isForceScaled()) {
+            int hInsets = attrs.surfaceInsets.left + attrs.surfaceInsets.right;
+            int vInsets = attrs.surfaceInsets.top + attrs.surfaceInsets.bottom;
+            float surfaceContentWidth = surfaceWidth - hInsets;
+            float surfaceContentHeight = surfaceHeight - vInsets;
+            if (!mForceScaleUntilResize) {
+                mSurfaceController.forceScaleableInTransaction(true);
+            }
+
+            int posX = mTmpSize.left;
+            int posY = mTmpSize.top;
+            task.mStack.getDimBounds(mTmpStackBounds);
+
+            boolean allowStretching = false;
+            task.mStack.getFinalAnimationSourceHintBounds(mTmpSourceBounds);
+            // If we don't have source bounds, we can attempt to use the content insets
+            // in the following scenario:
+            //    1. We have content insets.
+            //    2. We are not transitioning to full screen
+            // We have to be careful to check "lastAnimatingBoundsWasToFullscreen" rather than
+            // the mBoundsAnimating state, as we may have already left it and only be here
+            // because of the force-scale until resize state.
+            if (mTmpSourceBounds.isEmpty() && (mWin.mLastRelayoutContentInsets.width() > 0
+                    || mWin.mLastRelayoutContentInsets.height() > 0)
+                        && !task.mStack.lastAnimatingBoundsWasToFullscreen()) {
+                mTmpSourceBounds.set(task.mStack.mPreAnimationBounds);
+                mTmpSourceBounds.inset(mWin.mLastRelayoutContentInsets);
+                allowStretching = true;
+            }
+            if (!mTmpSourceBounds.isEmpty()) {
+                // Get the final target stack bounds, if we are not animating, this is just the
+                // current stack bounds
+                task.mStack.getFinalAnimationBounds(mTmpAnimatingBounds);
+
+                // Calculate the current progress and interpolate the difference between the target
+                // and source bounds
+                float finalWidth = mTmpAnimatingBounds.width();
+                float initialWidth = mTmpSourceBounds.width();
+                float tw = (surfaceContentWidth - mTmpStackBounds.width())
+                        / (surfaceContentWidth - mTmpAnimatingBounds.width());
+                float th = tw;
+                mExtraHScale = (initialWidth + tw * (finalWidth - initialWidth)) / initialWidth;
+                if (allowStretching) {
+                    float finalHeight = mTmpAnimatingBounds.height();
+                    float initialHeight = mTmpSourceBounds.height();
+                    th = (surfaceContentHeight - mTmpStackBounds.height())
+                        / (surfaceContentHeight - mTmpAnimatingBounds.height());
+                    mExtraVScale = (initialHeight + tw * (finalHeight - initialHeight))
+                            / initialHeight;
+                } else {
+                    mExtraVScale = mExtraHScale;
+                }
+
+                // Adjust the position to account for the inset bounds
+                posX -= (int) (tw * mExtraHScale * mTmpSourceBounds.left);
+                posY -= (int) (th * mExtraVScale * mTmpSourceBounds.top);
+
+                // Always clip to the stack bounds since the surface can be larger with the current
+                // scale
+                clipRect = null;
+                finalClipRect = mTmpStackBounds;
+            } else {
+                // We want to calculate the scaling based on the content area, not based on
+                // the entire surface, so that we scale in sync with windows that don't have insets.
+                mExtraHScale = mTmpStackBounds.width() / surfaceContentWidth;
+                mExtraVScale = mTmpStackBounds.height() / surfaceContentHeight;
+
+                // Since we are scaled to fit in our previously desired crop, we can now
+                // expose the whole window in buffer space, and not risk extending
+                // past where the system would have cropped us
+                clipRect = null;
+                finalClipRect = null;
+            }
+
+            // In the case of ForceScaleToStack we scale entire tasks together,
+            // and so we need to scale our offsets relative to the task bounds
+            // or parent and child windows would fall out of alignment.
+            posX -= (int) (attrs.x * (1 - mExtraHScale));
+            posY -= (int) (attrs.y * (1 - mExtraVScale));
+
+            // Imagine we are scaling down. As we scale the buffer down, we decrease the
+            // distance between the surface top left, and the start of the surface contents
+            // (previously it was surfaceInsets.left pixels in screen space but now it
+            // will be surfaceInsets.left*mExtraHScale). This means in order to keep the
+            // non inset content at the same position, we have to shift the whole window
+            // forward. Likewise for scaling up, we've increased this distance, and we need
+            // to shift by a negative number to compensate.
+            posX += attrs.surfaceInsets.left * (1 - mExtraHScale);
+            posY += attrs.surfaceInsets.top * (1 - mExtraVScale);
+
+            mSurfaceController.setPositionInTransaction((float) Math.floor(posX),
+                    (float) Math.floor(posY), recoveringMemory);
+
+            // Various surfaces in the scaled stack may resize at different times.
+            // We need to ensure for each surface, that we disable transformation matrix
+            // scaling in the same transaction which we resize the surface in.
+            // As we are in SCALING_MODE_SCALE_TO_WINDOW, SurfaceFlinger will
+            // then take over the scaling until the new buffer arrives, and things
+            // will be seamless.
+            mForceScaleUntilResize = true;
+        } else {
+            if (!w.mSeamlesslyRotated) {
+                mSurfaceController.setPositionInTransaction(mTmpSize.left, mTmpSize.top,
+                        recoveringMemory);
+            }
+        }
+
+        // If we are ending the scaling mode. We switch to SCALING_MODE_FREEZE
+        // to prevent further updates until buffer latch.
+        // When ending both force scaling, and seamless rotation, we need to freeze
+        // the Surface geometry until a buffer comes in at the new size (normally position and crop
+        // are unfrozen). setGeometryAppliesWithResizeInTransaction accomplishes this for us.
+        if ((wasForceScaled && !mForceScaleUntilResize) ||
+                (wasSeamlesslyRotated && !w.mSeamlesslyRotated)) {
+            mSurfaceController.setGeometryAppliesWithResizeInTransaction(true);
+            mSurfaceController.forceScaleableInTransaction(false);
+        }
+
+        if (!w.mSeamlesslyRotated) {
+            applyCrop(clipRect, finalClipRect, recoveringMemory);
+            mSurfaceController.setMatrixInTransaction(mDsDx * w.mHScale * mExtraHScale,
+                    mDtDx * w.mVScale * mExtraVScale,
+                    mDtDy * w.mHScale * mExtraHScale,
+                    mDsDy * w.mVScale * mExtraVScale, recoveringMemory);
+        }
+
+        if (mSurfaceResized) {
+            mReportSurfaceResized = true;
+            mAnimator.setPendingLayoutChanges(w.getDisplayId(),
+                    WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER);
+            w.applyDimLayerIfNeeded();
+        }
+    }
+
+
+private void calculateSurfaceBounds(WindowState w, LayoutParams attrs) {
+        if ((attrs.flags & FLAG_SCALED) != 0) {
+	    //1 缩放的时候要设置边界为要求的大小
+            // For a scaled surface, we always want the requested size.
+            mTmpSize.right = mTmpSize.left + w.mRequestedWidth;
+            mTmpSize.bottom = mTmpSize.top + w.mRequestedHeight;
+        } else {
+            // When we're doing a drag-resizing, request a surface that's fullscreen size,
+            // so that we don't need to reallocate during the process. This also prevents
+            // buffer drops due to size mismatch.
+            if (w.isDragResizing()) {
+                if (w.getResizeMode() == DRAG_RESIZE_MODE_FREEFORM) {
+                    mTmpSize.left = 0;
+                    mTmpSize.top = 0;
+                }
+                final DisplayInfo displayInfo = w.getDisplayInfo();
+                mTmpSize.right = mTmpSize.left + displayInfo.logicalWidth;
+                mTmpSize.bottom = mTmpSize.top + displayInfo.logicalHeight;
+            } else {
+		//2 不拖拽的时候使用兼容大小
+                mTmpSize.right = mTmpSize.left + w.mCompatFrame.width();
+                mTmpSize.bottom = mTmpSize.top + w.mCompatFrame.height();
+            }
+        }
+
+        // Something is wrong and SurfaceFlinger will not like this, try to revert to sane values.
+        // This doesn't necessarily mean that there is an error in the system. The sizes might be
+        // incorrect, because it is before the first layout or draw.
+	//3 最小设置一像素
+        if (mTmpSize.width() < 1) {
+            mTmpSize.right = mTmpSize.left + 1;
+        }
+        if (mTmpSize.height() < 1) {
+            mTmpSize.bottom = mTmpSize.top + 1;
+        }
+	//4 去掉surfaceInsets
+        // Adjust for surface insets.
+        mTmpSize.left -= attrs.surfaceInsets.left;
+        mTmpSize.top -= attrs.surfaceInsets.top;
+        mTmpSize.right += attrs.surfaceInsets.right;
+        mTmpSize.bottom += attrs.surfaceInsets.bottom;
+    }
+

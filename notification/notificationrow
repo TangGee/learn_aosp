@@ -1,0 +1,85 @@
+对于ExpandableNotificationRow进行分析，首先
+ExpandableView　最上层base class 　主要重写了FrameLayou的方法就是onMeasure
+其实也没有做啥工作，经是横向的frameLayout给忽略了，只重新计算了纵向高度
+另外重写了裁剪方法，对view进行裁剪，主要需要关注的就是setActualHeight　设置view的真实高度　也就是除去裁剪隐藏掉的部分后剩余的高度，所以被裁剪后的view应该是从top到ActualHeight高度　，另外值得注意的就是OnHeightChangedListener，需要关注对外部的作用
+
+ExpandableOutlineView该view是ExpandableView的子类，主要做的工作就是裁剪，对outLine部分设置alpha和确定裁剪区域　没什么要看的　主要方法就是setOutlineRect　　setOutlineRect
+
+ActivatableNotificationView　这个view集成ExpandableOutlineView,主要对ExpandableOutlineView增加的方法就是对背景的处理，请关注keygurd上面点击一下notification的背景变化，由灰变白，过一小会如果不继续操作就有变成灰色，如果白色时候再次点击就会打开，这里有更新OutlineAlpha也没啥好看的
+　mDimmed　这个变量在keyGurd时候为true 设置背景为灰色
+　　updateBackground方法更新背景
+
+
+ExpandableNotificationRow　继承自ActivatableNotificationView
+它就封装了一些和notification相关的逻辑　也是比较复杂的view 我们应该把重点放在这个上面　这里大部分封装到都是group相关的逻辑，以及高度变化的逻辑，和headerUp的逻辑，我们展开收多大部分的计算都在这里完成
+　　首先group的逻辑我们现在不需要管，主要分析下高度的逻辑
+  先忽略headerUp　mIsPinned = false
+
+  isExpanded判断视图是否展开　keygurd先不考虑，主要有一下几个条件
+   return (!mOnKeyguard || allowOnKeyguard)
+                   && (!hasUserChangedExpansion() && (isSystemExpanded() || isSystemChildExpanded())
+				                   || isUserExpanded());
+ 1 首先不能是在keyGurd上面 & 
+
+
+
+NotificationContentView　分析
+　selectLayout 选layout的过程是重点
+　　1mUserExpanding指用户正在拖动操作　展开或者关闭，如果设置成false 就要更新view显示和背景颜色　计算mVisibleType，　mTransformationStartVisibleType为变化开始的状态，最后变换完成还要更新下状态
+　　2　拖拽的时候引起Row.setActualHeight　最终传到到 mPrivateLayout.setContentHeight，改变高度，在高度变化的过程中
+ 
+ 点击展开的逻辑
+
+
+ 認真分析NotificationStackScrollLayout系统
+
+
+ACTION_DOWN
+ 点击过程BarView的onInterceptTouchEvent 之后调用到PhoneStatusBar的interceptTouchEventf方法进行处理，调用
+ prepareTracking方法　首先调用getPanelView().prepareTracking
+ mTracking = true开始追踪
+mStatusBarTrackingDown = true并设置为可见　mTogglePanelExpanded=false设置panel区域没有展开　跟新Toggle　更新panelView高度为MATCH_PARENT
+mNotificationStack.setIsExpanded设置已经展开
+mStackScrollAlgorith设置已展开
+updateExpandedViewPos应该是指高度用于　更新mTrackingPosition记录panel的高度
+mHandler.post(mStartRevealAnimation);揭幕
+visibilityChanged 更新mPanelSlightlyVisible　给bgHandler发送消息VISIBILITY_CHANGED另一个线程　
+updateViewsInStatusBar更新statusBar
+updateStatusBarBackground更新背t
+mVelocityTracker跟踪速度变化
+　　　
+　　　mStartRevealAnimation这个函数比较重要　来分析一下
+　　　　　　添加mRevealAnimationCallback回调到Choreographer动画回调中，并根据高度速度更新view高度　指导显示高度大于默认高度　这个过程类似于N里面的peek过程　这个过程和滑动过程有冲突　所以
+　　　　在小米手机中有抖动的感觉
+
+ACTION_MOVE
+     mAnimatingReveal=false 不让pick的动画继续播放
+	 updateExpandedViewPos　更新pannelView的高度为手指的位置
+	 getPanelView().updateExpandedViewHeight
+
+ACTION_UP
+ACTION_CANCEL
+　　根据追踪的速率执行动画mPerformFling　关闭动画　没什么好看的
+
+updateExpandedViewHeight
+
+
+PanelView
+NotificationPanelView mStatusBarTrackingDown
+　 仔细观察panelView下拉过程　
+　　　首先headerView和notification一起拉出，出现的速率是根据二者的高度算的，header根据header的高度和当前高度求出展示百分比，第一条notification则根据qs+header高度计算百分比，也就是
+达到qs高度+header高度后notification完全展示，所以header先展示完成
+setViewsY　设置mNotificationStack　mNotificationStackBg　为y, mQSContainer的y坐标为mNotificationStack.getY()-mQSContainer.getHeight()　也就是说qs是紧挨着第一条notification，mQsDetail.setY(mQSContainer.getY())　
+　　并且设置高度之后调用updateClip()进行裁剪　
+header完全展示出来之后就可以设置clear button了　
+设置背景颜色
+
+phoneStatusBar的拖动事件就看完了　这时候松手就有可能滑动到最大距离了
+
+从新看下ACTION_UP CANCLE自动到最大距离的操作
+
+
+总结一下整体拉出的流程
+最顶层StatusBarWindowView
+该事件都是由PhoneStatusBar处理 PhoneStatusBarView接收事件　经过PhoneStatusBar的 onInterceptTouchEvent处理
+

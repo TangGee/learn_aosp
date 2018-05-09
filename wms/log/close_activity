@@ -1,0 +1,262 @@
+06-30 18:37:54.884  1450  1815 D BaseMiuiPhoneWindowManager: keyCode:4 down:true eventTime:8006327 downTime:8006327 policyFlags:22000002 deviceId:6 isScreenOn:true keyguardActive:false repeatCount:0
+06-30 18:37:55.001  1450  1815 D BaseMiuiPhoneWindowManager: keyCode:4 down:false eventTime:8006445 downTime:8006327 policyFlags:22000002 deviceId:6 isScreenOn:true keyguardActive:false repeatCount:0
+06-30 18:37:55.005  1450  1735 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.007  1450  1735 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.009  1450  1735 I WindowManager: >>> OPEN TRANSACTION setFocusedApp
+06-30 18:37:55.010  1450  1735 I WindowManager: >>> CLOSE TRANSACTION setFocusedApp
+06-30 18:37:55.012  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.012  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=21005 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.013  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.031  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.032  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.034  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.045  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.049  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.050  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.054  1450  1712 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.056  1450  1712 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.061  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.062  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.062  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.063  1450  2776 V WindowManager: Setting visibility of Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: true
+06-30 18:37:55.079  1450  2754 I WindowManager: Releasing surface in: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.079  1450  2754 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.079  1450  2754 V WindowManager: Eval win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=false, isAnimating=true
+06-30 18:37:55.080  1450  2754 V WindowManager: Not displayed: s=null pv=true mDrawState=NO_SURFACE ah=false th=false a=false
+06-30 18:37:55.081  1450  2754 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.083  1450  2754 V WindowManager: Update reported visibility: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.083  1450  2754 V WindowManager: VIS AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: interesting=0 visible=0
+06-30 18:37:55.084  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.084  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.085  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.086  1450  2776 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.086  1450  2776 V WindowManager: Eval win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=false, isAnimating=true
+06-30 18:37:55.086  1450  2776 V WindowManager: Not displayed: s=null pv=true mDrawState=NO_SURFACE ah=false th=false a=false
+06-30 18:37:55.087  1450  2776 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.095  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.095  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.097  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.111  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.112  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.113  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.113  1450  2153 I WindowStateAnimator: createSurface WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}: mDrawState=DRAW_PENDING
+06-30 18:37:55.113  1450  2153 V WindowStateAnimator: Creating surface in session android.view.SurfaceSession@62b23fc window WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher} w=720 h=1280 x=0.0 y=0.0 format=1 flags=4
+06-30 18:37:55.114  1450  2153 I WindowStateAnimator:   CREATE SURFACE Surface(name=com.miui.home/com.miui.home.launcher.Launcher) IN SESSION android.view.SurfaceSession@62b23fc: pid=2542 format=1 flags=0x4 / WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.114  1450  2153 I WindowStateAnimator: >>> OPEN TRANSACTION createSurfaceLocked
+06-30 18:37:55.114  1450  2153 I WindowManager:   SURFACE CREATE pos=(0,0) (720x1280), layer=21010 HIDE: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.114  1450  2153 I WindowStateAnimator: <<< CLOSE TRANSACTION createSurfaceLocked
+06-30 18:37:55.115  1450  2153 I WindowManager:   OUT SURFACE Surface(name=null)/@0x237147f: copied
+06-30 18:37:55.115  1450  2153 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.115  1450  2153 I WindowManager:   SURFACE CROP [0,0][720,1280]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.115  1450  2153 V WindowManager: Eval win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=false, isAnimating=true
+06-30 18:37:55.115  1450  2153 V WindowManager: Not displayed: s=Surface(name=com.miui.home/com.miui.home.launcher.Launcher) pv=true mDrawState=DRAW_PENDING ah=false th=false a=false
+06-30 18:37:55.116  1450  2153 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.117  1450  2153 V WindowManager: Update reported visibility: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.117  1450  2153 V WindowManager: Win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=false, isAnimating=true
+06-30 18:37:55.117  1450  2153 V WindowManager: Not displayed: s=Surface(name=com.miui.home/com.miui.home.launcher.Launcher) pv=true mDrawState=1 ah=false th=false a=false
+06-30 18:37:55.117  1450  2153 V WindowManager: VIS AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: interesting=1 visible=0
+06-30 18:37:55.135  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.135  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.135  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=21010 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.136  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.152  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.153  1450  1712 V WindowStateAnimator: prepareSurface: No changes in animation for WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.155  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=21010 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.156  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.156  1450  1999 V WindowStateAnimator: finishDrawingLocked: mDrawState=COMMIT_DRAW_PENDING WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher} in Surface(name=com.miui.home/com.miui.home.launcher.Launcher)
+06-30 18:37:55.157  1450  1712 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.158  1450  1712 V WindowManager: Updating vis of wallpaper Window{f9d860d u0 com.android.systemui.ImageWallpaper}: true from:
+06-30 18:37:55.158  1450  1712 V WindowManager:   com.android.server.wm.WindowManagerService.adjustWallpaperWindowsLocked:2109
+06-30 18:37:55.158  1450  1712 V WindowManager:   com.android.server.wm.WindowManagerService.performLayoutAndPlaceSurfacesLockedInner:10135
+06-30 18:37:55.158  1450  1712 V WindowManager:   com.android.server.wm.WindowManagerService.performLayoutAndPlaceSurfacesLockedLoop:9131
+06-30 18:37:55.158  1450  1712 V WindowManager:   com.android.server.wm.WindowManagerService.performLayoutAndPlaceSurfacesLocked:9078
+06-30 18:37:55.158  1450  1712 I WindowStateAnimator: commitFinishDrawingLocked: mDrawState=READY_TO_SHOW Surface(name=com.miui.home/com.miui.home.launcher.Launcher)
+06-30 18:37:55.158  1450  1712 V WindowManager: Eval win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=true, isAnimating=true
+06-30 18:37:55.158  1450  1712 V WindowManager: tokenMayBeDrawn: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}} freezingScreen=false mAppFreezing=false
+06-30 18:37:55.158  1450  1712 V WindowManager: allDrawn: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}} interesting=1 drawn=1
+06-30 18:37:55.159  1450  1712 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.159  1450  1712 V WindowManager: applyAnimation: atoken=AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.159  1450  1712 V WindowManager: Loaded animation android.view.animation.AnimationSet@2ec9c4c for AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.160  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.160  1450  1712 V WindowManager: Win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=true, isAnimating=true
+06-30 18:37:55.160  1450  1712 V WindowManager: VIS AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: interesting=1 visible=0
+06-30 18:37:55.160  1450  1712 V AppWindowAnimator: performing show on: WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.160  1450  1712 V WindowStateAnimator: performShow on WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}: mDrawState=READY_TO_SHOW readyForDisplay=true starting=false during animation: policyVis=true attHidden=false tok.hiddenRequested=false tok.hidden=false animating=true tok animating=false Callers=com.android.server.wm.AppWindowAnimator.showAllWindowsLocked:396 com.android.server.wm.WindowManagerService.handleAppTransitionReadyLocked:9601 com.android.server.wm.WindowManagerService.performLayoutAndPlaceSurfacesLockedInner:10380 
+06-30 18:37:55.160  1450  1712 I WindowManager:   SURFACE SHOW (performShowLocked): Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.160  1450  1712 V WindowStateAnimator: Showing WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher} during animation: policyVis=true attHidden=false tok.hiddenRequested=false tok.hidden=false animating=true tok animating=false
+06-30 18:37:55.161  1450  1712 V WindowStateAnimator: applyAnimation: win=WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher} anim=0 attr=0x2 a=null transit=3 isEntrance=true Callers com.android.server.wm.WindowStateAnimator.applyEnterAnimationLocked:1827 com.android.server.wm.WindowStateAnimator.performShowLocked:1732 com.android.server.wm.AppWindowAnimator.showAllWindowsLocked:396 
+06-30 18:37:55.161  1450  1712 V WindowStateAnimator: performShowLocked: mDrawState=HAS_DRAWN in WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.161  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.161  1450  1712 V WindowManager: Win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=true, isAnimating=true
+06-30 18:37:55.161  1450  1712 V WindowManager: VIS AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: interesting=1 visible=0
+06-30 18:37:55.161  1450  1712 V WindowManager: Setting visibility of Window{940b6df u0 com.android.settings/com.android.settings.MainSettings}: false
+06-30 18:37:55.161  1450  1712 V WindowManager: applyAnimation: atoken=AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}
+06-30 18:37:55.161  1450  1712 V WindowManager: Loaded animation android.view.animation.AnimationSet@525e495 for AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}
+06-30 18:37:55.162  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}
+06-30 18:37:55.162  1450  1712 V WindowManager: Win Window{940b6df u0 com.android.settings/com.android.settings.MainSettings}: isDrawn=true, isAnimating=true
+06-30 18:37:55.162  1450  1712 V WindowManager: VIS AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}: interesting=1 visible=0
+06-30 18:37:55.164  1450  1712 I WindowManager:   THUMBNAIL Surface(name=thumbnail anim): CREATE
+06-30 18:37:55.169  1450  1712 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.170  1450  1712 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.171  1450  1712 V WindowManager: Reporting drawn in AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.171  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.173  1450  1712 V AppWindowAnimator: Starting animation in AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}} @ 8006610 scale=1.0 allDrawn=true animating=false
+06-30 18:37:55.173  1450  1712 V AppWindowAnimator: Starting animation in AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}} @ 8006610 scale=1.0 allDrawn=true animating=false
+06-30 18:37:55.173  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=20000 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{f9d860d u0 com.android.systemui.ImageWallpaper}
+06-30 18:37:55.174  1450  1712 I WindowManager:   SURFACE SHOW (performLayout): Window{f9d860d u0 com.android.systemui.ImageWallpaper}
+06-30 18:37:55.174  1450  1712 V WindowStateAnimator: Showing Window{f9d860d u0 com.android.systemui.ImageWallpaper} during relayout
+06-30 18:37:55.174  1450  1712 I WindowManager:   SURFACE POS 58.827927, 130.9155: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.174  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=22005 matrix=[0.8711244*1.0,0.0*1.0][0.0*1.0,0.8197451*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.174  1450  1712 I WindowManager:   SURFACE POS -374.98468, -609.9864: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.174  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=20010 matrix=[1.8483816*1.0,0.0*1.0][0.0*1.0,1.8483816*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.174  1450  1712 I WindowManager:   SURFACE SHOW (performLayout): Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.178  1450  1712 V WindowStateAnimator: Showing Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher} during relayout
+06-30 18:37:55.179  1450  1712 V AppWindowAnimator: performing show on: WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.179  1450  1712 V WindowStateAnimator: performShow on WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}: mDrawState=HAS_DRAWN readyForDisplay=true starting=false during animation: policyVis=true attHidden=false tok.hiddenRequested=false tok.hidden=false animating=true tok animating=true Callers=com.android.server.wm.AppWindowAnimator.showAllWindowsLocked:396 com.android.server.wm.WindowAnimator.testTokenMayBeDrawnLocked:629 com.android.server.wm.WindowAnimator.animateLocked:703 
+06-30 18:37:55.180  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.180  1450  1712 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.181  1450  1712 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.182  1450  1701 I WindowManager: Relayout invis Window{940b6df u0 com.android.settings/com.android.settings.MainSettings}: mExiting=false
+06-30 18:37:55.182  1450  1701 I WindowManager: Releasing surface in: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.182  1450  1701 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.183  1450  1701 I WindowManager: <<< CLOSE TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.187  1450  1701 V WindowManager: Update reported visibility: AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}
+06-30 18:37:55.187  1450  1701 V WindowManager: VIS AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}: interesting=0 visible=0
+06-30 18:37:55.187  1450  1701 V WindowManager: Visibility changed in AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}: vis=false
+06-30 18:37:55.188  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.192  1450  1712 I WindowManager:   SURFACE POS 114.47205, 247.76419: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.192  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=22005 matrix=[0.7492236*1.0,0.0*1.0][0.0*1.0,0.65885854*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.192  1450  1712 I WindowManager:   SURFACE POS -311.59625, -506.87265: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.192  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=20010 matrix=[1.7049689*1.0,0.0*1.0][0.0*1.0,1.7049689*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.193  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.193  1450  1712 V WindowManager: Reporting visible in AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}} visible=false gone=true
+06-30 18:37:55.200  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.201  1450  1712 I WindowManager:   SURFACE POS 163.46298, 344.30176: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.201  1450  1712 I WindowManager:   SURFACE alpha=0.86383766 layer=22005 matrix=[0.6418981*1.0,0.0*1.0][0.0*1.0,0.5259379*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.201  1450  1712 I WindowManager:   SURFACE POS -255.787, -416.08792: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.201  1450  1712 I WindowManager:   SURFACE alpha=0.13616234 layer=20010 matrix=[1.5787036*1.0,0.0*1.0][0.0*1.0,1.5787036*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.201  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.217  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.217  1450  1712 I WindowManager:   SURFACE POS 206.22437, 423.03073: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.217  1450  1712 I WindowManager:   SURFACE alpha=0.66175216 layer=22005 matrix=[0.5482198*1.0,0.0*1.0][0.0*1.0,0.41753763*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.217  1450  1712 I WindowManager:   SURFACE POS -207.07433, -336.84714: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.218  1450  1712 I WindowManager:   SURFACE alpha=0.33824784 layer=20010 matrix=[1.4684939*1.0,0.0*1.0][0.0*1.0,1.4684939*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.219  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.234  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.234  1450  1712 I WindowManager:   SURFACE POS 241.15906, 482.95633: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.234  1450  1712 I WindowManager:   SURFACE alpha=0.50291145 layer=22005 matrix=[0.47168761*1.0,0.0*1.0][0.0*1.0,0.33502728*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.234  1450  1712 I WindowManager:   SURFACE POS -167.2776, -272.10995: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.235  1450  1712 I WindowManager:   SURFACE alpha=0.49708855 layer=20010 matrix=[1.3784561*1.0,0.0*1.0][0.0*1.0,1.3784561*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.235  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.250  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.251  1450  1712 I WindowManager:   SURFACE POS 273.03708, 533.642: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.251  1450  1712 I WindowManager:   SURFACE alpha=0.3644315 layer=22005 matrix=[0.40185177*1.0,0.0*1.0][0.0*1.0,0.26523918*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.251  1450  1712 I WindowManager:   SURFACE POS -130.96294, -213.037: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.251  1450  1712 I WindowManager:   SURFACE alpha=0.6355685 layer=20010 matrix=[1.2962962*1.0,0.0*1.0][0.0*1.0,1.2962962*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.252  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.267  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.268  1450  1712 I WindowManager:   SURFACE POS 299.93134, 572.9252: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.268  1450  1712 I WindowManager:   SURFACE alpha=0.25403702 layer=22005 matrix=[0.3429339*1.0,0.0*1.0][0.0*1.0,0.211151*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.268  1450  1712 I WindowManager:   SURFACE POS -100.32562, -163.19937: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.268  1450  1712 I WindowManager:   SURFACE alpha=0.745963 layer=20010 matrix=[1.226981*1.0,0.0*1.0][0.0*1.0,1.226981*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.269  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.284  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.284  1450  1712 I WindowManager:   SURFACE POS 321.07053, 601.1439: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.284  1450  1712 I WindowManager:   SURFACE alpha=0.17294168 layer=22005 matrix=[0.29662383*1.0,0.0*1.0][0.0*1.0,0.17229718*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.284  1450  1712 I WindowManager:   SURFACE POS -76.24443, -124.026566: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.284  1450  1712 I WindowManager:   SURFACE alpha=0.8270583 layer=20010 matrix=[1.1724987*1.0,0.0*1.0][0.0*1.0,1.1724987*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.285  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.301  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.301  1450  1712 I WindowManager:   SURFACE POS 339.5, 623.43756: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.301  1450  1712 I WindowManager:   SURFACE alpha=0.107979655 layer=22005 matrix=[0.25624996*1.0,0.0*1.0][0.0*1.0,0.14160156*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.301  1450  1712 I WindowManager:   SURFACE POS -55.25, -89.875: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.301  1450  1712 I WindowManager:   SURFACE alpha=0.89202034 layer=20010 matrix=[1.125*1.0,0.0*1.0][0.0*1.0,1.125*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.302  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.317  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.318  1450  1712 I WindowManager:   SURFACE POS 354.19174, 639.3112: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.318  1450  1712 I WindowManager:   SURFACE alpha=0.06174141 layer=22005 matrix=[0.22406447*1.0,0.0*1.0][0.0*1.0,0.119745374*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.318  1450  1712 I WindowManager:   SURFACE POS -38.513546, -62.649864: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.318  1450  1712 I WindowManager:   SURFACE alpha=0.9382586 layer=20010 matrix=[1.0871347*1.0,0.0*1.0][0.0*1.0,1.0871347*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.319  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.334  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.334  1450  1712 I WindowManager:   SURFACE POS 364.98422, 649.61566: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.334  1450  1712 I WindowManager:   SURFACE alpha=0.032476306 layer=22005 matrix=[0.20042115*1.0,0.0*1.0][0.0*1.0,0.10555744*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.335  1450  1712 I WindowManager:   SURFACE POS -26.219006, -42.650375: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.335  1450  1712 I WindowManager:   SURFACE alpha=0.9675237 layer=20010 matrix=[1.059319*1.0,0.0*1.0][0.0*1.0,1.059319*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.336  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.351  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.351  1450  1712 I WindowManager:   SURFACE POS 373.62964, 656.79016: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.351  1450  1712 I WindowManager:   SURFACE alpha=0.013497472 layer=22005 matrix=[0.18148142*1.0,0.0*1.0][0.0*1.0,0.095679045*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.351  1450  1712 I WindowManager:   SURFACE POS -16.370361, -26.629614: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.351  1450  1712 I WindowManager:   SURFACE alpha=0.9865025 layer=20010 matrix=[1.037037*1.0,0.0*1.0][0.0*1.0,1.037037*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.352  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.368  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.368  1450  1712 I WindowManager:   SURFACE POS 379.7832, 661.10376: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.368  1450  1712 I WindowManager:   SURFACE alpha=0.0038804412 layer=22005 matrix=[0.1680007*1.0,0.0*1.0][0.0*1.0,0.08973974*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.368  1450  1712 I WindowManager:   SURFACE POS -9.360363, -15.226473: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.368  1450  1712 I WindowManager:   SURFACE alpha=0.99611956 layer=20010 matrix=[1.0211773*1.0,0.0*1.0][0.0*1.0,1.0211773*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.369  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.385  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.385  1450  1712 I WindowManager:   SURFACE POS 383.8686, 663.4422: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.385  1450  1712 I WindowManager:   SURFACE alpha=4.4226646E-4 layer=22005 matrix=[0.15905076*1.0,0.0*1.0][0.0*1.0,0.08651996*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.385  1450  1712 I WindowManager:   SURFACE POS -4.7064214, -7.655921: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.385  1450  1712 I WindowManager:   SURFACE alpha=0.99955773 layer=20010 matrix=[1.010648*1.0,0.0*1.0][0.0*1.0,1.010648*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.386  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.401  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.401  1450  1712 I WindowManager:   SURFACE POS 386.20374, 664.48694: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.402  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=22005 matrix=[0.15393513*1.0,0.0*1.0][0.0*1.0,0.08508152*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.402  1450  1712 I WindowManager:   SURFACE POS -2.0462885, -3.328691: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.402  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=20010 matrix=[1.0046296*1.0,0.0*1.0][0.0*1.0,1.0046296*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.404  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.421  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.421  1450  1712 I WindowManager:   SURFACE POS 387.48358, 664.90265: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.421  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=22005 matrix=[0.15113133*1.0,0.0*1.0][0.0*1.0,0.084509075*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.421  1450  1712 I WindowManager:   SURFACE POS -0.5882895, -0.95696867: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.421  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=20010 matrix=[1.001331*1.0,0.0*1.0][0.0*1.0,1.001331*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.423  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.438  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.439  1450  1712 I WindowManager:   SURFACE POS 387.94116, 664.9946: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.440  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=22005 matrix=[0.1501289*1.0,0.0*1.0][0.0*1.0,0.084382474*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.440  1450  1712 I WindowManager:   SURFACE POS -0.06702232, -0.109025: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.440  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=20010 matrix=[1.0001516*1.0,0.0*1.0][0.0*1.0,1.0001516*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.441  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.453  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.453  1450  1712 I WindowManager:   SURFACE POS 388.0, 665.0: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.454  1450  1712 I WindowManager:   SURFACE alpha=0.0 layer=22005 matrix=[0.14999998*1.0,0.0*1.0][0.0*1.0,0.084375024*1.0]: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.454  1450  1712 I WindowManager:   SURFACE POS 0.0, 0.0: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.454  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=20010 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.455  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.470  1450  1712 I WindowAnimator: >>> OPEN TRANSACTION animateLocked
+06-30 18:37:55.470  1450  1712 V AppWindowAnimator: Finished animation in AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}} @ 8006911
+06-30 18:37:55.470  1450  1712 V AppWindowAnimator: Animation done in AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: reportedVisible=false
+06-30 18:37:55.470  1450  1712 V WindowStateAnimator: finishExit in WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}: exiting=false remove=false windowAnimating=false
+06-30 18:37:55.470  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.470  1450  1712 V WindowManager: Win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=true, isAnimating=false
+06-30 18:37:55.470  1450  1712 V WindowManager: VIS AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: interesting=1 visible=1
+06-30 18:37:55.470  1450  1712 V WindowManager: Visibility changed in AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: vis=true
+06-30 18:37:55.470  1450  1712 V WindowAnimator: updateWindowsApps...: done animating AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.472  1450  1712 V AppWindowAnimator: Finished animation in AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}} @ 8006911
+06-30 18:37:55.472  1450  1712 V AppWindowAnimator: Animation done in AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}: reportedVisible=false
+06-30 18:37:55.472  1450  1712 V WindowStateAnimator: finishExit in WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}: exiting=true remove=false windowAnimating=false
+06-30 18:37:55.473  1450  1712 I WindowManager:   SURFACE HIDE (finishExit): Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.473  1450  1712 I WindowManager:   SURFACE HIDE (performLayout): Window{940b6df u0 com.android.settings/com.android.settings.MainSettings EXITING}
+06-30 18:37:55.473  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}
+06-30 18:37:55.473  1450  1712 V WindowManager: VIS AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}: interesting=0 visible=0
+06-30 18:37:55.473  1450  1712 V WindowAnimator: updateWindowsApps...: done animating AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}
+06-30 18:37:55.473  1450  1712 V WindowStateAnimator: Animation done in WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}: exiting=false, reportedVisible=true
+06-30 18:37:55.473  1450  1712 V WindowStateAnimator: finishExit in WindowStateAnimator{5a6888c com.miui.home/com.miui.home.launcher.Launcher}: exiting=false remove=false windowAnimating=false
+06-30 18:37:55.473  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}
+06-30 18:37:55.473  1450  1712 V WindowManager: Win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=true, isAnimating=false
+06-30 18:37:55.473  1450  1712 V WindowManager: VIS AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}}: interesting=1 visible=1
+06-30 18:37:55.474  1450  1712 V WindowStateAnimator: Animation done in WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}: exiting=false, reportedVisible=false
+06-30 18:37:55.474  1450  1712 V WindowStateAnimator: finishExit in WindowStateAnimator{7bfff2c com.android.settings/com.android.settings.MainSettings}: exiting=false remove=false windowAnimating=false
+06-30 18:37:55.474  1450  1712 V WindowManager: Update reported visibility: AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}
+06-30 18:37:55.474  1450  1712 V WindowManager: VIS AppWindowToken{7d7b6e token=Token{4c552e9 ActivityRecord{9ce3f70 u0 com.android.settings/.MainSettings t16}}}: interesting=0 visible=0
+06-30 18:37:55.474  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=21000 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{f9d860d u0 com.android.systemui.ImageWallpaper}
+06-30 18:37:55.474  1450  1712 I WindowManager:   SURFACE POS 0.0, 0.0: Window{940b6df u0 com.android.settings/com.android.settings.MainSettings}
+06-30 18:37:55.475  1450  1712 I WindowManager:   SURFACE alpha=1.0 layer=21010 matrix=[1.0*1.0,0.0*1.0][0.0*1.0,1.0*1.0]: Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}
+06-30 18:37:55.476  1450  1712 I WindowAnimator: <<< CLOSE TRANSACTION animateLocked
+06-30 18:37:55.476  1450  1712 V WindowManager: Reporting visible in AppWindowToken{8c69b2f token=Token{d9d0810 ActivityRecord{56284d3 u0 com.miui.home/.launcher.Launcher t14}}} visible=true gone=false
+06-30 18:37:55.477  1450  1712 I WindowManager: >>> OPEN TRANSACTION performLayoutAndPlaceSurfaces
+06-30 18:37:55.478  1450  1712 V WindowManager: Eval win Window{ea12cef u0 com.miui.home/com.miui.home.launcher.Launcher}: isDrawn=true, isAnimating=false
+06-

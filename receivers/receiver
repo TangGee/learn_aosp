@@ -1,0 +1,302 @@
+发送过程
+final int broadcastIntentLocked(ProcessRecord callerApp,
+            String callerPackage, Intent intent, String resolvedType,
+                        IIntentReceiver resultTo, int resultCode, String resultData,
+                                    Bundle resultExtras, String[] requiredPermissions, int appOp, Bundle bOptions,
+                                                boolean ordered, boolean sticky, int callingPid, int callingUid, int userId) 
+
+
+1  判断是否为instantApp发出的广播,如果是instantApp发出的广播 要去掉Intent.FLAG_RECEIVER_VISIBLE_TO_INSTANT_APPS 标志,表示不被Instant_app看到
+
+2 添加Intent.FLAG_EXCLUDE_STOPPED_PACKAGES 标志表示被stop的应用不能接收广播(需要证明是不是forceStop)
+
+3 如果AMS还没有完全启动并且广播没有FLAG_RECEIVER_BOOT_UPGRADE(这有prebootBroadCast有这个标志,表示系统还没有启动完成发送的广播,这时候应用还不能启动,所以只能发送给动态注册的应用),则需要添加Intent.FLAG_RECEIVER_REGISTERED_ONLY 表示只发送给动态注册的广播接收者 (这种情况不允许其他应用启动,所以要加上这个标志)
+4 如果指定接收者但是不是有序广播 是不允许的,所以打印警告log
+
+5 获取调用者userId 
+6 如果调用者没有启动则跳过广播
+7 一些选项的处理  getTemporaryAppWhitelistDuration的时候,临时白名单是干什么的????
+   检查权限CHANGE_DEVICE_IDLE_TEMP_WHITELIST   改变idle状态的权限  这里与idle相关,之后分析
+
+8 检查是否是受保护的广播 ,受保护的广播只能由系统发出,需要声明类似
+ <protected-broadcast android:name="android.net.tether.CONNECTEDSTA_CHANGE" />
+
+9  判断是否是系统进程发出的广播 包括的进程id有ROOT_UID, SYSTEM_UID PHONE_UID BLUETOOTH_UID NFC_UID 或者常驻进程被认为是系统调用的 
+10 如果不是系统调用的广播要进行权限检查:首先调用的是受保护的广播是不允许的,直接抛出异常. 
+  如果不是受保护的广播,则 如果是ACTION_APPWIDGET_CONFIGURE|ACTION_APPWIDGET_UPDATE 处理系统能发出,还有就是小部件主人自身可以发出(指定自己作为接收者)
+  如果没有指定接收者组件名,就设置intent的接收者包名为调用者自身
+
+ 11 对action 做处理 
+   首先或者后台启动广播列表,如果包含这个广播则添加Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND(有些广播可以唤醒后台进程,在BackgroundLaunchBroadcasts名单的强制加上这个标志) 后面在广播分发的过程中我们再去分析它的作用
+
+    1 对一些特殊的广播action进程处理 这里需要特殊的权限,这里不详细分析
+12 粘性广播处理
+   1 检查 BROADCAST_STICKY 权限 如果没有权限抛出异常
+   2 没有指定组件抛出异常
+   3 userId的处理 
+       userId 不是USER_ALL的情况(有可能出现cross_user问题)
+         检查时候和UserHandle.USER_ALL的stick广播有冲突如果有冲突则抛出异常(mStickyBroadcasts维护粘性广播),粘性广播会等组件启动时候分发,后面在派发流程分析
+   就是看下有没有添加了对应的stick广播,添加了则更新intent,否则添加一个新的
+
+13 如果没有FLAG_RECEIVER_REGISTERED_ONLY 标志则收集静态注册的广播
+   收集静态广播的流程:
+      private List<ResolveInfo> collectReceiverComponents(Intent intent, String resolvedType,
+                  int callingUid, int[] users 
+              对于callingUid == SHELL_UID 并且是首先用户没有调试权限的,并且com.android.internal.intent.action.REMOTE_BUGREPORT_FINISHED 不是bugreport 的则跳过
+
+              对于允许的通过pms去查询组件,对于组件(包含多用户和单用户的)
+
+14 intent.getComponent() 对于没有指定component的intent才有可能发送给动态注册的广播接收
+    这里使用SHELL_UID发送的广播要查询 所有接收者,否则只是查询当前发送userid的接收者,所以这里可以看出静态出册的广播接收者可能收到所有用户发送的广播,动态注册的广播接收者只能接收相同用户发送的广播.
+
+15 FLAG_RECEIVER_REPLACE_PENDING 表示需要替代之前没有分发完成的广播 下面是对这个进行处理
+   receivers 代表静态广播, registeredReceivers代表动态广播
+
+16 对于不是有序广播的并且系统里包含动态注册的广播. 
+   1 如果系统发的广播 不是受保护的广播或者几个特定的广播 这时候广播就可能有问题了,现在检查的不是很严格,只要广播接收者全部都声明了权限就认为可以发出该广播,如果有一个接收者没有声明权限则直接打印wtf log. 相信以后google 一定会收紧这个权限
+
+17 根据FLAG_RECEIVER_FOREGROUND 选择前台队列或者后台队列
+18 创建BroadcastRecord 一个广播记录项 
+BroadcastRecord r = new BroadcastRecord(queue, intent, callerApp,
+                    callerPackage, callingPid, callingUid, callerInstantApp, resolvedType,
+                                        requiredPermissions, appOp, brOptions, registeredReceivers, resultT                                         o,resultCode, resultData, resultExtras, ordered, sticky, false, us                                         erId)
+
+     注意这里先处理那些动态注册的因为不需要重新启动这些应用
+19  添加到广播队列 有两种情况
+    1 添加了FLAG_RECEIVER_FOREGROUND 标志,要替换之前还没有分发出去的广播 使用queue.replaceParallelBroadcastLocked(r)方法替换(注意这里值是处理并行广播) 替换的过程要匹配intent和匹配user 
+      广播队列里面有一个mParallelBroadcasts的list变量 维护并行广播的record
+
+    2 如果没有替换成功调用queue.enqueueParallelBroadcastLocked(r) 添加广播到mParallelBroadcasts最末端,创建入队列的一些信息用于统计作用 主要就是r.enqueueClockTime,调用queue.scheduleBroadcastsLocked()函数发起调度请求.
+20 设置registeredReceivers = null NR = 0 表示并行的动态注册广播已经处理完成. 下面该处理的是静态注册的广播和动态注册的串行(order)广播
+
+21 处理静态广播 如下:
+   对于一些Action有些包名是不能收到的,比如一个应用的package添加移除重启 和清楚数据 自己是不能收到的. 
+   ACTION_EXTERNAL_APPLICATIONS_AVAILABLE 外部应用可以使用自己也是不能收到的
+   要移除这些不能收到广播的包的接收者.
+23 对静态和动态广播的优先级进行排序,放到receivers(原来盛放静态广播的集合,)集合里面.
+24 检查checkBroadcastFromSystem 又一次 这里所有的广播接收者都被检查到了
+25  如果有对应的广播接收者有两种情况 1 确实有receiver, 2 没有但是指定了resultTo(指定哪个组件接收)
+     1找到对应的queue 
+     2创建BroadcastRecord 
+         BroadcastRecord r = new BroadcastRecord(queue, intent, callerApp,
+                             callerPackage, callingPid, callingUid, callerInstantApp, resolvedType,
+                                                 requiredPermissions, appOp, brOptions, receivers, resultTo                                                 , resultCode,
+                                                   resultData, resultExtras, ordered, sticky, false, userId)
+                                                   
+    3 这里有一点突破尝试,所有的静态注册的广播和动态注册的order广播都要当做 order广播处理
+     使用replaceOrderedBroadcastLocked 替换需要替换的 ,如果替换了则原来的发现指定了接收者,则直接直接执行广播逻辑
+     如果没有替换成功则直接添加到穿行广播里面. 所以可以看到静态注册的刚播都是串行广播,到底是不是这样我们在派发过程再去分析
+
+25 没有可用的接收者只需要统计信息
+
+
+
+
+最后说明下广播如何引发调度 当有新的广播添加到队列,使用queue.scheduleBroadcastsLocked()引发处理调度
+public void scheduleBroadcastsLocked() {
+        if (DEBUG_BROADCAST) Slog.v(TAG_BROADCAST, "Schedule broadcasts ["
+                        + mQueueName + "]: current="
+                                        + mBroadcastsScheduled);
+                                        if (mBroadcastsScheduled) {
+                                                 return;
+                                        }                                                                            mHandler.sendMessage(mHandler.obtainMessage(BROADCAST_INTENT_MSG, this));
+mBroadcastsScheduled = true;}
+
+
+
+分发过程
+首先说明前台队列和后台队列的区别
+
+
+
+mFgBroadcastQueue = new BroadcastQueue(this, mHandler,
+                "foreground", BROADCAST_FG_TIMEOUT, false);
+mBgBroadcastQueue = new BroadcastQueue(this, mHandler,
+                      "background", BROADCAST_BG_TIMEOUT, true);
+二者使用同一个线程处理消息
+二者超时时间不一样  前台10s 后台60s(注意这个过程是receiver执行时间不是派发时间 ) 
+另一个不同是mDelayBehindServices参数 后台为true 前台为false  
+
+分析下派发广播的过程 最后分析dumpsys 信息
+BROADCAST_INTENT_MSG 消息处理
+ final void processNextBroadcast(boolean fromMsg) 函数
+ 1 可能设置mBroadcastsScheduled 方便调度下一个广播
+ 2 处理并行广播
+    1 遍历mParallelBroadcasts 更新统计信息dispatchTime,dispatchClockTime 两个时间信息都是干啥的最后分析
+    2 遍历该广播的接收者
+        1 使用deliverToRegisteredReceiverLocked 函数分发
+              注意并行广播都是动态注册的所以可以使用 BroadcastFilter作为参数,直接强转
+              处理的流程比较长,也是分段去写
+              1 检查没有filter权限的跳过,分别用AMS和Appops检查 这个需要以后分析
+              2 权限receiver没有权限的跳过
+              3 检查没有导出的跳出,这里应该是自己应用可以通过
+              4 Appops检查应用
+              5 防火墙检查
+              6 检查应用已经死亡或者崩溃跳出(注意这里是动态注册的广播)
+              7 instant 不能看到的但是fliter是instant的退出 注意这里的filter应该代表一个应用,里面有很多接收者   
+              8 如果skip成立添加统计信息直接退出,注意上面如果有skip其他skip检查则不会执行
+              9 经过上面的权限检查后  如果还要重新审查权限mService.mPermissionReviewRequired ==true 则使用
+              rivate boolean requestStartTargetPermissionsReviewIfNeededLocked 重新审查,由此可见安卓在安全上做了超级多的工作,能否简化这种方式????
+                  大多数手机都不成立我们不去分析这里
+             10 添加统计信息
+             11 如果是有序广播的处理 这里虽然不成立我们还是分析一下,后面再遇到这个函数就不返回来分析了
+                   主要就是设置filter.receiverList的一些信息用于清理工作
+                   并行的可能不需要做这些清理工作
+             12 如果应用正在处于fullBackup状态 
+                1并且广播是有序广播直接跳过, 这个过程中调用了finishReceiverLocked 函数我们稍后分析
+             13 不在备份情况直接执行广播  performReceiveLocked(filter.receiverList.app, filter.receiverList.receiver,
+                                     new Intent(r.intent), r.resultCode, r.resultData,
+                                                             r.resultExtras, r.ordered, r.initialSticky, r.userId)
+                 1 performReceiveLocked 的过程分析
+                         app.thread.scheduleRegisteredReceiver(receiver, intent, resultCode,
+                                                     data, extras, ordered, sticky, sendingUser, app.repProcState)                 注意这个过程是异步的 因为这里
+                2 对于静态广播使用 receiver.performReceive(intent, resultCode, data, extras, ordered,
+                                    sticky, sendingUser) 执行广播,这个过程也是异步的
+                那么问题来了 我们怎么处理使串行广播串行化
+
+
+            14  如果是有序广播设置 r.state = BroadcastRecord.CALL_DONE_RECEIVE
+             
+          
+3 上面的过程完成后,注意这里处理的是并行广播,并没有对deliverToRegisteredReceiverLocked设置的结果进行处理
+       ,尤其是有序广播的结果,我们稍后会分析有序广播的情况
+
+4 更新该广播的统计信息
+        主要统计信息包含finishTime派发完成时间 enqueueClockTime入队列时间  dispatchTime派发时间(cpu时间), dispatchClockTime 派发时间(日历时间)
+
+5 注意后面处理的都是order广播 对pendingBroadcast 进行处理 
+      如果pendingBroadcast 做处理的app还没有死亡,直接返回等待处理完成
+      否则设置一些数据进行使下一个receiver可以接收广播
+6  有序广播个数为0(一轮广播处理完成了 这个逻辑应该是在最后完成的),则通知gc, 处理完成所有的有序广播还要更新oomadj  最后返回
+7 后面的过程就是真正处理有序广播的过程,首先从有序广播队列里面拿出来一个BroadcastRecord. 
+8 这里处理的是已经超时的广播,该广播已经被派发,但是现在还在广播队列中.  这种情况下如果系统已经启动完成,并且派发的时间到现在已经超过了很长时间(BroadcastRecord的广播接收者个数x2x广播超时的时间(这个时间貌似很长啊).) 超过这个阀值广播还没有执行完成. 使用broadcastTimeoutLocke通知超时,并且设置forceReceive = true 这个变量我们后面会知道它是干什么用的,最后把r.state = BroadcastRecord.IDLE 标记该广播处于idle状态. 现在我们来分析下broadcastTimeoutLocked的流程,方便我们理解后续的流程
+    final void broadcastTimeoutLocked(boolean fromMsg) 
+      1 首先根据fromMsg 设置 mPendingBroadcastTimeoutMessage=false  这个变量顾名思义,意图就是判断是否有检查广播超时的消息还没有处理完成. 相信当广播处理完成的时候会把这个值设置成false,调用广播执行的时候会把这个值设置成true. 以便检查广播超时. 
+      2 如果有序广播个数为0 则不需要进行后续操作
+      3  去除最前面的有序广播
+      4 如果fromMsg 代表从handle队列执行该广播(这里是false不过我们也会对true进行分析,后续就不需要返回来进行分析了,防止看代码太跳)
+          1 如果是从msg队列发出来的超时处理,当前正在做dexopt就把mDidDexOpt设置为fasle, 然后发出延迟的超时请求(意图是延迟广播超时时间,从mDidDexOpt的注释可以看出该值为true的时候正在执行dexopt操作,所以要延长超时时间
+          2 系统没有准备完成直接返回
+          3  如果还没超时则再次发出超时消息.
+      5 对于可能没有超时的情况做出了处理(没有超时的全都返回了)后面就处理真正超时的情况
+      6 如果处于WAITING_SERVICES,设置br.curComponent = null,br.state = BroadcastRecord.IDLE 直接处理下一个广播
+      7  设置 r.receiverTime = now  r.anrCount++ 统计超时信息,由此可见receiverTime 是分发完成时候设置的, 并且统计了anr数量 这里就真的是anr的情况了
+      8 没有下一个广播 r.nextReceiver <= 0 应该是下一个广播接收者的下标,我们可以从后面看到设置它的信息
+      9 设置BroadcastReceiver超时超时的统计信息 
+      10 finishReceiverLocked 完成广播处理
+      11 调度下一个广播
+      12 发送anr消息
+      13 在这里总结一下,对于br.state == BroadcastRecord.WAITING_SERVICES 会直接跳过处理下一个广播. mDidDexOpt可能延长超时时间, mService.mProcessesReady不处理正常超时
+         br.curComponent 当前正在处理的广播接收者
+         br.state = BroadcastRecord.IDLE 状态
+9 处理完非正常超时的镜框要判断当前广播的记录的状态不是IDLE则直接返回,由此可见这个状态是用于控制有序广播执行的,有一下几种状态
+static final int IDLE = 0;   //idle状态 空闲的
+    static final int APP_RECEIVE = 1;   // app正在处理 
+        static final int CALL_IN_RECEIVE = 2;  //
+            static final int CALL_DONE_RECEIVE = 3; //  对于有序动态注册的广播已经调用完成performReceiveLocked,通知到客户端
+                static final int WAITING_SERVICES = 4; //等待服务启动 这种情况超时的话直接设置成idle状态
+10这里处理的状态包括没有广播接收者,所有广播接收者已经处理完成, 广播被终端和 广播非正常超时的情况. 
+      1 指定了特定的广播接收者 这种情况可能被没有广播接收者的情况锁包含,所以使用performReceiveLocked执行广播,设置resultTo=null 就不会进行后续处理了.   这个广播就发送完成了.  这种情况其实也不用关心结果了吧??
+      2 cancelBroadcastTimeoutLocked 取消超时消息
+      3 添加统计数据
+      4  设置looped==true表示一个广播记录项已经处理完成了,下一轮循环进行updataOomAdj 操作  ,进行下一轮循环(注意这个循环是用于挑选下一个要处理的广播记录项)
+        我们再来看看挑选广播记录项的过程中都做了什么 
+           1 处理完成一项 更新oomadj
+           2 处理非正常超时的情况 
+           3 广播处理已经完成的情况
+11 总结下上面挑选出来的广播记录项目, 包含广播处理者或者状态不是BroadcastRecord.IDLE的广播.(其实后面这个条件也应该满足包含广播处理者必然情况)
+12 下面是真正处理广播派发和流程控制的过程
+13 继续向下分析 获取nextReceiver 这个数值是递增的. 设置r.receiverTime 用于设置超时和统计信息. 
+14如果不是第一个广播还要更新r.dispatchTime ,这个是新的dispatchTime 每次处理新的广播接收者的时候后进行更新.  然后还要更新dispatchClockTime为当前时间添加统计信息
+15 如果系统中没有mPendingBroadcastTimeoutMessage则发送超时检查消息, 这里可以看出,并行广播不会超时,串行广播才会超时. 另外使用静态广播肯定是串行的,但是动态广播是不是串行取决于是否是串行发送的
+16 获取广播参数和下一个要处理的广播,这里的广播有可能是静态的或者动态的用不同的对象表示所以不会进行强转.
+17 首先如果是动态广播if (nextReceiver instanceof BroadcastFilter)  进行处理
+   1 deliverToRegisteredReceiverLocked(r, filter, r.ordered, recIdx) 进行分发,这个过程我们已经分析过这里就不追踪了,主要就是权限检查和派发还有就是有序广播设置r.state = BroadcastRecord.CALL_DONE_RECEIVE;
+   2 如果派发的动态广播 这里如果是有序广播会设置r.receiver为当前的接收者,但是如果没有设置或者不是有序广播的话就不需要关心后续的状态,设置状态为idle 并且重新调度处理下一个广播.
+   3 如果是有序广播的话要进行 scheduleTempWhitelistLocked的处理
+18 到这里一个动态广播就处理完了,对于有序广播我们并没有请求处理下一个广播,可见应该在广播处理完成的时候才会请求下一个
+19 处理静态有序广播,后面也是一系列的权限和状态处理,这部分也没有什么意思不去分析. 
+   这里有一些优化的部分我们不得不去分析
+       1 首先做一些兼容性检查 不合格的跳过
+       2 组件权限检查 不符合跳过
+       3 导出检查
+       4 AppOpsService
+       5  user cross权限检查
+       6 instant 检查
+       7 非正常死亡的app跳过 这种情况是先启动进程再回来调用服务的情况会设置这个app
+       8 包不可用返回
+       9 需要重新检查权限的
+20 singleton非systemcall的要获取ResolverInfo.activityInfo
+21 获取ProcessRecord
+22 到此位置还没有跳出的情况
+      1不允许启动跳出
+      2后台检查需要处理的情况
+          如果没有指定具体的组件和包名并且设置了FLAG_RECEIVER_INCLUDE_BACKGROUND,并且允许启动,并且签名权限不满足,则addBackgroundCheckViolationLocked 做什么处理我稍后分析
+      3 检查是否可以自启动
+
+23 最后如果跳过则设置统计信息 掉启下一次处理
+24  设置状态r.state = BroadcastRecord.APP_RECEIVE
+25 进程已经启动使用processCurBroadcastLocked处理广播 (注意跳过fullBackup的)
+26 app.thread.scheduleReceiver 调用广播
+27 进程没有启动的情况先启动进程 失败的话处理下一个
+28 设置 mPendingBroadcast = r;
+            mPendingBroadcastRecvIndex = recIdx;
+             这两个值的作用是当应用重新启动后再次处理这个广播
+
+
+
+
+
+
+
+
+客户端的执行过程:
+handleReceiver((ReceiverData)msg.obj) 函数进行处理
+处理完成使用am.finishReceiver( 结束处理
+public boolean finishReceiverLocked(BroadcastRecord r, int resultCode,
+            String resultData, Bundle resultExtras, boolean resultAbort, boolean waitForServices)
+1 设置广播记录为IDLE状态
+2 设置当前接收者为null,设置组件为null??? 这个是否合理呢?
+3 移除app的urReceivers 
+4 设置 r.curFilter.receiverList.curBroadcast = null 表示该组件现在没有处理广播,为什么要这么处理呢,因为一个广播组件可能包可以处理好几个action
+5 设置结果因为有序广播可能包含狠毒欧结果
+6 waitForServices  后台广播队列满足这个条件,可以被service延迟,如果有backgroundservice 则设置状态为r.state = BroadcastRecord.WAITING_SERVICES 让他等.  等到后台正在启动的数量低于限制后再次允许广播调度
+  注意前台广播是不关心service状态的,这样做的原因是什么呢???
+7 如果还有下一个广播 使用r.queue.processNextBroadcast(false)进行调度, 注意这里的fromMsg是假的 所以不会再接收广播分发和重新设置超时消息
+
+这里对广播超时还有一点容易让人费解的地方,就是在处理超时的消息的时候 ,虽然只有在所有的有序广播都处理完成的时候去取消超时消息,但是判断是否超时的时候会参考每个广播发送者的派发时间,代码如下
+ long timeoutTime = r.receiverTime + mTimeoutPeriod;
+             if (timeoutTime > now) {
+                             // We can observe premature timeouts because we do not cancel and reset the
+                                             // broadcast timeout message after each receiver finishes.  Instead, we set up
+                                                             // an initial timeout then kick it down the road a little further as needed
+                                                                             // when it expires.
+                                                                                             if (DEBUG_BROADCAST) Slog.v(TAG_BROADCAST,
+                                                                                                                     "Premature timeout ["
+                                                                                                                                             + mQueueName + "] @ " + now + ": resetting BROADCAST_TIMEOUT_MSG for "
+                                                                                                                                                                     + timeoutTime);
+                                                                                                                                                                                     setBroadcastTimeoutLocked(timeoutTime);
+                                                                                                                                                                                                     return;
+                                                                                                                                                                                                                 }
+
+                                                                                                           这一段代码足以打消我们的担心,广播机制还是如我们理解的样子. 
+
+                                                                                                           另外一点值得注意的是在Android_o里面加入的特性
+对于后台启动广播可能加了请多限制 这里不解释了 
+
+
+
+下面对log进行分析
+函数全都在dumpBroadcastsLocked 函数中
+
+
+
+
+最后对广播总结
+1  静态注册的广播都会放在 有序广播执行
+2 动态广播如果没指定是order的接收者则放在并行队列执行
+3 有序广播排序按照优先级,优先级相同的接收者动态的排在前边
+4 如果不添加广播接收者组件名称有可能收不到广播
+5 有两个广播队列超时时间不一样但是在同一个线程执行
+6 广播接收者执行的时候都是异步的,并不会阻塞ams进程,ams只进行分发,ams只是保证有序广播的调度
+

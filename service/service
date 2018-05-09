@@ -1,0 +1,133 @@
+service 的启动过程
+ComponentName startServiceLocked(IApplicationThread caller, Intent service, String resolvedType,
+            int callingPid, int callingUid, boolean fgRequired, String callingPackage, final int userId)
+
+   1 检查调用者 设置callerFg代表是否在fg的cgroup中,如果没有指定调用者进程则默认是前台的(这是极少数情况吧) 注意是callerFg并不代表service是前台的
+   2 获取user下的ServiceMap
+   3 如果指定了组件从servicemap中 获取ServiceRecord 
+   4 如果没找到ServiceRecord不是从外部绑定的,尝试从smap.mServicesByIntent中找到service,这是是从intent,并且intent没有指定componetName.
+   5 不是外部使用的service并且调用者不是自身,则设置没有找到对应service
+   6 没有找到正确的service
+      1 通过PMS查询组件
+      2 查询到为null 直接返回
+      3 根据查询到的ResolveInfo 设置compoent
+      4 如果查到的service是导出的service(可以被其他应用绑定)  
+          1并且是外部绑定,如果service不被导出 直接抛出异常
+          2 FLAG_ISOLATED_PROCESS 不在沙箱进程执行 抛出异常
+          3 获取应用信息
+          4这里解释下isBindExternal,在绑定服务的时候如果指定了BIND_EXTERNAL_SERVICE这个标志,代表要绑定的服务必须运行在沙盒进程中, 并且设置了externalService=true,另外如果service指定了 externalService=true 也必须使用BIND_EXTERNAL_SERVICE绑定, 而且还要求service被导出 要求挺多的哈
+          5 了解了4中的基础试试在继续往下看
+          6如果isBindExternal==true 
+            1 如果进程没有导抛出异常
+            2 如果service不是在沙盒进程中运行也要抛出异常   
+            3 查询AplicationInfo , 组件名称添加到service中,这种情况是那种真的能被BIND_EXTERNAL_SERVICE绑定的服务
+          7 如果指定了FLAG_EXTERNAL_SERVICE 但是绑定时候没有加BIND_EXTERNAL_SERVICE则直接抛出异常
+
+        5 如果userid>0 则要判断启动的service是不是系统中单例的,如果是的话就福所谓了 userid设置成0
+        6 从servicemap找到servicerecord
+        7 没有找到但是设置了createIfNeeded 这里来看肯定是要启动服务了,在总结下设置createIfNeeded的情况
+          包括startservice, 和binderservice的时候,这里有些奇怪为什么不是BIND_AUTO_CREATE时候采取设置我们后面分析
+        8 创建 ServiceRestarter res = new ServiceRestarter(),放数据结构到ServiceMap中
+        9 遍历mPendingServices,移除与当前要启动的service重复的
+             这里为什么不方法哦mPendingServices做为问题后问分析
+      7 这时候正常情况下如果createIfNeed 或者service已经启动了的话service 已经不为null了,为null的情况就是没有指定createIfNeeded
+      8 servicerecord不为null
+         1  检查权限
+         2 检查是否导出
+         3 检查权限用appops
+         3  防火墙检查 
+         4 如果以上全都检查通过创建serviceLooupResult返回,否则返回null.
+      9 没有autocreate 直接返回空
+
+2 如果没有获取到要启动的service的record直接返回null,这里就可以启动service或者直接返回存货的service了
+3 检查record 如果没有返回出错 权限被拒绝的情况
+4 对servicerecord进行检查
+5 如果对应user不存在返回null
+6 如果ServiceRecord没有设置startRequested 并且不是启动前台服务,就是说启动后台服务且是第一次启动,就要做一些检查(后台启动检查)
+    1  获取启动模式,如果不是normal是delayed则直接返回null
+    2  如果不是normal,应用没有启动则也不允许启动返回错误的compentName. 
+7 对后台启动检查完成之后
+8 mPermissionReviewRequired 重新检查权限
+9 从其他应用启动service要重新设置计数 并且从mRestartingServices列表移除,并且移除r.restarter请求
+10 设置统计信息r.lastActivity  r.startRequested = true, r.delayedStop = false, r.fgRequired = fgRequired
+11 添加一个项目到pendingStarts 用于管理启动这个服务的项目
+12  获取servicemap
+13 不是前台app调用,不是前台服务, service对应的service还没有被启动.并且user存在我们来看看这里有什么处理
+   1  如果调用进程是一个后台进程但是调用者的curProcState > ActivityManager.PROCESS_STATE_RECEIVER,如果有其他应用再启动service的过程中被延迟了,直接返回 组件 注意这里面是大于也就是说一个广播都没有,这种进程的优先级应该是极低的(注意 PROCESS_STATE_RECEIVER>PROCESS_STATE_SERVICE)
+        1 如果自己启动的后台服务也超出限制了,就加到ServiceMap.mDelayedStartList中
+        2 对于不满足上面两种情况的还需要继续考察 设置addToStarting = true
+   3 下面的条件是  ActivityManager.PROCESS_STATE_RECEIVER>=proc.curProcState >= ActivityManager.PROCESS_STATE_SERVICE , 因为当前进程优先级已经大于包含service了,再启动一个应该也可以
+14 总结下来,到这里被淘汰的情况有 
+    1  service 不存在
+    2  由于FLAG_EXTERNAL_SERVICE标志的service或者指定BIND_EXTERNAL_SERVICE标志被拒绝(这种是抛出安全异常)
+    3 权限问题 (这些返回new ComponentName("!", res.permission != null
+                        ? res.permission : "private to package"))
+    4 没有指定createIfNeeded 并且当前没有启动好的service
+    这些都是在retrieveServiceLocked处理的
+    5 userid不存在(这个user有可能是多用户的,也有可能被换成系统的(singleton的service))
+    6 延迟启动的应用 返回null
+    7 拒绝启动的 返回ComponentName("?", "app is in background uid " + uidRec)
+    8 mPermissionReviewRequired 被拒绝的
+    9 调用者不是前台进程,启动的service不是前台应用的并且service宿主的进程没有启动或者优先级太低,并且service被延迟启动的
+    10 user启动的进程数量超过最大进程数量了
+15 再来总结下 addToStarting参数,这种情况是去除了上面情况后 
+    总体来说就是service所在进程当前的curProcState 太大,可能不会马上被起来(越大越不重要)
+16 startServiceInnerLocked(smap, service, r, callerFg, addToStarting)
+   1 stracker相关 先不去分析
+   2 通知电池服务
+   3 bringUpServiceLocked(r, service.getFlags(), callerFg, false, false) 
+      1 如果service所在进程已经启动,并且service已经启动, 注意ServiceRecord.app不为空表示已经启动了
+         void sendServiceArgsLocked(ServiceRecord r, boolean execInFg,
+                     boolean oomAdjusted) 
+             1 判断要启动的service个数为0,返回
+             2 遍历pendingStarts
+                1 如果intent是空的并且只有一个service要启动,会向下执行,否则是不允许有空的
+                2 下面就可以放到r.deliveredStarts中了
+                3 增加deliveryCount 计数
+                4 需要授权的请求授权
+                5 private final void bumpServiceExecutingLocked(ServiceRecord r, boolean fg, String why)
+                   去过r.executeNesting == 0 说明第一次执行,创建一些初始化信息, 增加ProcessRecorder的executingServices, execServicesFg 发送超时消息
+                     1 如果是前台应用调用服务也会设置r.app.execServicesFg = true,设置超时消息(这里是有后台service变前台的过程,超时时间变化所以会重新发出超时消息,那么问题来了如何区分是哪个服务超时? 如何撤回消息?)
+                     2 设置  r.executeFg |= fg ,r.executeNesting++ ,r.executingStart = now
+                6 更新oomadj(注意这里可能是调用同一个应用的service多次(来自多个客户端)),只需要执行一次adj的更新
+                7 如果要启动的是前台服务 并且 不需要等待
+                    1 如果当前不是前台服务,使用scheduleServiceForegroundTransitionTimeoutLocked发送设置为前台服务的超时检查消息
+                    2 如果当前就是前台服务,设置r.fgRequired = false
+              由此可见fgRequired和isForeground是一对关系,前者是需求,后者是结果,但是又是单向的从非前台变成前台单向.
+                8 如果deliveryCount>1 添加 START_FLAG_RETRY 
+                9 如果si.doneExecutingCount > 0 设置Service.START_FLAG_REDELIVERY
+                10 到这里我们还是很奇怪pendingStarts都是在哪里添加的??? 其实也没有什么好奇怪的
+                11 添加ServiceStartArgs到集合
+            3 跳出遍历前面已经收集了一下ServiceStartArgs
+            4 启动service r.app.thread.scheduleServiceArgs(r, slice)
+            5 如果过程中发生了异常则执行serviceDoneExecutingLocked 所有的参数个,其实客户端执行service也会调用到这个函数
+
+       2 如果不是在restart过程中但是mRestartingServices.contains(r) 直接跳过,等着restart过程再去执行吧
+       3 restart的过程中 使用private void clearRestartingIfNeededLocked(ServiceRecord r) 进行重新启动???
+       4 如果设置了延迟启动 现在清除这个延迟启动的标志
+       5 如果user没有启动  bringDownServiceLocked(r) 关闭service
+       6 后面这些情况应该就是进程还没启动或者service没有运行的情况了
+       7 如果不是沙盒进程, 获取进程的信息
+            1 如果进程已经启动,使用realStartServiceLocked(r, app, execInFg)进行启动service 然后返回
+       8 如果是沙盒进程
+            1 设置沙盒进程的 ProcessRecord (有可能为null,后面会进行启动)
+       9 后面的过程处理沙盒进程和进程没有启动的情况
+       10 如果进程没有启动则启动进程
+       11 启动失败 bringDownServiceLocked(ServiceRecord r) 减少计数
+       12 启动成功则添加到mPendingServices 等进程起来之后处理
+       13 如果延迟结束(如果要stopservice发现它正在被延迟启动则可能在这里需要执行一次stop) 注意被延迟的条件是正在执行start的service已经超过了限制的个数, 只是start被延迟了.
+       14  主要到这里还没有分析realStartServiceLocked(r, app, execInFg) 和 stopServiceLocked(r) ,bringDownServiceLocked(r) 等到stopServiceLocked后我们再去分析.
+  4 如果bringUpServiceLocked 返回false则返返回
+
+
+
+
+
+
+realStartServiceLocked(ServiceRecord r,
+            ProcessRecord app, boolean execInFg)  真正启动service的过程
+1 app.thread 不存在直接抛出异常
+2 设置r.app = app  注意这里是service第一次启动的时间点,如果之前已经启动的会在sendServiceArgsLocked(r, execInFg, false) 执行service的start函数, 注意这里会执行Service.onCtrate onStart onStartCommand,而sendServiceArgsLocked函数只是执行onStartCommand. 
+3 r.restartTime = r.lastActivity = SystemClock.uptimeMillis() 
+4 添加到app.services中用于记录 ProcessRecord中的信息
+5 

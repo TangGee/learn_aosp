@@ -1,0 +1,28 @@
+条件断点对于我们的调试是很有用的 尤其是在多进程模型下,多个进程频繁调用同一服务
+   gdb条件断点设置方法 :
+      b 13 if i == 8
+
+
+
+
+服务端执行命令
+attach模式
+ adb shell gdbserver$USE64BIT :$PORT --attach $PID &
+ adb shell gdbserver64 :5039 --attach $PID &
+
+直接执行模式
+ adb shell gdbserver64 :5039 /usr/bin/xxx
+ 
+
+客户端执行命令
+adb forward tcp:5039 tcp:5039  
+端口转发
+
+打开gdb调试 /home/mi/d2a/prebuilts/gdb/linux-x86/bin/gdb
+gdb out/target/product/tissot/gdbclient.cmds out/target/product/tissot/symbols/init    调试init进程  也可以进入gdb后直接file 命令加载调试符号文件
+
+gdbclient.cmds 
+set solib-absolute-prefix out/target/product/tissot/symbols
+set solib-search-path out/target/product/tissot/symbols/system/lib64:out/target/product/tissot/symbols/system/lib64/hw:out/target/product/tissot/symbols/system/lib64/ssl/engines:out/target/product/tissot/symbols/system/lib64/drm:out/target/product/tissot/symbols/system/lib64/egl:out/target/product/tissot/symbols/system/lib64/soundfx:out/target/product/tissot/symbols/vendor/lib64:out/target/product/tissot/symbols/vendor/lib64/hw:out/target/product/tissot/symbols/vendor/lib64/egl
+source /home/mi/d2a/development/scripts/gdb/dalvik.gdb
+target remote :5039

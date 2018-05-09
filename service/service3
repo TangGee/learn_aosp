@@ -1,0 +1,405 @@
+1 上回书说道 
+ComponentName startServiceInnerLocked(ServiceMap smap, Intent service, ServiceRecord r,
+            boolean callerFg, boolean addToStarting)
+
+     已经解释了retrieveServiceLocked 函数还没有详细分析. 继续后续流程
+
+1 后面执行的情况是如果没有其他使用者调用了startService,说明这个服务还没有起来或者已经stop了, 并且当前调用者不是前台应用,还要检查当前调用者是否有启动应用的能力,是什么样的能力呢
+   1 检查对应service(注意是service)的启动能模式
+       int getAppStartModeLocked(int uid, String packageName, int packageTargetSdk,
+                   int callingPid, boolean alwaysRestrict, boolean disabledOnly)
+            检查启动模式虽然不是我这次主要分析问题的原点,但是为了更好的掌握android的进程管理还是需要分析的
+            1 从存货的进程里面找到service的uid所对应的UidRecord
+            2 判断uid状态, 对三种情况进一步处理, 包括uidRec == null(进程没有启动), alwaysRestrict永远限制(对应进程虽然启动了还是非得要检查(无理取闹模式), uidRec.idle), 应用处于idle状态(在后台长时间不活跃)
+               1 首先获取到应用是不是ephemeral(短暂的还不知道是干嘛的应用)
+               2 如果是短暂的直接返回ActivityManager.APP_START_MODE_DISABLED(不允许启动)
+               3 对不不是短暂进程的做如下处理
+                  1 如果没有指定disabledOnly 则返回APP_START_MODE_NORMAL,由此可见只有ephemeral进程是被DISABLE的. 
+                  2 获取startMode 对于要求严格限制的appRestrictedInBackgroundLocked 函数进行处理
+                  int appRestrictedInBackgroundLocked(int uid, String packageName, int packageTargetSdk)
+                       1如果应用的targetSdk 在Android o以上 返回APP_START_MODE_DELAYED_RIGID (看来是严格检查,注释中说在android o以上要检查后台启动情况,由此可见返回这个后面还会检查后台情况)
+                       2 对于o以下的应用使用AppOpsService.noteOperation(AppOpsManager.OP_RUN_IN_BACKGROUND,
+                                       uid, packageName) 检查是否可以在后台运行,又返回三种情况
+                  3 不严格的检查
+                  int appServicesRestrictedInBackgroundLocked(int uid, String packageName, int packageTargetSdk)             
+                        1 常驻应用返回APP_START_MODE_NORMAL
+                        2  在后台运行白名单返回APP_START_MODE_NORMAL
+                        3 在idle白名单 返回APP_START_MODE_NORMAL
+                        4 使用appRestrictedInBackgroundLocked 严格的的检查
+                  4 经过2,3 对startmode的检查后返回的结果有如下几种 0:APP_START_MODE_NORMAL 正常启动
+                       1:APP_START_MODE_DELAYED 延迟启动 2:APP_START_MODE_DELAYED_RIGID 严格的错误,可能还需需要继续检查 . 对于禁用的情况这里是不包含的,看来这和引用包是两个改建
+                  5 获取startMode后,APP_START_MODE_DELAYED 比较特殊,检查应用没有在后台 返回APP_START_MODE_NORMAL
+                  6 其他类型直接返回
+            3 不满足2状态的直接返回 APP_START_MODE_NORMAL
+            4 对于检查启动类型后 如果是APP_START_MODE_DELAYED直接返回null,其他返回ComponentName("?", "app is in background uid " + uidRec)
+            5 由此可见,可以正常启动service的模式只有APP_START_MODE_NORMAL, 我们以后有机会分析启动限制
+ 
+    2 checkGrantUriPermissionFromIntentLocked 检查intent里面携带的url权限
+        这个应该是返回需要授权的uri信息
+    3 权限审查,如果开启了这个选项只允许前台应用启动服务,并且还需要弹出页面由用户手动同意权限,后台启动则直接不允许
+    4 设置 ServiceRecord的一些信息用于启动service(注意这里有两种情况service已经启动和还没有启动)
+     设置的有 1 r.lastActivity 最后活跃时间 2 r.startRequested = true 需要启动(都到这里了可定需要启动拉)
+     3  r.delayedStop = false 不用延迟关闭了 不需要关闭, 4 r.fgRequired = fgRequired是否需要作为前台服务.
+     5 r.pendingStarts.add(new ServiceRecord.StartItem(r, false, r.makeNextStartId(),
+       service, neededGrants, callingUid)) 添加到pendingStarts表示一次没有处理的启动请求
+    5 获取ServiceRecord所属的user的ServiceMap,做一些用户界别的检查 主要是针对 调用者不是前台进程,启动的也不是前台服务,并且user已经启动的情况, user没有启动的情况前面已经跳过了 
+        1 看看service对应的进程有没有启动 
+            1对于service进程优先级太低proc.curProcState > ActivityManager.PROCESS_STATE_RECEIVER 或者service进程没有启动的 这种情况对service启动就会严加限制. 我们来看看怎么限制
+                1  延迟启动的直接返回(因为原来启动的时候也是这种情况,服务在后台, 现在可定还是延迟状态,所以不用重新设置了,直接返回)
+                2 后台正在运行的服务已经超出了最大限制,把这个服务添加到smap.mDelayedStartList 中并且设置r.delayed = true,返回. 由此可见后台服务限制还是比较严格的
+                3 如果不满足1,2 说明还可以启动服务,设置addToStarting=true
+            2 proc.curProcState >= ActivityManager.PROCESS_STATE_SERVICE 也就是服务中本来也有服务运行,直接设置 addToStarting = true
+        2 现在可以看到在1里面淘汰了延迟启动的服务,放到了延迟列表里就返回了, 另外对于service进程优先级低于PROCESS_STATE_SERVICE的或者进程还没有启动的设置addToStarting = true;
+          addToStarting的情况包含一下几种: 1 进程优先级比较高  2 前台进程启动的服务 3后台进程启动的前台服务. 或者user都没有启动(这种情况不大可能,前边已经检查过了)
+     6 ComponentName cmp = startServiceInnerLocked(smap, service, r, callerFg, addToStarting) 真正启动服务或者执行startcommand的过程,注意前边分析的参数我们后面再去分析. 
+
+
+在分析startServiceInnerLocked函数前我们还是老老实实的分析retrieveServiceLocked函数,看看如何分获取service记录. 这里我们猜想它如何实现. 肯定是对于已经启动的或者已经请求启动的(延迟启动)直接拿出来ServiceRecord, 对于没有启动的service通过pms找到组件,检查一系列权限,之后创建serviceRecord的过程,我们带着猜测进去看下
+1 找到正确的调用者userid,分析多用户时候再去分析它
+2 获取user下的ServiceMap
+3 从intent中获取要启动的ComponentName
+4 ServiceMap里面有两个集合,用于存放当前user下的用户信息
+    final ArrayMap<ComponentName, ServiceRecord> mServicesByName = new ArrayMap<>();
+            final ArrayMap<Intent.FilterComparison, ServiceRecord> mServicesByIntent = new ArrayMap<>();
+   mServicesByName 是根据ComponentName 进行查询ServiceRecord, 而mServicesByIntent 则根据intent信息进程查询
+5  如果指定了ComponentName 看看mServicesByName里面是否已经存在了对应的ServiceRecord,如果存在取出来(这种找法是相当准确的)
+6 如果通过ComponentName没有找到ServiceRecord并且isBindExternal(代表绑定外部服务,是绑定service时候根据传递的flags去设置的),  根据intent找一下,由此可见如果要绑定外部服务,找到服务后可定会被放到mServicesByName集合中去.
+  这里我们来介绍isBindExternal参数的来历
+  这里解释下isBindExternal,在绑定服务的时候如果指定了BIND_EXTERNAL_SERVICE这个标志,代表要绑定的服务必须运行在沙盒进程中, 并且设置了externalService=true,另外如果service指定了 externalService=true 也必须使用BIIND_EXTERNAL_SERVICE绑定, 而且还要求service被导出 要求挺多的哈
+7 了解了isBindExternal的上述需求我们继续向下分析
+8 如果一个声明了FLAG_EXTERNAL_SERVICE的服务运行在自己的进程中,其他服务不能绑定它,所以设置找到的ServiceRecord为null,再去创建新的实例(这里当然也有可能还没有对应的serviceRecord)
+9 这里所描述的情况就是没有找到对应的ServiceRecord,因为这我们要启动的service并没有启动. 
+   1 使用PMS解析对应的service信息ResolveInfo
+   2 如果没有找到对应的serice信息则返回null不去处理
+   3 后面的情况是通过pms找到的对应的service,进行一些检查后创建ServiceRecord的过程我们详细分析
+       1 创建ComponentName
+       2 对FLAG_EXTERNAL_SERVICE进行检查,前面说了绑定外部服务如果传递了BIND_EXTERNAL_SERVICE标志,要慢如如下条件, 首先服务应该被导出, 另外服务必须是在独立的进程中运行, 满足这两条之后就可以为service的intent添加ComponentName信息了,这和我们前面分析的绑定外部服务必定要放在mServicesByName中是一致的. 另外如果没有使用了BIND_EXTERNAL_SERVICE,则会抛出异常 . 到这里我们可以总结下EXTERNAL_SERVICE的特性. 1 运行在沙盒进程中 2 自己应用拥有一个实例,其他应用拥有一个实例.  这里有一个疑问,是不是产生多个ServiceRecord?  如何解决差到多个实例的情况?
+       3 这样对于外部服务的特殊处理也执行完成了
+       4 对于多用户的处理,如果调用者的userid>0 也就是说不是系统用户,则判断要启动的服务是不是singleton的,如果是单例的则不需要在userid下创建ServiceRecord(只需要在user_system下创建就可以了).  重新设置查到的serviceInfo到系统用户
+       5 再次再新的用户的ServiceMap下查找是由存在已经运行起来的service. 
+       6 如果还是没有查到的话可代表确实该service还没有启动或者没有延迟启动. 
+       7 对于没有找到的情况如果指定了createIfNeeded就创建一个ServiceRecord(这里需要说明下createIfNeeded参数,在请求启动service的时候和binderservice的时候都会设置成true,要求创建ServiceRecord,启动的时候比较容易分析,binder的时候为什么不是指定AutoCreate的时候才去创建???????? 我们后面一定会弄明白这一点)
+       现在来看看创建ServiceRecord的过程. 
+            1 创建一个BatteryStatsImpl 用于通知电池服务service运行情况方便统计
+            2 创建ServiceRecord new ServiceRecord(mAm, ss, name, filter, sInfo, callingFromFg, res)
+            3 创建ServiceRestarter,把ServiceRecord放到这个Starter中去,看来是双向关系呀
+            4  smap.mServicesByName.put(name, r);
+                                smap.mServicesByIntent.put(filter, r); 添加到集合
+            5 如果mPendingServices中存在这个service,移除它,(mPendingServices) 是等待进程起起来再启动服务的,这里移除它就可以和当前这次请求统一处理,说不定进程已经起来了. 我想这种情况是不会出现的,为什么呢,因为新创建的serviceRecord,怎么会和出现在这个列表中呢???
+       8 到这里对于一开始没有找到相应的ServiceRecord要么使用新的userid找到了,要么已经创建了,要么就是没一些异常情况返回了. 或者就是找到了但是不能创建(stop的时候)
+       9 下面一段就是对找到ServiceRecord的情况做出处理
+          1首先检查权限和导出选项,错误设置ServiceLookupResult(null, "not exported from uid "
+                                      + r.appInfo.uid)
+          2 如果使用mAm价差通过了再次使用AppOpsManager检查权限
+          3 权限检查失败都会返回错误
+          4 防火墙检查权限
+          5 所有权限通通过返回争取的 ServiceLookupResult(r, null)
+       10 最后可能会返回错误的 ServiceLookupResult(null, errMsg), null, 正确的ServiceLookupResult(r, null)          检查的还挺多哈,不过和我们猜想的一样啊
+
+
+这里我们已经对找到和创建ServiceRecord的过程进行分析了,也分析了找到后对启动限制的检查,我们再次总结一下
+1 首先对user,权限进行检查,还有启动服务是否合法
+2 对后台启动进行检查,主要包括进程的启动模式和后台进程的个数. 还留有一个疑问addToStarting是干什么用的
+我们总结下可以启动的条件
+  不违反原则,权限满足,用户满足, 前台应用启动服务或者启动前台服务
+
+到这里我们分析service真正启动和或者执行的过程
+startServiceInnerLocked(smap, service, r, callerFg, addToStarting)
+ComponentName startServiceInnerLocked(ServiceMap smap, Intent service, ServiceRecord r,
+            boolean callerFg, boolean addToStarting) throws TransactionTooLargeException 
+1 获取service追踪者ServiceState,看类名称是用于记录service状态的. 我们来看看如何获取
+public ServiceState getTracker() 
+   1 tracker不为null,直接返回
+   2  如果不是常驻进程, 创建一个 tracker = ams.mProcessStats.getServiceStateLocked(serviceInfo.packageName,
+                       serviceInfo.applicationInfo.uid, serviceInfo.applicationInfo.versionCode,
+                                           serviceInfo.processName, serviceInfo.name),这里可以看出来常驻进程不需要追踪. 
+         ----> ProcStats->public ServiceState getServiceStateLocked(String packageName, int uid, int vers,
+                     String processName, String className)
+                      创建一个ServiceState找到对应的service状态,没有则创建一个喽
+2 获取后开始设置状态 stracker.setStarted
+3 开启电池最总
+4 bringUpServiceLocked(r, service.getFlags(), callerFg, false, false) 从何函数的名字来看叫做调出服务. 我们一会分析
+5 对调出服务结果做处理,如果返回错误也从这里返回错误
+6 如果r.startRequested 并且 addToStarting 说明需要放到后台启动的服务里面,看到了addToStarting的作用, 如果是第一次添加后台服务,还要smap.rescheduleDelayedStartsLocked() 我们也先不去分析. 
+7 如果没有请求启动或者不是启动后台服务, 并且是前台服务或者前台调用者使用   smap.ensureNotStartingBackgroundLocked(r); 函数做操作
+
+
+我们先来分析bringUpServiceLocked(r, service.getFlags(), callerFg, false, false) 函数,这应该是服务启动的真正过程. 
+1 首先如果r.app != null && r.app.thread != null的情况说明服务已经启动,只要执行startCommand就行了,使用sendServiceArgsLocked(r, execInFg, false)函数进行执行. 注意r.app实在启动服务的时候设置
+    先来分析sendServiceArgsLocked 函数.
+    private final void sendServiceArgsLocked(ServiceRecord r, boolean execInFg,
+                boolean oomAdjusted) throws TransactionTooLargeException
+          1 首先判断是否真的有要启动的服务,没有则不需要处理 直接返回
+          2 遍历startService请求 r.pendingStarts, 注意这是一个for循环,我们进入循环中观察
+              1 拿出一个请求StartItem
+              2 如果没有指定intent,并且请求数量大于1 就跳过,那么什么时候会intent为null呢? 猜想是bindService的时候,后面进行实验
+              3 设置派发时间 si.deliveredTime = SystemClock.uptimeMillis()
+              4 增加r.deliveredStarts.add(si) 分发的请求
+              5 si.deliveryCount++ 计数
+              6 授权(对于授权这里还是值得分析的)
+              7 bumpServiceExecutingLocked(r, execInFg, "start") 函数的名字很抽象,我不太能得出信息(通气服务执行???)  还是进去看看吧
+                  1 r.executeNesting嵌套数量为0,要创建一些信息
+                      r.executeFg = fg 设置是否我前台
+                      stracker.setExecuting(true, mAm.mProcessStats.getMemFactorLocked(), now) 设置执行状态                      设置应用信息
+                         r.app.executingServices.add(r)
+                         r.app.execServicesFg |= fg; 这里注意并不是说服务是前台服务,而是前台进程调用的服务
+                          if (r.app.executingServices.size() == 1) {
+                                              scheduleServiceTimeoutLocked(r.app);
+                                                              }
+                              还要设置超时消息,这里需要注意一点,前台进程调用的服务超时20s,后台调用的超时2000s. 那么问题来了后台服务调用前台应用的服务怎么算? 做实验做实验
+                  2 不是嵌套服务的话前边的哪些信息已经初始化了, 只是需要看一下是否要改变服务的属性execServicesFg和服务的超时消息
+                  3 r.executeFg |= fg;
+                          r.executeNesting++;
+                               r.executingStart = now; 更新三个状态信息 感觉这里写的比较啰嗦哈
+               8 回到遍历中,第一次遍历更新oomadj,(注意当前这次调用真正出发了服务的启动,如果pendingStarts可能是有延迟的启动,幸运的是它们借助这次启动的东风得意执行)
+               9 前边处理了前台服务调用的情况,这里处理的才是真正的前台进程,如果请求启动前台服务,并且r.fgWaiting说明马上可以启动前台服务了(r.fgWaiting == true代表前台服务已经启动了,不需要重新处理).
+                  1 如果当前r.isForeground==false 说明还没有启动成前台服务,发送超时消息,否则设置r.fgRequired = false 表示前台服务的请求已经得到执行
+               10 处理完成前台的小插曲,如果是前台的请求,超时消息已经发出去了,是箭在弦上不得不发了,我们就来看看怎么发
+               11  如果大于 派发次数大于1 设置flags |= Service.START_FLAG_RETRY
+               12 si.doneExecutingCount > 0 执行返程次数大于0 设置flags |= Service.START_FLAG_REDELIVERY
+               13 这两个标志还不太好理解分析客户端执行的时候再去分析
+               14 把请求封装成ServiceStartArgs(si.taskRemoved, si.id, flags, si.intent)参数,放到一个集合里,用于批量执行. 
+               15 这样收集服务请求的过程就完成了
+           3 前边手机好的请求 我们封装成ParceledListSlice用于序列化,slice.setInlineCountLimit(4) 设置一次最多传送4个请求,如果太多ParceledListSlice封装了一个binder调用获取数据
+           4 r.app.thread.scheduleServiceArgs(r, slice) 请求servie进程执行
+           5 对错误的处理 serviceDoneExecutingLocked(r, inDestroying, inDestroying)
+             这一步骤还挺长,我们去分析一下
+               1r.executeNesting-- 代表处理了一个请求,如果r.executeNesting <= 0 说明是最后一个请求,这时候可能要去destory服务
+               首先如果r.app != null 对app做一些清理工作 ,这正是我们发起请求时候设置的
+                 r.app.execServicesFg = false;
+                                 r.app.executingServices.remove(r);
+                 如果没有正在执行的服务 移除服务消息
+                如果还有其他服务在执行,那么如果我们异常(执行完成)的这个服务是一个前台应用掉漆的服务,遍历进程中启动的其他服务看有没有前台应用掉起来的,设置r.app.execServicesFg = true
+                如果当前服务正在销毁的而过程中,从mDestroyingServices移除,绑定的数据清除
+                更新oomadj
+               2 更新状态, 不是常驻服务进程的服务移除 更新白名单管理服务,设置r.app == null
+           6 抛出异常
+
+这里我们就分析完成了service已经启动,直接执行startCommand的情况,不过我们还没有分析客户端如何执行,来看一下
+
+注意
+new ServiceStartArgs(si.taskRemoved, si.id, flags, si.intent) 
+   可能的flags 
+   if (si.deliveryCount > 1) {
+                   flags |= Service.START_FLAG_RETRY;
+                               }
+                                           if (si.doneExecutingCount > 0) {
+                                                           flags |= Service.START_FLAG_REDELIVERY;
+                                                                       }
+客户端的代码在ActivityThread中
+  两个参数 1 IBinder token代代表AMS中的ServiceRecord. ParceledListSlice args代表参数.
+  遍历启动请求,封装成ServiceStartArgs,发送SERVICE_ARGS消息请求执行. 
+
+private void handleServiceArgs(ServiceArgsData data)  进行处理
+   根据ServiceRecord的binder对象从mServices找到对应的service,主要调用的时候默认服务已经启动了, 所以只处理找到了服务的情况. 
+      这里根据 taskRemoved参数去做不同的处理,如果 taskRemoved 为false,则执行onStartCommand 函数
+      如果taskRemoved为true说明是由于应用的task被移除发起的请求, 如果设置了FLAG_STOP_WITH_TASK 则不会收到请求,只是简单的关闭服务.  这可能是给应用服务一个做事情的机会?
+      服务完成后执行ActivityManager.getService().serviceDoneExecuting(
+                                  data.token, SERVICE_DONE_EXECUTING_START, data.startId, res) 
+
+另外这里我们可以解释那连个flags了
+public static final int START_FLAG_REDELIVERY = 0x0001 表示原来就指定过这个intent(因为这个服务项的doneExecutingCount大于0, 执行stop前被杀死,这是重启的过程)
+public static final int START_FLAG_RETRY = 0x0002; 表示有些服务之前没有发送出去,又进行重新发送
+
+
+我们这里先不去看服务执行完成的serviceDoneExecuting函数,先去分析启动过程中还没看完的部分,前面值分析了服务已经启动的情况
+
+
+
+private String bringUpServiceLocked(ServiceRecord r, int intentFlags, boolean execInFg,
+            boolean whileRestarting, boolean permissionsReviewRequired) 
+该函数我们之前已经分析了service已经启动的情况,这时候来分析还没有请的情况,可想而知这里又会有两种情况,一种是进程还没有启动,另一种是进程已经启动了. 
+1 如果当前不是进行服务的重新启动,该服务在重新启动的列表里面就直接返回null,到重新启动时候会进行处理
+2 过了这种情况无论服务是重新启动还是不是冲洗你启动都可以执行启动了,所以要从mRestartingServices中移除.
+3 如果后台服务已经达到了上限,这个服务的请求要被延迟. 能到这里的话肯定是该服务已经可以执行,从这个用户的mDelayedStartList中移除,设置r.delayed = false
+4 如果service的所在的user已经不存在,则使用bringDownServiceLocked(r) 搞什么鬼 应该是关闭服务的过程,后续分析
+5 启动了!!!!
+6 如果服务不用运行在沙盒进程中
+    1 获取服务所在的进程
+    2 如果进程正在运行 使用realStartServiceLocked(r, app, execInFg) 来启动服务,这里就可以直接返回了
+7 处理沙盒进程
+     其实也没啥处理 主要是对webview的处理,可见webview的重要之处
+8 下面所处理的情况就是进程没有启动或者是沙盒进程的情况
+   1 进程没有启动,并且不需要重新检查权限,直接启动进程
+   2 进程启动失败的情况 还是要执行bringDownServiceLocked(r) 关掉服务,启动成功如果是运行在沙盒进程中的服务设置r.isolatedProc = app
+9 如果mPendingServices.contains(r) 添加到mPendingServices.add(r) 代表等待进程启动,但是这里就产生了一个疑问,为啥沙盒进程还要等待?????
+10 如果延迟stop,这里就执行stop,为啥?? 设置为stop为false,不需要延迟关闭了,但是如果执行了start,则还需要执行stopServiceLocked(r) 这是搞什么????  stop的时候发现正在延迟启动,要等到去启动服务了才去执行stop(延迟执行stop)
+
+
+
+1 private final void realStartServiceLocked(ServiceRecord r,
+            ProcessRecord app, boolean execInFg) throws RemoteException 
+   1 如果thread为null 抛出异常
+   2 启动时间 设置
+   3 添加到应用ProcessRecord的services列表
+   4 创建那些服务信息
+   5 更新进程lru列表
+   6 更新前台服务
+   7 更新电池状态
+   8 app.thread.scheduleCreateService(r, r.serviceInfo,
+                       mAm.compatibilityInfoForPackageLocked(r.serviceInfo.applicationInfo) 创建service
+   9 发出前台服务通知r.postNotification()
+   10 没有创建成功的情况下
+       1执行serviceDoneExecutingLocked(r, inDestroying, inDestroying)  我们之前已经分析过
+       2 已经添加到了services列表要移除
+       3 不在destorying列表 scheduleServiceRestartLocked(r, false) 重新启动
+   11 设置whitelistManager 
+   12 service create之后处理绑定请求
+        来看下如何处理绑定请求
+        requestServiceBindingsLocked(r, execInFg) 函数
+            1 首先判断进程状态不存在则返回false
+            2  对于没有绑定过,或者要求重新绑定的并且真的有绑定请求的情况,合并请求参数,调用r.app.thread.scheduleBindService(r, i.intent.getIntent(), rebind,
+                                    r.app.repProcState)执行绑定请求, 请求完成后如果不是rebind, 设置i.requested = true
+                 i.hasBound = true;
+                                 i.doRebind = false;
+                                 这样就绑定完成了,出现错误的时候都会执行serviceDoneExecutingLocked(r, inDestroying, inDestroying) 来做清理工作
+   13 private boolean updateServiceClientActivitiesLocked(ProcessRecord proc,
+               ConnectionRecord modCr, boolean updateLru)  更新客户端活跃状态
+               这里主要更新service所在进程的proc.hasClientActivities变量,用于计算adj
+   14 发送sendServiceArgsLocked(r, execInFg, true) 发送未执行的请求
+   15 如果要延迟启动的话,现在已经不需要了,因为请求都执行完了,  从mDelayedStartList中移除,设置 r.delayed = false
+   16 处理延迟stop
+
+
+ActivityThread: 绑定过程
+  private void handleBindService(BindServiceData data) 
+  不是rebind的情况  调用s.onBind函数创建Binder对象 使用ctivityManager.getService().publishService(
+                                    data.token, data.intent, binder) 发布对象
+  rebind呢? 执行serviceDoneExecuting 执行onRebind函数 要弄清楚这一点要看unbindservice珊瑚
+  
+
+
+ndService那么unBindService也是不能少的，unbind的过程一定会有stop的过程我们会一并分析．　最后还要看看service重启的逻辑．
+boolean unbindServiceLocked(IServiceConnection connection) 
+　　函数的参数是connection，这也是我们开发者看到的外观，也能反映bind的次数，但是有一点值得注意的是一个connection可以bind多次，AMS一定会解决这个问题．
+　　１　通过Connection找到对应的ConnectionRecord，这里可能有多个，看到了吗这就是我们上面说的问题，虽然一个Connection可以绑定多次，但是会对应多个ConnectionRecord,那么问题来了，这么一来bind和unbind不就不是成对出现乐吗，这又可能是开发者的一个失误．
+　　２　如果没有对应的ConnectionRecord直接返回false
+　　3 遍历这个Connection对应的　Record
+　　　　　取出一个ConnectionRecord，使用removeConnectionLocked移除对应的record,从我们的图可以看出只有ServiceRecord.connections和ActiveService.mServiceConnections是以ServiceConnection
+          作为key的,ConnectionRecord作为value,所以移除ConnectionRecord后还要判断这两个集合的key下面还有没有可用的value,如果没有还要从这两个map移除对应
+          记录项. 
+          所以void removeConnectionLocked(
+                  ConnectionRecord c, ProcessRecord skipApp, ActivityRecord skipAct) 函数其实很好分析,只不过是数据结构移除的过程. 另外还有些更新adj等数据的过程
+                  另外值得注意的一点就是在ServiceConnection对应的ServiceRecord全部被移除后,对应的条件是if (s.app != null && s.app.thread != null && b.intent.apps.size() == 0
+                                      && b.intent.hasBound)  这说明service正在运行并且这个AppBindRecord对应的绑定的connection已经不存在了, 所以需要解绑,那么我还是觉得这里是有问题的
+                  试想两个不同的intent去绑定服务,却用同一个serviceconnection去绑定服务,则也是要解绑两次的,这就需要开发者很小心的去绑定和解绑服务,否则可能会对系统造成不必要的伤害,这应该
+                  在系统设置之出被避免的,我们来看下android是否有考虑到这一点
+                  再来看一下对比intent的函数
+                  public boolean filterEquals(Intent other) {
+                          if (other == null) {
+                                      return false;
+                                              }
+                                                      if (!Objects.equals(this.mAction, other.mAction)) return false;
+                                                              if (!Objects.equals(this.mData, other.mData)) return false;
+                                                                      if (!Objects.equals(this.mType, other.mType)) return false;
+                                                                              if (!Objects.equals(this.mPackage, other.mPackage)) return false;
+                                                                                      if (!Objects.equals(this.mComponent, other.mComponent)) return false;
+                                                                                              if (!Objects.equals(this.mCategories, other.mCategories)) return false;
+
+                                                                                                      return true;
+                 其实还是比较显而易见的,对于intent只是对比这几个值.解绑connection的时候可能会解绑多个IntentBindRecord.
+                 }
+
+                 既然弄明白了这一点我们再来看下removeConnectionLocked中真正unbind的过程
+                 1先调用了bumpServiceExecutingLocked(s, false, "unbind") 函数,记录了当前执行的状态主要包含三部分 executeFg代表是否由前台进程调用,executeNesting嵌套执行的次数, executingStart开始执行的时间
+                 2 更新oomAdj
+                 3 调用scheduleUnbindService请求服务端执行unbind操作,我们可以看到每次执行都要改变1中说的三个参数,而执行完成使用serviceDoneExecuting 回调做后续处理.(后续处理其实也包括死亡处理)
+                 4 再来看下service unbind的时候对于c.flags&Context.BIND_AUTO_CREATE的处理,如果解绑的是最后一个使用了BIND_AUTO_CREATE的connection,则使用bringDownServiceIfNeededLocked(s, true, hasAutoCreate) 去检查
+                 是否需要执行service stop函数 
+                 5  private final void bringDownServiceIfNeededLocked(ServiceRecord r, boolean knowConn,
+                             boolean hasConn) 
+                        1 private final boolean isServiceNeededLocked(ServiceRecord r, boolean knowConn,
+                                    boolean hasConn) 如果service有必要存活就返回了,这里主要看bind情况
+                                      1个函数判断service还有没有必要存在,所以先判断r.startRequested是否为true,如果有说明有人调用了service启动
+                                      2 如果不知道connection要看下有没有BIND_AUTO_CREATE的ServiceConnection  
+                                      3 如果还存在带有BIND_AUTO_CREATE的ServiceConnection也返回true 
+                                      4 所以对于isServiceNeededLocked其实就是判断服务是否还有必要存活, 这里我们不仅产生了疑问: 如果还有其他绑定但是没有了带有BIND_AUTO_CREATE的service
+                                      真的要销毁这个service,别着急我们往下看来解决掉这个疑问
+                       2 mPendingServices包含这个service说明正在进程的启动过程中,直接返回, 对于unbind的情况是不会发生的
+                       3 bringDownServiceLocked(r) 这才是真正downservice的操作
+                       4 private final void bringDownServiceLocked(ServiceRecord r)
+                          1函数还是挺长的, 遍历ServiceRecord.connections
+                          2首先遍历service对应的所有的ConnectionRecord,调用它的cr.conn.connected(r.name, null, true) 函数,由此可见两点 1这个函数不一定运行在主线程 2 第三个参数代表service快要挂了
+                          那么问题又来了,如果一个服务先启动,再去bind它会怎样,也会随这unbind销毁吗???
+                          3找到所有的bindRecord执行unbindservice 函数
+                          4 如果服务是前台服务还需要做一些善后处理 
+                              主要就是应用希望以前台服务启动,要在通知发出后才会设置为真正的前台服务,如果在这个过程中解绑是不可以的,抛出SERVICE_FOREGROUND_CRASH_MSG的消息
+                          5 这时候就真的要destoryService了 所以更新destroyTime
+                          6  对一个不会发生的事情做了处理
+                          7 从smap移除该service的record
+                          8 unscheduleServiceRestartLocked 移除restart的请求
+                             主要就是从mRestartingServices中移除该service的信息,设置restartTracker状态
+                             移除restart的调用消息
+                       5 从mPendingServices中移除(等待进程启动的那些)
+                       6 取消前台notification通知
+                       7 如果是前台服务,使用decActiveForegroundAppLocked进行操作
+                              主要是更新一些前台信息
+                       8 设置三个前台进程相关的参数
+                           r.isForeground = false;
+                                   r.foregroundId = 0;
+                                           r.foregroundNoti = null;
+                       9 清除deliveredStarts(正在分发的服务信息)
+                       10 pendingStarts 清除 启动请求 (这是不是会有拒绝服务攻击?)
+                       11 对应用ProcessRecord维护的服务信息进行处理
+                       12 调用r.app.thread.scheduleStopService(r) 操作
+                       13 清除bind信息
+                       14 清除restarter信息
+                       15 清除tracker状态信息
+
+                       对去刚才的疑问奥秘就在isServiceNeededLocked函数里面 
+                       我们之前认为这个变量是用于标记有人的请求服务还没有处理, if (r.startRequested) {
+                                   return true;
+                                           }  其实是已经处理了启动服务,所以我们不用担心关闭了别人启动的服务. 还是很高明的
+
+void publishServiceLocked(ServiceRecord r, Intent intent, IBinder service) 第一次发布服务的操作
+ 1 调用    c.conn.connected(r.name, service, false) 函数
+ 2serviceDoneExecutingLocked(r, mDestroyingServices.contains(r), false)
+
+
+ int stopServiceLocked(IApplicationThread caller, Intent service,
+             String resolvedType, int userId)
+ 1 retrieveServiceLocked(service, resolvedType, null,
+                 Binder.getCallingPid(), Binder.getCallingUid(), userId, false, false, false) 找到ServiceRecord
+ 2 private void stopServiceLocked(ServiceRecord service) 
+   如果遇到service.delayed 则要设置service.delayedStop = true 也就是需要先执行完成start的命令再去stop(因为我们delay了启动,也要delay 停止,保证service执行一遍,延迟这个操作对于开发者来说还是有很多不确定性的,最后不要在
+   后台使用)
+     如果没有遇到延迟启动使用bringDownServiceIfNeededLocked(service, false, false) 注意这个函数我们也分析过入股service还有必要运行,也就是包含BIND_AUTO_CREATE 还是会保留这个服务的,不过service.startRequested 已经设置成了false,等到最后一个BIND_AUTO_CREATE 被unbind的时候还是会消灭服务,所以BIND_AUTO_CREATE可以延长service的声明周期,这里可以看出,startCommand和 bind完全是两个体系的东西
+
+
+关于service我们的最后一个疑问就是重启的逻辑
+重启的逻辑在scheduleServiceRestartLocked(r, true)这个函数,有三个地方调用
+1 
+这也是在scheduleServiceRestartLocked调用的 
+final void performServiceRestartLocked(ServiceRecord r) 
+2 private final void realStartServiceLocked(ServiceRecord r,
+            ProcessRecord app, boolean execInFg)  在启动的时候抛出异常重新启动,启动后设置状态之前,所以有机会重启,这很好理解, 这样写代码很累,有依赖异常控制逻辑的嫌疑
+3 
+private final boolean cleanUpApplicationRecordLocked(ProcessRecord app,
+            boolean restarting, boolean allowRestart, int index, boolean replacingPid)--->
+final void killServicesLocked(ProcessRecord app, boolean allowRestart) 
+
+不允许重新启动的时候很少
+1 60s内崩溃两次
+2 崩溃的时候点了强制退出
+3 不允许系统启动的时候启动的进程
+
+final void killServicesLocked(ProcessRecord app, boolean allowRestart)
+  1移除所有的connection
+  2 移除不是常驻进程的 crash超过两次的非常驻进程 不允许重启
+  3 明确不允许重启的或者  user不在的 不允许重启
+
+  4 允许重启的调用scheduleServiceRestartLocked 进行一些可能的重启操作 allowcancel
+
+private final boolean scheduleServiceRestartLocked(ServiceRecord r, boolean allowCancel) 
+ 1 ams正在关闭的时候返回false
+ 2 service不对的 返回false
+ 3 对非常驻进程处理
+    1  遍历deliveredStarts 
+总结可以restart的情况还要判断是否有没有执行的请求要做,如果有的话就会重启,但是重启后可能就没有地方去stop这个服务了,这一点设计的也不是很合理
+对于常驻进程的服务会马上重启
+
+
+smap.rescheduleDelayedStartsLocked()
+smap.ensureNotStartingBackgroundLocked(r)
+scheduleServiceRestartLocked(r, false)
+publishService

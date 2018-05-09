@@ -1,0 +1,1569 @@
+ void performLayout(boolean initial, boolean updateInputWindows) {
+        if (!isLayoutNeeded()) { //1 不需要layout 直接返回
+            return;
+        }
+        clearLayoutNeeded(); //2 清除layout标志,清除后isLayoutNeeded()函数返回false
+
+        final int dw = mDisplayInfo.logicalWidth;
+        final int dh = mDisplayInfo.logicalHeight;
+
+        if (DEBUG_LAYOUT) {
+            Slog.v(TAG, "-------------------------------------");
+            Slog.v(TAG, "performLayout: needed=" + isLayoutNeeded() + " dw=" + dw + " dh=" + dh);
+        }
+
+	//3 begin layout, 参数isDefaultDisplay:是否为默认display,dw:逻辑宽度
+        // dh:逻辑高度  mRotation:旋转角度   getConfiguration().uiMode:ui模式   
+        mService.mPolicy.beginLayoutLw(isDefaultDisplay, dw, dh, mRotation,
+                getConfiguration().uiMode);
+        if (isDefaultDisplay) {
+            // Not needed on non-default displays.
+            mService.mSystemDecorLayer = mService.mPolicy.getSystemDecorLayerLw();
+            mService.mScreenRect.set(0, 0, dw, dh);
+        }
+
+        mService.mPolicy.getContentRectLw(mContentRect);
+
+        int seq = mService.mLayoutSeq + 1;
+        if (seq < 0) seq = 0;
+        mService.mLayoutSeq = seq;
+
+        // Used to indicate that we have processed the dream window and all additional windows are
+        // behind it.
+        mTmpWindow = null;
+        mTmpInitial = initial;
+
+        // First perform layout of any root windows (not attached to another window).
+        forAllWindows(mPerformLayout, true /* traverseTopToBottom */);
+
+        // Used to indicate that we have processed the dream window and all additional attached
+        // windows are behind it.
+        mTmpWindow2 = mTmpWindow;
+        mTmpWindow = null;
+
+        // Now perform layout of attached windows, which usually depend on the position of the
+        // window they are attached to. XXX does not deal with windows that are attached to windows
+        // that are themselves attached.
+        forAllWindows(mPerformLayoutAttached, true /* traverseTopToBottom */);
+
+        // Window frames may have changed. Tell the input dispatcher about it.
+        mService.mInputMonitor.layoutInputConsumers(dw, dh);
+        mService.mInputMonitor.setUpdateInputWindowsNeededLw();
+        if (updateInputWindows) {
+            mService.mInputMonitor.updateInputWindowsLw(false /*force*/);
+        }
+
+        mService.mPolicy.finishLayoutLw();
+        mService.mH.sendEmptyMessage(UPDATE_DOCKED_STACK_DIVIDER);
+    }
+
+
+
+
+对于overscan 参考https://www.cnblogs.com/all-for-fiona/p/4054527.html
+@Override
+    public void beginLayoutLw(boolean isDefaultDisplay, int displayWidth, int displayHeight,
+                              int displayRotation, int uiMode) {
+        mDisplayRotation = displayRotation;
+        final int overscanLeft, overscanTop, overscanRight, overscanBottom;
+        //1 根据旋转角度计算overscan坐标
+        if (isDefaultDisplay) {
+            switch (displayRotation) {
+                case Surface.ROTATION_90:
+                    overscanLeft = mOverscanTop;
+                    overscanTop = mOverscanRight;
+                    overscanRight = mOverscanBottom;
+                    overscanBottom = mOverscanLeft;
+                    break;
+                case Surface.ROTATION_180:
+                    overscanLeft = mOverscanRight;
+                    overscanTop = mOverscanBottom;
+                    overscanRight = mOverscanLeft;
+                    overscanBottom = mOverscanTop;
+                    break;
+                case Surface.ROTATION_270:
+                    overscanLeft = mOverscanBottom;
+                    overscanTop = mOverscanLeft;
+                    overscanRight = mOverscanTop;
+                    overscanBottom = mOverscanRight;
+                    break;
+                default:
+                    overscanLeft = mOverscanLeft;
+                    overscanTop = mOverscanTop;
+                    overscanRight = mOverscanRight;
+                    overscanBottom = mOverscanBottom;
+                    break;
+            }
+        } else {
+        //2 非主屏幕没有overscan坐标
+            overscanLeft = 0;
+            overscanTop = 0;
+            overscanRight = 0;
+            overscanBottom = 0;
+        }
+        mOverscanScreenLeft = mRestrictedOverscanScreenLeft = 0;
+        mOverscanScreenTop = mRestrictedOverscanScreenTop = 0;
+        mOverscanScreenWidth = mRestrictedOverscanScreenWidth = displayWidth;
+        mOverscanScreenHeight = mRestrictedOverscanScreenHeight = displayHeight;
+        mSystemLeft = 0;
+        mSystemTop = 0;
+        mSystemRight = displayWidth;
+        mSystemBottom = displayHeight;
+        mUnrestrictedScreenLeft = overscanLeft;
+        mUnrestrictedScreenTop = overscanTop;
+        mUnrestrictedScreenWidth = displayWidth - overscanLeft - overscanRight;
+        mUnrestrictedScreenHeight = displayHeight - overscanTop - overscanBottom;
+        mRestrictedScreenLeft = mUnrestrictedScreenLeft;
+        mRestrictedScreenTop = mUnrestrictedScreenTop;
+        mRestrictedScreenWidth = mSystemGestures.screenWidth = mUnrestrictedScreenWidth;
+        mRestrictedScreenHeight = mSystemGestures.screenHeight = mUnrestrictedScreenHeight;
+        mDockLeft = mContentLeft = mVoiceContentLeft = mStableLeft = mStableFullscreenLeft
+                = mCurLeft = mUnrestrictedScreenLeft;
+        mDockTop = mContentTop = mVoiceContentTop = mStableTop = mStableFullscreenTop
+                = mCurTop = mUnrestrictedScreenTop;
+        mDockRight = mContentRight = mVoiceContentRight = mStableRight = mStableFullscreenRight
+                = mCurRight = displayWidth - overscanRight;
+        mDockBottom = mContentBottom = mVoiceContentBottom = mStableBottom = mStableFullscreenBottom
+                = mCurBottom = displayHeight - overscanBottom;
+        mDockLayer = 0x10000000;
+        mStatusBarLayer = -1;
+
+        // start with the current dock rect, which will be (0,0,displayWidth,displayHeight)
+        final Rect pf = mTmpParentFrame;
+        final Rect df = mTmpDisplayFrame;
+        final Rect of = mTmpOverscanFrame;
+        final Rect vf = mTmpVisibleFrame;
+        final Rect dcf = mTmpDecorFrame;
+        pf.left = df.left = of.left = vf.left = mDockLeft;
+        pf.top = df.top = of.top = vf.top = mDockTop;
+        pf.right = df.right = of.right = vf.right = mDockRight;
+        pf.bottom = df.bottom = of.bottom = vf.bottom = mDockBottom;
+        dcf.setEmpty();  // Decor frame N/A for system bars.
+
+        if (isDefaultDisplay) {
+            // For purposes of putting out fake window up to steal focus, we will
+            // drive nav being hidden only by whether it is requested.
+            final int sysui = mLastSystemUiFlags;
+            boolean navVisible = (sysui & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+            boolean navTranslucent = (sysui
+                    & (View.NAVIGATION_BAR_TRANSLUCENT | View.NAVIGATION_BAR_TRANSPARENT)) != 0;
+            boolean immersive = (sysui & View.SYSTEM_UI_FLAG_IMMERSIVE) != 0;
+            boolean immersiveSticky = (sysui & View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) != 0;
+            boolean navAllowedHidden = immersive || immersiveSticky;
+            navTranslucent &= !immersiveSticky;  // transient trumps translucent
+            boolean isKeyguardShowing = isStatusBarKeyguard() && !mKeyguardOccluded;
+            if (!isKeyguardShowing) {
+                navTranslucent &= areTranslucentBarsAllowed();
+            }
+            boolean statusBarExpandedNotKeyguard = !isKeyguardShowing && mStatusBar != null
+                    && mStatusBar.getAttrs().height == MATCH_PARENT
+                    && mStatusBar.getAttrs().width == MATCH_PARENT;
+
+            // When the navigation bar isn't visible, we put up a fake
+            // input window to catch all touch events.  This way we can
+            // detect when the user presses anywhere to bring back the nav
+            // bar and ensure the application doesn't see the event.
+            if (navVisible || navAllowedHidden) {
+                if (mInputConsumer != null) {
+                    mHandler.sendMessage(
+                            mHandler.obtainMessage(MSG_DISPOSE_INPUT_CONSUMER, mInputConsumer));
+                    mInputConsumer = null;
+                }
+            } else if (mInputConsumer == null) {
+                mInputConsumer = mWindowManagerFuncs.createInputConsumer(mHandler.getLooper(),
+                        INPUT_CONSUMER_NAVIGATION,
+                        (channel, looper) -> new HideNavInputEventReceiver(channel, looper));
+                // As long as mInputConsumer is active, hover events are not dispatched to the app
+                // and the pointer icon is likely to become stale. Hide it to avoid confusion.
+                InputManager.getInstance().setPointerIconType(PointerIcon.TYPE_NULL);
+            }
+
+            // For purposes of positioning and showing the nav bar, if we have
+            // decided that it can't be hidden (because of the screen aspect ratio),
+            // then take that into account.
+            navVisible |= !canHideNavigationBar();
+
+            boolean updateSysUiVisibility = layoutNavigationBar(displayWidth, displayHeight,
+                    displayRotation, uiMode, overscanLeft, overscanRight, overscanBottom, dcf, navVisible, navTranslucent,
+                    navAllowedHidden, statusBarExpandedNotKeyguard);
+            if (DEBUG_LAYOUT) Slog.i(TAG, String.format("mDock rect: (%d,%d - %d,%d)",
+                    mDockLeft, mDockTop, mDockRight, mDockBottom));
+            updateSysUiVisibility |= layoutStatusBar(pf, df, of, vf, dcf, sysui, isKeyguardShowing);
+            if (updateSysUiVisibility) {
+                updateSystemUiVisibilityLw();
+            }
+        }
+    }
+
+ mSystemLeft = 0;
+        mSystemTop = 0;
+        mSystemRight = displayWidth;
+        mSystemBottom = displayHeight; 
+这四个值为屏幕逻辑大小
+
+
+ mOverscanScreenLeft = mRestrictedOverscanScreenLeft = 0;
+        mOverscanScreenTop = mRestrictedOverscanScreenTop = 0;
+mOverscanScreenWidth = mRestrictedOverscanScreenWidth = displayWidth;
+        mOverscanScreenHeight = mRestrictedOverscanScreenHeight = displayHeight; 
+这四个个值为屏幕逻辑大小
+
+
+mUnrestrictedScreenLeft = overscanLeft;
+        mUnrestrictedScreenTop = overscanTop;
+        mUnrestrictedScreenWidth = displayWidth - overscanLeft - overscanRight;
+        mUnrestrictedScreenHeight = displayHeight - overscanTop - overscanBottom;
+这四个值为去掉overscan的
+
+
+
+  mRestrictedScreenLeft = mUnrestrictedScreenLeft;
+        mRestrictedScreenTop = mUnrestrictedScreenTop;
+        mRestrictedScreenWidth = mSystemGestures.screenWidth = mUnrestrictedScreenWidth;
+        mRestrictedScreenHeight = mSystemGestures.screenHeight = mUnrestrictedScreenHeight;
+这四个值为去掉overscan的
+
+
+  mDockLeft = mContentLeft = mVoiceContentLeft = mStableLeft = mStableFullscreenLeft
+                = mCurLeft = mUnrestrictedScreenLeft;
+        mDockTop = mContentTop = mVoiceContentTop = mStableTop = mStableFullscreenTop
+                = mCurTop = mUnrestrictedScreenTop;
+        mDockRight = mContentRight = mVoiceContentRight = mStableRight = mStableFullscreenRight
+                = mCurRight = displayWidth - overscanRight;
+        mDockBottom = mContentBottom = mVoiceContentBottom = mStableBottom = mStableFullscreenBottom
+                = mCurBottom = displayHeight - overscanBottom;
+        mDockLayer = 0x10000000;
+  
+关于导航栏的一些属性请参考
+https://blog.csdn.net/xiaonaihe/article/details/54929504
+
+在isDefaultDisplay函数里面判断如果导航栏不可见会创建一个InputConsumer去消耗input事件做一些监控,如果可见的话要销毁这个InputConsumer. 创建的这个InputConsumer会使导航栏出来
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+更新导航栏
+
+private boolean layoutNavigationBar(int displayWidth, int displayHeight, int displayRotation,
+            int uiMode, int overscanLeft, int overscanRight, int overscanBottom, Rect dcf,
+            boolean navVisible, boolean navTranslucent, boolean navAllowedHidden,
+            boolean statusBarExpandedNotKeyguard) {
+        if (mNavigationBar != null) { //1 只有不为空的时候才需要计算
+            boolean transientNavBarShowing = mNavigationBarController.isTransientShowing();
+            // Force the navigation bar to its appropriate place and
+            // size.  We need to do this directly, instead of relying on
+            // it to bubble up from the nav bar, because this needs to
+            // change atomically with screen rotations.
+            //2 根据屏幕方向计算导航栏位置,导航栏总是在窄的边上,返回上下左右
+            mNavigationBarPosition = navigationBarPosition(displayWidth, displayHeight,
+                    displayRotation);
+	    //3 导航栏在下边的情况
+            if (mNavigationBarPosition == NAV_BAR_BOTTOM) {
+                // It's a system nav bar or a portrait screen; nav bar goes on bottom.
+                //4 计算导航栏的定点坐标,从最底部减去导航栏高度,再减去overscanBottom
+                int top = displayHeight - overscanBottom
+                        - getNavigationBarHeight(displayRotation, uiMode);
+                mTmpNavigationFrame.set(0, top, displayWidth, displayHeight - overscanBottom);
+                //5稳定的底部肯定要去除导航栏,因为导航栏可以是半透明或者不可见的
+                mStableBottom = mStableFullscreenBottom = mTmpNavigationFrame.top;
+                if (transientNavBarShowing) {
+		    //6 半透明
+                    mNavigationBarController.setBarShowingLw(true);
+                } else if (navVisible) {
+		    //7 导航栏不透明并且可见的情况要遮挡内容区域,从新设置一些属性
+                    mNavigationBarController.setBarShowingLw(true);
+                    mDockBottom = mTmpNavigationFrame.top;
+                    mRestrictedScreenHeight = mDockBottom - mRestrictedScreenTop;
+                    mRestrictedOverscanScreenHeight = mDockBottom - mRestrictedOverscanScreenTop;
+                } else {
+                    // We currently want to hide the navigation UI - unless we expanded the status
+                    // bar.
+		    //8 导航栏不可见
+                    mNavigationBarController.setBarShowingLw(statusBarExpandedNotKeyguard);
+                }
+  		//9 更新system ui的bottom,也就是去除system ui的区域底端
+                if (navVisible && !navTranslucent && !navAllowedHidden
+                        && !mNavigationBar.isAnimatingLw()
+                        && !mNavigationBarController.wasRecentlyTranslucent()) {
+                    // If the opaque nav bar is currently requested to be visible,
+                    // and not in the process of animating on or off, then
+                    // we can tell the app that it is covered by it.
+                    mSystemBottom = mTmpNavigationFrame.top;
+                }
+            } else if (mNavigationBarPosition == NAV_BAR_RIGHT) {
+                // Landscape screen; nav bar goes to the right.
+                int left = displayWidth - overscanRight
+                        - getNavigationBarWidth(displayRotation, uiMode);
+                mTmpNavigationFrame.set(left, 0, displayWidth - overscanRight, displayHeight);
+                mStableRight = mStableFullscreenRight = mTmpNavigationFrame.left;
+                if (transientNavBarShowing) {
+                    mNavigationBarController.setBarShowingLw(true);
+                } else if (navVisible) {
+                    mNavigationBarController.setBarShowingLw(true);
+                    mDockRight = mTmpNavigationFrame.left;
+                    mRestrictedScreenWidth = mDockRight - mRestrictedScreenLeft;
+                    mRestrictedOverscanScreenWidth = mDockRight - mRestrictedOverscanScreenLeft;
+                } else {
+                    // We currently want to hide the navigation UI - unless we expanded the status
+                    // bar.
+                    mNavigationBarController.setBarShowingLw(statusBarExpandedNotKeyguard);
+                }
+                if (navVisible && !navTranslucent && !navAllowedHidden
+                        && !mNavigationBar.isAnimatingLw()
+                        && !mNavigationBarController.wasRecentlyTranslucent()) {
+                    // If the nav bar is currently requested to be visible,
+                    // and not in the process of animating on or off, then
+                    // we can tell the app that it is covered by it.
+                    mSystemRight = mTmpNavigationFrame.left;
+                }
+            } else if (mNavigationBarPosition == NAV_BAR_LEFT) {
+                // Seascape screen; nav bar goes to the left.
+                int right = overscanLeft + getNavigationBarWidth(displayRotation, uiMode);
+                mTmpNavigationFrame.set(overscanLeft, 0, right, displayHeight);
+                mStableLeft = mStableFullscreenLeft = mTmpNavigationFrame.right;
+                if (transientNavBarShowing) {
+                    mNavigationBarController.setBarShowingLw(true);
+                } else if (navVisible) {
+                    mNavigationBarController.setBarShowingLw(true);
+                    mDockLeft = mTmpNavigationFrame.right;
+                    // TODO: not so sure about those:
+                    mRestrictedScreenLeft = mRestrictedOverscanScreenLeft = mDockLeft;
+                    mRestrictedScreenWidth = mDockRight - mRestrictedScreenLeft;
+                    mRestrictedOverscanScreenWidth = mDockRight - mRestrictedOverscanScreenLeft;
+                } else {
+                    // We currently want to hide the navigation UI - unless we expanded the status
+                    // bar.
+                    mNavigationBarController.setBarShowingLw(statusBarExpandedNotKeyguard);
+                }
+                if (navVisible && !navTranslucent && !navAllowedHidden
+                        && !mNavigationBar.isAnimatingLw()
+                        && !mNavigationBarController.wasRecentlyTranslucent()) {
+                    // If the nav bar is currently requested to be visible,
+                    // and not in the process of animating on or off, then
+                    // we can tell the app that it is covered by it.
+                    mSystemLeft = mTmpNavigationFrame.right;
+                }
+            }
+	    //10 更新content 区域
+            // Make sure the content and current rectangles are updated to
+            // account for the restrictions from the navigation bar.
+            mContentTop = mVoiceContentTop = mCurTop = mDockTop;
+            mContentBottom = mVoiceContentBottom = mCurBottom = mDockBottom;
+            mContentLeft = mVoiceContentLeft = mCurLeft = mDockLeft;
+            mContentRight = mVoiceContentRight = mCurRight = mDockRight;
+            mStatusBarLayer = mNavigationBar.getSurfaceLayer();
+	    //11 更新window的属性
+            // And compute the final frame.
+            mNavigationBar.computeFrameLw(mTmpNavigationFrame, mTmpNavigationFrame,
+                    mTmpNavigationFrame, mTmpNavigationFrame, mTmpNavigationFrame, dcf,
+                    mTmpNavigationFrame, mTmpNavigationFrame);
+            if (DEBUG_LAYOUT) Slog.i(TAG, "mNavigationBar frame: " + mTmpNavigationFrame);
+            if (mNavigationBarController.checkHiddenLw()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+//更新status bar
+private boolean layoutStatusBar(Rect pf, Rect df, Rect of, Rect vf, Rect dcf, int sysui,
+            boolean isKeyguardShowing) {
+        // decide where the status bar goes ahead of time
+        if (mStatusBar != null) {
+            //1 首先设置pf,df,of的区域大小为UnrestrictedScreen所描述的区域,也就是包含systemui区域的部分
+            // apply any navigation bar insets
+            pf.left = df.left = of.left = mUnrestrictedScreenLeft;
+            pf.top = df.top = of.top = mUnrestrictedScreenTop;
+            pf.right = df.right = of.right = mUnrestrictedScreenWidth + mUnrestrictedScreenLeft;
+            pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenHeight
+                    + mUnrestrictedScreenTop;
+            //2 vf描述不包含systemui的部分
+            vf.left = mStableLeft;
+            vf.top = mStableTop;
+            vf.right = mStableRight;
+            vf.bottom = mStableBottom;
+
+            mStatusBarLayer = mStatusBar.getSurfaceLayer();
+
+            // Let the status bar determine its size.
+            mStatusBar.computeFrameLw(pf /* parentFrame */, df /* displayFrame */,
+                    vf /* overlayFrame */, vf /* contentFrame */, vf /* visibleFrame */,
+                    dcf /* decorFrame */, vf /* stableFrame */, vf /* outsetFrame */);
+
+            // For layout, the status bar is always at the top with our fixed height.
+            mStableTop = mUnrestrictedScreenTop + mStatusBarHeight;
+
+            boolean statusBarTransient = (sysui & View.STATUS_BAR_TRANSIENT) != 0;
+            boolean statusBarTranslucent = (sysui
+                    & (View.STATUS_BAR_TRANSLUCENT | View.STATUS_BAR_TRANSPARENT)) != 0;
+            if (!isKeyguardShowing) {
+                statusBarTranslucent &= areTranslucentBarsAllowed();
+            }
+
+            // If the status bar is hidden, we don't want to cause
+            // windows behind it to scroll.
+            if (mStatusBar.isVisibleLw() && !statusBarTransient) {
+		//3 status bar 可见不透明,则重新设置docktop 为mUnrestrictedScreenTop + mStatusBarHeight
+		//更新content区域
+                // Status bar may go away, so the screen area it occupies
+                // is available to apps but just covering them when the
+                // status bar is visible.
+                mDockTop = mUnrestrictedScreenTop + mStatusBarHeight;
+
+                mContentTop = mVoiceContentTop = mCurTop = mDockTop;
+                mContentBottom = mVoiceContentBottom = mCurBottom = mDockBottom;
+                mContentLeft = mVoiceContentLeft = mCurLeft = mDockLeft;
+                mContentRight = mVoiceContentRight = mCurRight = mDockRight;
+
+                if (DEBUG_LAYOUT) Slog.v(TAG, "Status bar: " +
+                        String.format(
+                                "dock=[%d,%d][%d,%d] content=[%d,%d][%d,%d] cur=[%d,%d][%d,%d]",
+                                mDockLeft, mDockTop, mDockRight, mDockBottom,
+                                mContentLeft, mContentTop, mContentRight, mContentBottom,
+                                mCurLeft, mCurTop, mCurRight, mCurBottom));
+            }
+            if (mStatusBar.isVisibleLw() && !mStatusBar.isAnimatingLw()
+                    && !statusBarTransient && !statusBarTranslucent
+                    && !mStatusBarController.wasRecentlyTranslucent()) {
+                // If the opaque status bar is currently requested to be visible,
+                // and not in the process of animating on or off, then
+                // we can tell the app that it is covered by it.
+                mSystemTop = mUnrestrictedScreenTop + mStatusBarHeight;
+            }
+            if (mStatusBarController.checkHiddenLw()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+ /** {@inheritDoc} */
+    @Override
+    public void layoutWindowLw(WindowState win, WindowState attached) {
+        // We've already done the navigation bar and status bar. If the status bar can receive
+        // input, we need to layout it again to accomodate for the IME window.
+        //1 beginLayout的时候已经更新完成NavigationBar和StatusBar直接返回,statusbar 不能接收的时候是
+        //在接收输入法,要重新layout
+        if ((win == mStatusBar && !canReceiveInput(win)) || win == mNavigationBar) {
+            return;
+        }
+        final WindowManager.LayoutParams attrs = win.getAttrs();
+        final boolean isDefaultDisplay = win.isDefaultDisplay();
+        final boolean needsToOffsetInputMethodTarget = isDefaultDisplay &&
+                (win == mLastInputMethodTargetWindow && mLastInputMethodWindow != null);
+        // 2更新输入法窗口
+        if (needsToOffsetInputMethodTarget) {
+            if (DEBUG_LAYOUT) Slog.i(TAG, "Offset ime target window by the last ime window state");
+            offsetInputMethodWindowLw(mLastInputMethodWindow);
+        }
+
+        final int fl = PolicyControl.getWindowFlags(win, attrs);
+        final int pfl = attrs.privateFlags;
+        final int sim = attrs.softInputMode;
+        final int sysUiFl = PolicyControl.getSystemUiVisibility(win, null);
+
+        final Rect pf = mTmpParentFrame;
+        final Rect df = mTmpDisplayFrame;
+        final Rect of = mTmpOverscanFrame;
+        final Rect cf = mTmpContentFrame;
+        final Rect vf = mTmpVisibleFrame;
+        final Rect dcf = mTmpDecorFrame;
+        final Rect sf = mTmpStableFrame;
+        Rect osf = null;
+        dcf.setEmpty();
+
+        final boolean hasNavBar = (isDefaultDisplay && mHasNavigationBar
+                && mNavigationBar != null && mNavigationBar.isVisibleLw());
+
+        final int adjust = sim & SOFT_INPUT_MASK_ADJUST;
+	
+        if (isDefaultDisplay) {
+	//1 默认屏幕包含状态栏导航栏,设置stable状态
+            sf.set(mStableLeft, mStableTop, mStableRight, mStableBottom);
+        } else {
+	//2 非默认屏幕稳定区域就是全屏
+            sf.set(mOverscanLeft, mOverscanTop, mOverscanRight, mOverscanBottom);
+        }
+
+        if (!isDefaultDisplay) {
+            if (attached != null) {
+                // If this window is attached to another, our display
+                // frame is the same as the one we are attached to.
+		//3 非主屏幕上的子window
+                setAttachedWindowFrames(win, fl, adjust, attached, true, pf, df, of, cf, vf);
+            } else {
+                // Give the window full screen.
+                pf.left = df.left = of.left = cf.left = mOverscanScreenLeft;
+                pf.top = df.top = of.top = cf.top = mOverscanScreenTop;
+                pf.right = df.right = of.right = cf.right
+                        = mOverscanScreenLeft + mOverscanScreenWidth;
+                pf.bottom = df.bottom = of.bottom = cf.bottom
+                        = mOverscanScreenTop + mOverscanScreenHeight;
+            }
+        } else if (attrs.type == TYPE_INPUT_METHOD) {
+            //4 输入法窗口 左上右都是docker ,顶部是包含导航栏的,cf,vf的底部在稳定的导航栏上面
+            pf.left = df.left = of.left = cf.left = vf.left = mDockLeft;
+            pf.top = df.top = of.top = cf.top = vf.top = mDockTop;
+            pf.right = df.right = of.right = cf.right = vf.right = mDockRight;
+            // IM dock windows layout below the nav bar...
+            pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+            // ...with content insets above the nav bar
+            cf.bottom = vf.bottom = mStableBottom;
+            if (mStatusBar != null && mFocusedWindow == mStatusBar && canReceiveInput(mStatusBar)) {
+                // The status bar forces the navigation bar while it's visible. Make sure the IME
+                // avoids the navigation bar in that case.
+                if (mNavigationBarPosition == NAV_BAR_RIGHT) {
+                    pf.right = df.right = of.right = cf.right = vf.right = mStableRight;
+                } else if (mNavigationBarPosition == NAV_BAR_LEFT) {
+                    pf.left = df.left = of.left = cf.left = vf.left = mStableLeft;
+                }
+            }
+            // IM dock windows always go to the bottom of the screen.
+            attrs.gravity = Gravity.BOTTOM;
+            mDockLayer = win.getSurfaceLayer();
+        } else if (attrs.type == TYPE_VOICE_INTERACTION) {
+            pf.left = df.left = of.left = mUnrestrictedScreenLeft;
+            pf.top = df.top = of.top = mUnrestrictedScreenTop;
+            pf.right = df.right = of.right = mUnrestrictedScreenLeft + mUnrestrictedScreenWidth;
+            pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+            if (adjust != SOFT_INPUT_ADJUST_RESIZE) {
+                cf.left = mDockLeft;
+                cf.top = mDockTop;
+                cf.right = mDockRight;
+                cf.bottom = mDockBottom;
+            } else {
+                cf.left = mContentLeft;
+                cf.top = mContentTop;
+                cf.right = mContentRight;
+                cf.bottom = mContentBottom;
+            }
+            if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
+                vf.left = mCurLeft;
+                vf.top = mCurTop;
+                vf.right = mCurRight;
+                vf.bottom = mCurBottom;
+            } else {
+                vf.set(cf);
+            }
+        } else if (attrs.type == TYPE_WALLPAPER) {
+           layoutWallpaper(win, pf, df, of, cf);
+        } else if (win == mStatusBar) {
+            pf.left = df.left = of.left = mUnrestrictedScreenLeft;
+            pf.top = df.top = of.top = mUnrestrictedScreenTop;
+            pf.right = df.right = of.right = mUnrestrictedScreenWidth + mUnrestrictedScreenLeft;
+            pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenHeight + mUnrestrictedScreenTop;
+            cf.left = vf.left = mStableLeft;
+            cf.top = vf.top = mStableTop;
+            cf.right = vf.right = mStableRight;
+            vf.bottom = mStableBottom;
+
+            if (adjust == SOFT_INPUT_ADJUST_RESIZE) {
+                cf.bottom = mContentBottom;
+            } else {
+                cf.bottom = mDockBottom;
+                vf.bottom = mContentBottom;
+            }
+        } else {
+            //3 默认的decor大小,是根据system的大小算的,也就是display大小,包含overscan区域
+            // Default policy decor for the default display
+            dcf.left = mSystemLeft;
+            dcf.top = mSystemTop;
+            dcf.right = mSystemRight;
+            dcf.bottom = mSystemBottom;		
+            final boolean inheritTranslucentDecor = (attrs.privateFlags
+                    & WindowManager.LayoutParams.PRIVATE_FLAG_INHERIT_TRANSLUCENT_DECOR) != 0;
+            final boolean isAppWindow =
+                    attrs.type >= WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW &&
+                    attrs.type <= WindowManager.LayoutParams.LAST_APPLICATION_WINDOW;
+            final boolean topAtRest =
+                    win == mTopFullscreenOpaqueWindowState && !win.isAnimatingLw();
+            if (isAppWindow && !inheritTranslucentDecor && !topAtRest) {
+                if ((sysUiFl & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0
+                        && (fl & WindowManager.LayoutParams.FLAG_FULLSCREEN) == 0
+                        && (fl & WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) == 0
+                        && (fl & WindowManager.LayoutParams.
+                                FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS) == 0
+                        && (pfl & PRIVATE_FLAG_FORCE_DRAW_STATUS_BAR_BACKGROUND) == 0) {
+                    // Ensure policy decor includes status bar
+                    //3 这种情况status bar 不透明.背景不被app绘制,需要和app window错开,所以设置 dcf.top = mStableTop用于错开statusbar
+                    dcf.top = mStableTop;
+                }
+                if ((fl & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) == 0
+                        && (sysUiFl & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0
+                        && (fl & WindowManager.LayoutParams.
+                                FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS) == 0) {
+		    //4 这种情况导航栏要错开了,导航来有可能在下面和右边,左边. 更新他们
+                    // Ensure policy decor includes navigation bar
+                    dcf.bottom = mStableBottom;
+                    dcf.right = mStableRight;
+                }
+            }
+
+            if ((fl & (FLAG_LAYOUT_IN_SCREEN | FLAG_LAYOUT_INSET_DECOR))
+                    == (FLAG_LAYOUT_IN_SCREEN | FLAG_LAYOUT_INSET_DECOR)) {
+	    //5 忽略装饰区的情况
+                if (DEBUG_LAYOUT) Slog.v(TAG, "layoutWindowLw(" + attrs.getTitle()
+                            + "): IN_SCREEN, INSET_DECOR");
+                // This is the case for a normal activity window: we want it
+                // to cover all of the screen space, and it can take care of
+                // moving its contents to account for screen decorations that
+                // intrude into that space.
+                if (attached != null) {
+                    // If this window is attached to another, our display
+                    // frame is the same as the one we are attached to.
+                    setAttachedWindowFrames(win, fl, adjust, attached, true, pf, df, of, cf, vf);
+                } else {
+		    //6对顶级Window的处理
+                    if (attrs.type == TYPE_STATUS_BAR_PANEL
+                            || attrs.type == TYPE_STATUS_BAR_SUB_PANEL) {
+                        // Status bar panels are the only windows who can go on top of
+                        // the status bar.  They are protected by the STATUS_BAR_SERVICE
+                        // permission, so they have the same privileges as the status
+                        // bar itself.
+                        //
+                        // However, they should still dodge the navigation bar if it exists.
+			//7 statusbar panel窗口
+
+                        pf.left = df.left = of.left = hasNavBar
+                                ? mDockLeft : mUnrestrictedScreenLeft;
+                        pf.top = df.top = of.top = mUnrestrictedScreenTop;
+                        pf.right = df.right = of.right = hasNavBar
+                                ? mRestrictedScreenLeft+mRestrictedScreenWidth
+                                : mUnrestrictedScreenLeft + mUnrestrictedScreenWidth;
+                        pf.bottom = df.bottom = of.bottom = hasNavBar
+                                ? mRestrictedScreenTop+mRestrictedScreenHeight
+                                : mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+
+                        if (DEBUG_LAYOUT) Slog.v(TAG, String.format(
+                                        "Laying out status bar window: (%d,%d - %d,%d)",
+                                        pf.left, pf.top, pf.right, pf.bottom));
+                    } else if ((fl & FLAG_LAYOUT_IN_OVERSCAN) != 0
+                            && attrs.type >= WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW
+                            && attrs.type <= WindowManager.LayoutParams.LAST_SUB_WINDOW) {
+                        // Asking to layout into the overscan region, so give it that pure
+                        // unrestricted area.
+                        pf.left = df.left = of.left = mOverscanScreenLeft;
+                        pf.top = df.top = of.top = mOverscanScreenTop;
+                        pf.right = df.right = of.right = mOverscanScreenLeft + mOverscanScreenWidth;
+                        pf.bottom = df.bottom = of.bottom = mOverscanScreenTop
+                                + mOverscanScreenHeight;
+                    } else if (canHideNavigationBar()
+                            && (sysUiFl & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) != 0
+                            && attrs.type >= WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW
+                            && attrs.type <= WindowManager.LayoutParams.LAST_SUB_WINDOW) {
+                        // Asking for layout as if the nav bar is hidden, lets the
+                        // application extend into the unrestricted overscan screen area.  We
+                        // only do this for application windows to ensure no window that
+                        // can be above the nav bar can do this.
+                        pf.left = df.left = mOverscanScreenLeft;
+                        pf.top = df.top = mOverscanScreenTop;
+                        pf.right = df.right = mOverscanScreenLeft + mOverscanScreenWidth;
+                        pf.bottom = df.bottom = mOverscanScreenTop + mOverscanScreenHeight;
+                        // We need to tell the app about where the frame inside the overscan
+                        // is, so it can inset its content by that amount -- it didn't ask
+                        // to actually extend itself into the overscan region.
+                        of.left = mUnrestrictedScreenLeft;
+                        of.top = mUnrestrictedScreenTop;
+                        of.right = mUnrestrictedScreenLeft + mUnrestrictedScreenWidth;
+                        of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+                    } else {
+			//6 并非特殊窗口
+                        pf.left = df.left = mRestrictedOverscanScreenLeft;
+                        pf.top = df.top = mRestrictedOverscanScreenTop;
+                        pf.right = df.right = mRestrictedOverscanScreenLeft
+                                + mRestrictedOverscanScreenWidth;
+                        pf.bottom = df.bottom = mRestrictedOverscanScreenTop
+                                + mRestrictedOverscanScreenHeight;
+                        // We need to tell the app about where the frame inside the overscan
+                        // is, so it can inset its content by that amount -- it didn't ask
+                        // to actually extend itself into the overscan region.
+                        of.left = mUnrestrictedScreenLeft;
+                        of.top = mUnrestrictedScreenTop;
+                        of.right = mUnrestrictedScreenLeft + mUnrestrictedScreenWidth;
+                        of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+                    }
+
+                    if ((fl & FLAG_FULLSCREEN) == 0) {
+			//非全屏情况
+                        if (win.isVoiceInteraction()) {
+                            cf.left = mVoiceContentLeft;
+                            cf.top = mVoiceContentTop;
+                            cf.right = mVoiceContentRight;
+                            cf.bottom = mVoiceContentBottom;
+                        } else {
+                            if (adjust != SOFT_INPUT_ADJUST_RESIZE) {
+				//不因为输入法调整window的时候                                
+				cf.left = mDockLeft;
+                                cf.top = mDockTop;
+                                cf.right = mDockRight;
+                                cf.bottom = mDockBottom;
+                            } else {
+				//手输入法的影响的content大小
+                                cf.left = mContentLeft;
+                                cf.top = mContentTop;
+                                cf.right = mContentRight;
+                                cf.bottom = mContentBottom;
+                            }
+                        }
+                    } else {
+			//全屏情况下 不包含不透明导航栏的区域
+                        // Full screen windows are always given a layout that is as if the
+                        // status bar and other transient decors are gone.  This is to avoid
+                        // bad states when moving from a window that is not hding the
+                        // status bar to one that is.
+                        cf.left = mRestrictedScreenLeft;
+                        cf.top = mRestrictedScreenTop;
+                        cf.right = mRestrictedScreenLeft + mRestrictedScreenWidth;
+                        cf.bottom = mRestrictedScreenTop + mRestrictedScreenHeight;
+                    }
+	            //使用SYSTEM_UI_FLAG_LAYOUT_STABLE标志的情况使用稳定的便捷
+                    applyStableConstraints(sysUiFl, fl, cf);
+                    if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
+ 			//设置可见区域
+                        vf.left = mCurLeft;
+                        vf.top = mCurTop;
+                        vf.right = mCurRight;
+                        vf.bottom = mCurBottom;
+                    } else {
+			//不根据输入法调整
+                        vf.set(cf);
+                    }
+                }
+            } else if ((fl & FLAG_LAYOUT_IN_SCREEN) != 0 || (sysUiFl
+                    & (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)) != 0) {
+                if (DEBUG_LAYOUT) Slog.v(TAG, "layoutWindowLw(" + attrs.getTitle() +
+                        "): IN_SCREEN");
+                // A window that has requested to fill the entire screen just
+                // gets everything, period.
+                if (attrs.type == TYPE_STATUS_BAR_PANEL
+                        || attrs.type == TYPE_STATUS_BAR_SUB_PANEL) {
+                    pf.left = df.left = of.left = cf.left = hasNavBar
+                            ? mDockLeft : mUnrestrictedScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mUnrestrictedScreenTop;
+                    pf.right = df.right = of.right = cf.right = hasNavBar
+                            ? mRestrictedScreenLeft + mRestrictedScreenWidth
+                            : mUnrestrictedScreenLeft + mUnrestrictedScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom = hasNavBar
+                            ? mRestrictedScreenTop + mRestrictedScreenHeight
+                            : mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+                    if (DEBUG_LAYOUT) Slog.v(TAG, String.format(
+                            "Laying out IN_SCREEN status bar window: (%d,%d - %d,%d)",
+                            pf.left, pf.top, pf.right, pf.bottom));
+                } else if (attrs.type == TYPE_VOLUME_OVERLAY) {
+                    // Volume overlay covers everything, including the status and navbar
+                    pf.left = df.left = of.left = cf.left = mUnrestrictedScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mUnrestrictedScreenTop;
+                    pf.right = df.right = of.right = cf.right =
+                            mUnrestrictedScreenLeft + mUnrestrictedScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom =
+                            mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+                    if (DEBUG_LAYOUT) Slog.v(TAG, String.format(
+                                    "Laying out IN_SCREEN status bar window: (%d,%d - %d,%d)",
+                                    pf.left, pf.top, pf.right, pf.bottom));
+                } else if (attrs.type == TYPE_NAVIGATION_BAR
+                        || attrs.type == TYPE_NAVIGATION_BAR_PANEL) {
+                    // The navigation bar has Real Ultimate Power.
+                    pf.left = df.left = of.left = mUnrestrictedScreenLeft;
+                    pf.top = df.top = of.top = mUnrestrictedScreenTop;
+                    pf.right = df.right = of.right = mUnrestrictedScreenLeft
+                            + mUnrestrictedScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenTop
+                            + mUnrestrictedScreenHeight;
+                    if (DEBUG_LAYOUT) Slog.v(TAG, String.format(
+                                    "Laying out navigation bar window: (%d,%d - %d,%d)",
+                                    pf.left, pf.top, pf.right, pf.bottom));
+                } else if ((attrs.type == TYPE_SECURE_SYSTEM_OVERLAY
+                                || attrs.type == TYPE_BOOT_PROGRESS
+                                || attrs.type == TYPE_SCREENSHOT)
+                        && ((fl & FLAG_FULLSCREEN) != 0)) {
+                    // Fullscreen secure system overlays get what they ask for. Screenshot region
+                    // selection overlay should also expand to full screen.
+                    pf.left = df.left = of.left = cf.left = mOverscanScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mOverscanScreenTop;
+                    pf.right = df.right = of.right = cf.right = mOverscanScreenLeft
+                            + mOverscanScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom = mOverscanScreenTop
+                            + mOverscanScreenHeight;
+                } else if (attrs.type == TYPE_BOOT_PROGRESS) {
+                    // Boot progress screen always covers entire display.
+                    pf.left = df.left = of.left = cf.left = mOverscanScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mOverscanScreenTop;
+                    pf.right = df.right = of.right = cf.right = mOverscanScreenLeft
+                            + mOverscanScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom = mOverscanScreenTop
+                            + mOverscanScreenHeight;
+                } else if ((fl & FLAG_LAYOUT_IN_OVERSCAN) != 0
+                        && attrs.type >= WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW
+                        && attrs.type <= WindowManager.LayoutParams.LAST_SUB_WINDOW) {
+                    // Asking to layout into the overscan region, so give it that pure
+                    // unrestricted area.
+                    pf.left = df.left = of.left = cf.left = mOverscanScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mOverscanScreenTop;
+                    pf.right = df.right = of.right = cf.right
+                            = mOverscanScreenLeft + mOverscanScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom
+                            = mOverscanScreenTop + mOverscanScreenHeight;
+                } else if (canHideNavigationBar()
+                        && (sysUiFl & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) != 0
+                        && (attrs.type == TYPE_STATUS_BAR
+                            || attrs.type == TYPE_TOAST
+                            || attrs.type == TYPE_DOCK_DIVIDER
+                            || attrs.type == TYPE_VOICE_INTERACTION_STARTING
+                            || (attrs.type >= WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW
+                            && attrs.type <= WindowManager.LayoutParams.LAST_SUB_WINDOW))) {
+                    // Asking for layout as if the nav bar is hidden, lets the
+                    // application extend into the unrestricted screen area.  We
+                    // only do this for application windows (or toasts) to ensure no window that
+                    // can be above the nav bar can do this.
+                    // XXX This assumes that an app asking for this will also
+                    // ask for layout in only content.  We can't currently figure out
+                    // what the screen would be if only laying out to hide the nav bar.
+                    pf.left = df.left = of.left = cf.left = mUnrestrictedScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mUnrestrictedScreenTop;
+                    pf.right = df.right = of.right = cf.right = mUnrestrictedScreenLeft
+                            + mUnrestrictedScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom = mUnrestrictedScreenTop
+                            + mUnrestrictedScreenHeight;
+                } else if ((sysUiFl & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) != 0) {
+                    pf.left = df.left = of.left = mRestrictedScreenLeft;
+                    pf.top = df.top = of.top  = mRestrictedScreenTop;
+                    pf.right = df.right = of.right = mRestrictedScreenLeft + mRestrictedScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = mRestrictedScreenTop
+                            + mRestrictedScreenHeight;
+                    if (adjust != SOFT_INPUT_ADJUST_RESIZE) {
+                        cf.left = mDockLeft;
+                        cf.top = mDockTop;
+                        cf.right = mDockRight;
+                        cf.bottom = mDockBottom;
+                    } else {
+                        cf.left = mContentLeft;
+                        cf.top = mContentTop;
+                        cf.right = mContentRight;
+                        cf.bottom = mContentBottom;
+                    }
+                } else {
+                    pf.left = df.left = of.left = cf.left = mRestrictedScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mRestrictedScreenTop;
+                    pf.right = df.right = of.right = cf.right = mRestrictedScreenLeft
+                            + mRestrictedScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom = mRestrictedScreenTop
+                            + mRestrictedScreenHeight;
+                }
+
+                applyStableConstraints(sysUiFl, fl, cf);
+
+                if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
+                    vf.left = mCurLeft;
+                    vf.top = mCurTop;
+                    vf.right = mCurRight;
+                    vf.bottom = mCurBottom;
+                } else {
+                    vf.set(cf);
+                }
+            } else if (attached != null) {
+                if (DEBUG_LAYOUT) Slog.v(TAG, "layoutWindowLw(" + attrs.getTitle() +
+                        "): attached to " + attached);
+                // A child window should be placed inside of the same visible
+                // frame that its parent had.
+                setAttachedWindowFrames(win, fl, adjust, attached, false, pf, df, of, cf, vf);
+            } else {
+                if (DEBUG_LAYOUT) Slog.v(TAG, "layoutWindowLw(" + attrs.getTitle() +
+                        "): normal window");
+                // Otherwise, a normal window must be placed inside the content
+                // of all screen decorations.
+                if (attrs.type == TYPE_STATUS_BAR_PANEL || attrs.type == TYPE_VOLUME_OVERLAY) {
+                    // Status bar panels and the volume dialog are the only windows who can go on
+                    // top of the status bar.  They are protected by the STATUS_BAR_SERVICE
+                    // permission, so they have the same privileges as the status
+                    // bar itself.
+                    pf.left = df.left = of.left = cf.left = mRestrictedScreenLeft;
+                    pf.top = df.top = of.top = cf.top = mRestrictedScreenTop;
+                    pf.right = df.right = of.right = cf.right = mRestrictedScreenLeft
+                            + mRestrictedScreenWidth;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom = mRestrictedScreenTop
+                            + mRestrictedScreenHeight;
+                } else if (attrs.type == TYPE_TOAST || attrs.type == TYPE_SYSTEM_ALERT) {
+                    // These dialogs are stable to interim decor changes.
+                    pf.left = df.left = of.left = cf.left = mStableLeft;
+                    pf.top = df.top = of.top = cf.top = mStableTop;
+                    pf.right = df.right = of.right = cf.right = mStableRight;
+                    pf.bottom = df.bottom = of.bottom = cf.bottom = mStableBottom;
+                } else {
+                    pf.left = mContentLeft;
+                    pf.top = mContentTop;
+                    pf.right = mContentRight;
+                    pf.bottom = mContentBottom;
+                    if (win.isVoiceInteraction()) {
+                        df.left = of.left = cf.left = mVoiceContentLeft;
+                        df.top = of.top = cf.top = mVoiceContentTop;
+                        df.right = of.right = cf.right = mVoiceContentRight;
+                        df.bottom = of.bottom = cf.bottom = mVoiceContentBottom;
+                    } else if (adjust != SOFT_INPUT_ADJUST_RESIZE) {
+                        df.left = of.left = cf.left = mDockLeft;
+                        df.top = of.top = cf.top = mDockTop;
+                        df.right = of.right = cf.right = mDockRight;
+                        df.bottom = of.bottom = cf.bottom = mDockBottom;
+                    } else {
+                        df.left = of.left = cf.left = mContentLeft;
+                        df.top = of.top = cf.top = mContentTop;
+                        df.right = of.right = cf.right = mContentRight;
+                        df.bottom = of.bottom = cf.bottom = mContentBottom;
+                    }
+                    if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
+                        vf.left = mCurLeft;
+                        vf.top = mCurTop;
+                        vf.right = mCurRight;
+                        vf.bottom = mCurBottom;
+                    } else {
+                        vf.set(cf);
+                    }
+                }
+            }
+        }
+
+        // TYPE_SYSTEM_ERROR is above the NavigationBar so it can't be allowed to extend over it.
+        // Also, we don't allow windows in multi-window mode to extend out of the screen.
+        if ((fl & FLAG_LAYOUT_NO_LIMITS) != 0 && attrs.type != TYPE_SYSTEM_ERROR
+                && !win.isInMultiWindowMode()) {
+            df.left = df.top = -10000;
+            df.right = df.bottom = 10000;
+            if (attrs.type != TYPE_WALLPAPER) {
+                of.left = of.top = cf.left = cf.top = vf.left = vf.top = -10000;
+                of.right = of.bottom = cf.right = cf.bottom = vf.right = vf.bottom = 10000;
+            }
+        }
+
+        // If the device has a chin (e.g. some watches), a dead area at the bottom of the screen we
+        // need to provide information to the clients that want to pretend that you can draw there.
+        // We only want to apply outsets to certain types of windows. For example, we never want to
+        // apply the outsets to floating dialogs, because they wouldn't make sense there.
+        final boolean useOutsets = shouldUseOutsets(attrs, fl);
+        if (isDefaultDisplay && useOutsets) {
+            osf = mTmpOutsetFrame;
+            osf.set(cf.left, cf.top, cf.right, cf.bottom);
+            int outset = ScreenShapeHelper.getWindowOutsetBottomPx(mContext.getResources());
+            if (outset > 0) {
+                int rotation = mDisplayRotation;
+                if (rotation == Surface.ROTATION_0) {
+                    osf.bottom += outset;
+                } else if (rotation == Surface.ROTATION_90) {
+                    osf.right += outset;
+                } else if (rotation == Surface.ROTATION_180) {
+                    osf.top -= outset;
+                } else if (rotation == Surface.ROTATION_270) {
+                    osf.left -= outset;
+                }
+                if (DEBUG_LAYOUT) Slog.v(TAG, "applying bottom outset of " + outset
+                        + " with rotation " + rotation + ", result: " + osf);
+            }
+        }
+
+        if (DEBUG_LAYOUT) Slog.v(TAG, "Compute frame " + attrs.getTitle()
+                + ": sim=#" + Integer.toHexString(sim)
+                + " attach=" + attached + " type=" + attrs.type
+                + String.format(" flags=0x%08x", fl)
+                + " pf=" + pf.toShortString() + " df=" + df.toShortString()
+                + " of=" + of.toShortString()
+                + " cf=" + cf.toShortString() + " vf=" + vf.toShortString()
+                + " dcf=" + dcf.toShortString()
+                + " sf=" + sf.toShortString()
+                + " osf=" + (osf == null ? "null" : osf.toShortString()));
+
+        win.computeFrameLw(pf, df, of, cf, vf, dcf, sf, osf);
+
+        // Dock windows carve out the bottom of the screen, so normal windows
+        // can't appear underneath them.
+        if (attrs.type == TYPE_INPUT_METHOD && win.isVisibleLw()
+                && !win.getGivenInsetsPendingLw()) {
+            setLastInputMethodWindowLw(null, null);
+            //这里输入法测量好大小的时候会设置mContentBottom不大于输入法顶部
+	    // mCurBottom也不大于输入法顶部
+            offsetInputMethodWindowLw(win);
+        }
+        if (attrs.type == TYPE_VOICE_INTERACTION && win.isVisibleLw()
+                && !win.getGivenInsetsPendingLw()) {
+            offsetVoiceInputWindowLw(win);
+        }
+    }
+
+
+
+从applyStableConstraints可以看出 stable 只是为了不改变content的布局,所以在全屏的时候mStableFullscreenLeft应该是
+和包含statusbar 区域一样大的,在非全屏区域应该不包含status bar即使是透明的
+private void applyStableConstraints(int sysui, int fl, Rect r) {
+        if ((sysui & View.SYSTEM_UI_FLAG_LAYOUT_STABLE) != 0) {
+            // If app is requesting a stable layout, don't let the
+            // content insets go below the stable values.
+            if ((fl & FLAG_FULLSCREEN) != 0) {
+                if (r.left < mStableFullscreenLeft) r.left = mStableFullscreenLeft;
+                if (r.top < mStableFullscreenTop) r.top = mStableFullscreenTop;
+                if (r.right > mStableFullscreenRight) r.right = mStableFullscreenRight;
+                if (r.bottom > mStableFullscreenBottom) r.bottom = mStableFullscreenBottom;
+            } else {
+                if (r.left < mStableLeft) r.left = mStableLeft;
+                if (r.top < mStableTop) r.top = mStableTop;
+                if (r.right > mStableRight) r.right = mStableRight;
+                if (r.bottom > mStableBottom) r.bottom = mStableBottom;
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+//计算输入法window的位置
+    private void offsetInputMethodWindowLw(WindowState win) {
+        int top = Math.max(win.getDisplayFrameLw().top, win.getContentFrameLw().top);
+        top += win.getGivenContentInsetsLw().top;
+        if (mContentBottom > top) {
+            mContentBottom = top;
+        }
+        if (mVoiceContentBottom > top) {
+            mVoiceContentBottom = top;
+        }
+        top = win.getVisibleFrameLw().top;
+        top += win.getGivenVisibleInsetsLw().top;
+        if (mCurBottom > top) {
+            mCurBottom = top;
+        }
+        if (DEBUG_LAYOUT) Slog.v(TAG, "Input method: mDockBottom="
+                + mDockBottom + " mContentBottom="
+                + mContentBottom + " mCurBottom=" + mCurBottom);
+    }
+
+
+
+
+
+
+
+
+
+    @Override
+    public void computeFrameLw(Rect parentFrame, Rect displayFrame, Rect overscanFrame,
+            Rect contentFrame, Rect visibleFrame, Rect decorFrame, Rect stableFrame,
+            Rect outsetFrame) {
+        //1 window 将被移除,不需要操作
+        if (mWillReplaceWindow && (mAnimatingExit || !mReplacingRemoveRequested)) {
+            // This window is being replaced and either already got information that it's being
+            // removed or we are still waiting for some information. Because of this we don't
+            // want to apply any more changes to it, so it remains in this state until new window
+            // appears.
+            return;
+        }
+        mHaveFrame = true;
+
+        final Task task = getTask();
+        final boolean inFullscreenContainer = inFullscreenContainer();
+        final boolean windowsAreFloating = task != null && task.isFloating();
+        final DisplayContent dc = getDisplayContent();
+
+        // If the task has temp inset bounds set, we have to make sure all its windows uses
+        // the temp inset frame. Otherwise different display frames get applied to the main
+        // window and the child window, making them misaligned.
+        if (inFullscreenContainer || isLetterboxedAppWindow()) {
+ 	//2 全屏的activity,或者全屏task , inset frame设置为空
+            mInsetFrame.setEmpty();
+        } else if (task != null && isInMultiWindowMode()) {
+	//3 否则设置inset
+            task.getTempInsetBounds(mInsetFrame);
+        }
+
+        // Denotes the actual frame used to calculate the insets and to perform the layout. When
+        // resizing in docked mode, we'd like to freeze the layout, so we also need to freeze the
+        // insets temporarily. By the notion of a task having a different layout frame, we can
+        // achieve that while still moving the task around.
+        final Rect layoutContainingFrame;
+        final Rect layoutDisplayFrame;
+
+        // The offset from the layout containing frame to the actual containing frame.
+        final int layoutXDiff;
+        final int layoutYDiff;
+        if (inFullscreenContainer || layoutInParentFrame()) {
+         //4 全屏的或者在父布局中布局
+            // We use the parent frame as the containing frame for fullscreen and child windows
+            mContainingFrame.set(parentFrame);
+            mDisplayFrame.set(displayFrame);
+            layoutDisplayFrame = displayFrame;
+            layoutContainingFrame = parentFrame;
+            layoutXDiff = 0;
+            layoutYDiff = 0;
+        } else {
+            getContainerBounds(mContainingFrame);
+            if (mAppToken != null && !mAppToken.mFrozenBounds.isEmpty()) {
+
+                // If the bounds are frozen, we still want to translate the window freely and only
+                // freeze the size.
+                Rect frozen = mAppToken.mFrozenBounds.peek();
+                mContainingFrame.right = mContainingFrame.left + frozen.width();
+                mContainingFrame.bottom = mContainingFrame.top + frozen.height();
+            }
+            final WindowState imeWin = mService.mInputMethodWindow;
+            // IME is up and obscuring this window. Adjust the window position so it is visible.
+            if (imeWin != null && imeWin.isVisibleNow() && mService.mInputMethodTarget == this) {
+                final int stackId = getStackId();
+                if (stackId == FREEFORM_WORKSPACE_STACK_ID
+                        && mContainingFrame.bottom > contentFrame.bottom) {
+                    // In freeform we want to move the top up directly.
+                    // TODO: Investigate why this is contentFrame not parentFrame.
+                    mContainingFrame.top -= mContainingFrame.bottom - contentFrame.bottom;
+                } else if (stackId != PINNED_STACK_ID
+                        && mContainingFrame.bottom > parentFrame.bottom) {
+                    // But in docked we want to behave like fullscreen and behave as if the task
+                    // were given smaller bounds for the purposes of layout. Skip adjustments for
+                    // the pinned stack, they are handled separately in the PinnedStackController.
+                    mContainingFrame.bottom = parentFrame.bottom;
+                }
+            }
+
+            if (windowsAreFloating) {
+                // In floating modes (e.g. freeform, pinned) we have only to set the rectangle
+                // if it wasn't set already. No need to intersect it with the (visible)
+                // "content frame" since it is allowed to be outside the visible desktop.
+                if (mContainingFrame.isEmpty()) {
+                    mContainingFrame.set(contentFrame);
+                }
+            }
+            mDisplayFrame.set(mContainingFrame);
+            layoutXDiff = !mInsetFrame.isEmpty() ? mInsetFrame.left - mContainingFrame.left : 0;
+            layoutYDiff = !mInsetFrame.isEmpty() ? mInsetFrame.top - mContainingFrame.top : 0;
+            layoutContainingFrame = !mInsetFrame.isEmpty() ? mInsetFrame : mContainingFrame;
+            mTmpRect.set(0, 0, dc.getDisplayInfo().logicalWidth, dc.getDisplayInfo().logicalHeight);
+            subtractInsets(mDisplayFrame, layoutContainingFrame, displayFrame, mTmpRect);
+            if (!layoutInParentFrame()) {
+                subtractInsets(mContainingFrame, layoutContainingFrame, parentFrame, mTmpRect);
+                subtractInsets(mInsetFrame, layoutContainingFrame, parentFrame, mTmpRect);
+            }
+            layoutDisplayFrame = displayFrame;
+            layoutDisplayFrame.intersect(layoutContainingFrame);
+        }
+
+        final int pw = mContainingFrame.width();
+        final int ph = mContainingFrame.height();
+
+        if (!mParentFrame.equals(parentFrame)) {
+            //Slog.i(TAG_WM, "Window " + this + " content frame from " + mParentFrame
+            //        + " to " + parentFrame);
+            mParentFrame.set(parentFrame);
+            mContentChanged = true;
+        }
+        if (mRequestedWidth != mLastRequestedWidth || mRequestedHeight != mLastRequestedHeight) {
+            mLastRequestedWidth = mRequestedWidth;
+            mLastRequestedHeight = mRequestedHeight;
+            mContentChanged = true;
+        }
+
+        mOverscanFrame.set(overscanFrame);
+        mContentFrame.set(contentFrame);
+        mVisibleFrame.set(visibleFrame);
+        mDecorFrame.set(decorFrame);
+        mStableFrame.set(stableFrame);
+        final boolean hasOutsets = outsetFrame != null;
+        if (hasOutsets) {
+            mOutsetFrame.set(outsetFrame);
+        }
+
+        final int fw = mFrame.width();
+        final int fh = mFrame.height();
+
+        applyGravityAndUpdateFrame(layoutContainingFrame, layoutDisplayFrame);
+
+        // Calculate the outsets before the content frame gets shrinked to the window frame.
+        if (hasOutsets) {
+            mOutsets.set(Math.max(mContentFrame.left - mOutsetFrame.left, 0),
+                    Math.max(mContentFrame.top - mOutsetFrame.top, 0),
+                    Math.max(mOutsetFrame.right - mContentFrame.right, 0),
+                    Math.max(mOutsetFrame.bottom - mContentFrame.bottom, 0));
+        } else {
+            mOutsets.set(0, 0, 0, 0);
+        }
+
+        // Make sure the content and visible frames are inside of the
+        // final window frame.
+        if (windowsAreFloating && !mFrame.isEmpty()) {
+            // For pinned workspace the frame isn't limited in any particular
+            // way since SystemUI controls the bounds. For freeform however
+            // we want to keep things inside the content frame.
+            final Rect limitFrame = task.inPinnedWorkspace() ? mFrame : mContentFrame;
+            // Keep the frame out of the blocked system area, limit it in size to the content area
+            // and make sure that there is always a minimum visible so that the user can drag it
+            // into a usable area..
+            final int height = Math.min(mFrame.height(), limitFrame.height());
+            final int width = Math.min(limitFrame.width(), mFrame.width());
+            final DisplayMetrics displayMetrics = getDisplayContent().getDisplayMetrics();
+            final int minVisibleHeight = Math.min(height, WindowManagerService.dipToPixel(
+                    MINIMUM_VISIBLE_HEIGHT_IN_DP, displayMetrics));
+            final int minVisibleWidth = Math.min(width, WindowManagerService.dipToPixel(
+                    MINIMUM_VISIBLE_WIDTH_IN_DP, displayMetrics));
+            final int top = Math.max(limitFrame.top,
+                    Math.min(mFrame.top, limitFrame.bottom - minVisibleHeight));
+            final int left = Math.max(limitFrame.left + minVisibleWidth - width,
+                    Math.min(mFrame.left, limitFrame.right - minVisibleWidth));
+            mFrame.set(left, top, left + width, top + height);
+            mContentFrame.set(mFrame);
+            mVisibleFrame.set(mContentFrame);
+            mStableFrame.set(mContentFrame);
+        } else if (mAttrs.type == TYPE_DOCK_DIVIDER) {
+            dc.getDockedDividerController().positionDockedStackedDivider(mFrame);
+            mContentFrame.set(mFrame);
+            if (!mFrame.equals(mLastFrame)) {
+                mMovedByResize = true;
+            }
+        } else {
+            mContentFrame.set(Math.max(mContentFrame.left, mFrame.left),
+                    Math.max(mContentFrame.top, mFrame.top),
+                    Math.min(mContentFrame.right, mFrame.right),
+                    Math.min(mContentFrame.bottom, mFrame.bottom));
+
+            mVisibleFrame.set(Math.max(mVisibleFrame.left, mFrame.left),
+                    Math.max(mVisibleFrame.top, mFrame.top),
+                    Math.min(mVisibleFrame.right, mFrame.right),
+                    Math.min(mVisibleFrame.bottom, mFrame.bottom));
+
+            mStableFrame.set(Math.max(mStableFrame.left, mFrame.left),
+                    Math.max(mStableFrame.top, mFrame.top),
+                    Math.min(mStableFrame.right, mFrame.right),
+                    Math.min(mStableFrame.bottom, mFrame.bottom));
+        }
+
+        if (inFullscreenContainer && !windowsAreFloating) {
+            // Windows that are not fullscreen can be positioned outside of the display frame,
+            // but that is not a reason to provide them with overscan insets.
+            mOverscanInsets.set(Math.max(mOverscanFrame.left - layoutContainingFrame.left, 0),
+                    Math.max(mOverscanFrame.top - layoutContainingFrame.top, 0),
+                    Math.max(layoutContainingFrame.right - mOverscanFrame.right, 0),
+                    Math.max(layoutContainingFrame.bottom - mOverscanFrame.bottom, 0));
+        }
+
+        if (mAttrs.type == TYPE_DOCK_DIVIDER) {
+            // For the docked divider, we calculate the stable insets like a full-screen window
+            // so it can use it to calculate the snap positions.
+            mStableInsets.set(Math.max(mStableFrame.left - mDisplayFrame.left, 0),
+                    Math.max(mStableFrame.top - mDisplayFrame.top, 0),
+                    Math.max(mDisplayFrame.right - mStableFrame.right, 0),
+                    Math.max(mDisplayFrame.bottom - mStableFrame.bottom, 0));
+
+            // The divider doesn't care about insets in any case, so set it to empty so we don't
+            // trigger a relayout when moving it.
+            mContentInsets.setEmpty();
+            mVisibleInsets.setEmpty();
+        } else {
+            getDisplayContent().getLogicalDisplayRect(mTmpRect);
+            // Override right and/or bottom insets in case if the frame doesn't fit the screen in
+            // non-fullscreen mode.
+            boolean overrideRightInset = !windowsAreFloating && !inFullscreenContainer
+                    && mFrame.right > mTmpRect.right;
+            boolean overrideBottomInset = !windowsAreFloating && !inFullscreenContainer
+                    && mFrame.bottom > mTmpRect.bottom;
+            mContentInsets.set(mContentFrame.left - mFrame.left,
+                    mContentFrame.top - mFrame.top,
+                    overrideRightInset ? mTmpRect.right - mContentFrame.right
+                            : mFrame.right - mContentFrame.right,
+                    overrideBottomInset ? mTmpRect.bottom - mContentFrame.bottom
+                            : mFrame.bottom - mContentFrame.bottom);
+
+            mVisibleInsets.set(mVisibleFrame.left - mFrame.left,
+                    mVisibleFrame.top - mFrame.top,
+                    overrideRightInset ? mTmpRect.right - mVisibleFrame.right
+                            : mFrame.right - mVisibleFrame.right,
+                    overrideBottomInset ? mTmpRect.bottom - mVisibleFrame.bottom
+                            : mFrame.bottom - mVisibleFrame.bottom);
+
+            mStableInsets.set(Math.max(mStableFrame.left - mFrame.left, 0),
+                    Math.max(mStableFrame.top - mFrame.top, 0),
+                    overrideRightInset ? Math.max(mTmpRect.right - mStableFrame.right, 0)
+                            : Math.max(mFrame.right - mStableFrame.right, 0),
+                    overrideBottomInset ? Math.max(mTmpRect.bottom - mStableFrame.bottom, 0)
+                            :  Math.max(mFrame.bottom - mStableFrame.bottom, 0));
+        }
+
+        // Offset the actual frame by the amount layout frame is off.
+        mFrame.offset(-layoutXDiff, -layoutYDiff);
+        mCompatFrame.offset(-layoutXDiff, -layoutYDiff);
+        mContentFrame.offset(-layoutXDiff, -layoutYDiff);
+        mVisibleFrame.offset(-layoutXDiff, -layoutYDiff);
+        mStableFrame.offset(-layoutXDiff, -layoutYDiff);
+
+        mCompatFrame.set(mFrame);
+        if (mEnforceSizeCompat) {
+            // If there is a size compatibility scale being applied to the
+            // window, we need to apply this to its insets so that they are
+            // reported to the app in its coordinate space.
+            mOverscanInsets.scale(mInvGlobalScale);
+            mContentInsets.scale(mInvGlobalScale);
+            mVisibleInsets.scale(mInvGlobalScale);
+            mStableInsets.scale(mInvGlobalScale);
+            mOutsets.scale(mInvGlobalScale);
+
+            // Also the scaled frame that we report to the app needs to be
+            // adjusted to be in its coordinate space.
+            mCompatFrame.scale(mInvGlobalScale);
+        }
+
+        if (mIsWallpaper && (fw != mFrame.width() || fh != mFrame.height())) {
+            final DisplayContent displayContent = getDisplayContent();
+            if (displayContent != null) {
+                final DisplayInfo displayInfo = displayContent.getDisplayInfo();
+                getDisplayContent().mWallpaperController.updateWallpaperOffset(
+                        this, displayInfo.logicalWidth, displayInfo.logicalHeight, false);
+            }
+        }
+
+        if (DEBUG_LAYOUT || localLOGV) Slog.v(TAG,
+                "Resolving (mRequestedWidth="
+                + mRequestedWidth + ", mRequestedheight="
+                + mRequestedHeight + ") to" + " (pw=" + pw + ", ph=" + ph
+                + "): frame=" + mFrame.toShortString()
+                + " ci=" + mContentInsets.toShortString()
+                + " vi=" + mVisibleInsets.toShortString()
+                + " si=" + mStableInsets.toShortString()
+                + " of=" + mOutsets.toShortString());
+    }
+
+
+content区域和visible区域的区别是content区域包含输入法,visible区域不包含输入法
+//计算下面的这些值
+   outFrame.set(win.mCompatFrame);
+            outOverscanInsets.set(win.mOverscanInsets);
+            outContentInsets.set(win.mContentInsets);
+            win.mLastRelayoutContentInsets.set(win.mContentInsets);
+            outVisibleInsets.set(win.mVisibleInsets);
+            outStableInsets.set(win.mStableInsets);
+            outOutsets.set(win.mOutsets);
+            outBackdropFrame.set(win.getBackdropFrame(win.mFrame));
+
+
+
+
+我们再次屡一遍,和一些变量的含义
+
+
+ // The current size of the screen; really; extends into the overscan area of
+    // the screen and doesn't account for any system elements like the status bar.
+    int mOverscanScreenLeft, mOverscanScreenTop;
+    int mOverscanScreenWidth, mOverscanScreenHeight;
+    // The current visible size of the screen; really; (ir)regardless of whether the status
+    // bar can be hidden but not extending into the overscan area.
+    int mUnrestrictedScreenLeft, mUnrestrictedScreenTop;
+    int mUnrestrictedScreenWidth, mUnrestrictedScreenHeight;
+    // Like mOverscanScreen*, but allowed to move into the overscan region where appropriate.
+    int mRestrictedOverscanScreenLeft, mRestrictedOverscanScreenTop;
+    int mRestrictedOverscanScreenWidth, mRestrictedOverscanScreenHeight;
+    // The current size of the screen; these may be different than (0,0)-(dw,dh)
+    // if the status bar can't be hidden; in that case it effectively carves out
+    // that area of the display from all other windows.
+    int mRestrictedScreenLeft, mRestrictedScreenTop;
+    int mRestrictedScreenWidth, mRestrictedScreenHeight;
+    // During layout, the current screen borders accounting for any currently
+    // visible system UI elements.
+    int mSystemLeft, mSystemTop, mSystemRight, mSystemBottom;
+    // For applications requesting stable content insets, these are them.
+    //包含状态栏,包含导航栏
+    int mStableLeft, mStableTop, mStableRight, mStableBottom;
+    // For applications requesting stable content insets but have also set the
+    // fullscreen window flag, these are the stable dimensions without the status bar.
+    // 不包含导航栏,包含状态栏
+    int mStableFullscreenLeft, mStableFullscreenTop;
+    int mStableFullscreenRight, mStableFullscreenBottom;
+
+首先上面这些变量只是受到status bar 和 nativation bar 影响,所以在layer二者完成后就不在变化
+
+
+
+
+
+
+
+
+后面这几个还受到输入法,壁纸的影响
+
+    // During layout, the current screen borders with all outer decoration
+    // (status bar, input method dock) accounted for.
+    int mCurLeft, mCurTop, mCurRight, mCurBottom;
+    // During layout, the frame in which content should be displayed
+    // to the user, accounting for all screen decoration except for any
+    // space they deem as available for other content.  This is usually
+    // the same as mCur*, but may be larger if the screen decor has supplied
+    // content insets.
+    int mContentLeft, mContentTop, mContentRight, mContentBottom;
+    // During layout, the frame in which voice content should be displayed
+    // to the user, accounting for all screen decoration except for any
+    // space they deem as available for other content.
+    int mVoiceContentLeft, mVoiceContentTop, mVoiceContentRight, mVoiceContentBottom;
+    // During layout, the current screen borders along which input method
+    // windows are placed.
+    int mDockLeft, mDockTop, mDockRight, mDockBottom;
+    // During layout, the layer at which the doc window is placed.
+    
+
+
+
+上面这些是和测量关系不大的
+	int mDockLayer;
+    // During layout, this is the layer of the status bar.
+    int mStatusBarLayer;
+    int mLastSystemUiFlags;
+    // Bits that we are in the process of clearing, so we want to prevent
+    // them from being set by applications until everything has been updated
+    // to have them clear.
+    int mResettingSystemUiFlags = 0;
+    // Bits that we are currently always keeping cleared.
+    int mForceClearedSystemUiFlags = 0;
+    int mLastFullscreenStackSysUiFlags;
+    int mLastDockedStackSysUiFlags;
+    final Rect mNonDockedStackBounds = new Rect();
+    final Rect mDockedStackBounds = new Rect();
+    final Rect mLastNonDockedStackBounds = new Rect();
+    final Rect mLastDockedStackBounds = new Rect();
+
+    // What we last reported to system UI about whether the compatibility
+    // menu needs to be displayed.
+    boolean mLastFocusNeedsMenu = false;
+    // If nonzero, a panic gesture was performed at that time in uptime millis and is still pending.
+    private long mPendingPanicGestureUptime;
+
+    InputConsumer mInputConsumer = null;
+
+
+
+
+
+最后的这些区域用于测量大小
+    代表父窗口的坐标
+    static final Rect mTmpParentFrame = new Rect();
+    //代表display的坐标
+    static final Rect mTmpDisplayFrame = new Rect();
+    //代表包含overscan区域的坐标
+    static final Rect mTmpOverscanFrame = new Rect();
+    //代表内容区域的坐标
+    static final Rect mTmpContentFrame = new Rect();
+    //代表可见区域的坐标,内容区域有可能被输入法遮挡
+    static final Rect mTmpVisibleFrame = new Rect();
+    // 表示decor 区域的坐标
+    static final Rect mTmpDecorFrame = new Rect();
+    // 稳定区域的坐标
+    static final Rect mTmpStableFrame = new Rect();
+    //导航栏坐标
+    static final Rect mTmpNavigationFrame = new Rect();
+    //超出屏幕区域
+    static final Rect mTmpOutsetFrame = new Rect();
+    private static final Rect mTmpRect = new Rect();
+
+
+layoutNavigationBar的过程会修改的值
+ mStableBottom = mStableFullscreenBottom = mTmpNavigationFrame.top; //肯定不包含navigation bar的部分,不管是不是透明的
+
+导航栏不透明:
+ mDockBottom = mTmpNavigationFrame.top;
+ mRestrictedScreenHeight = mDockBottom - mRestrictedScreenTop;
+ mRestrictedOverscanScreenHeight = mDockBottom - mRestrictedOverscanScreenTop;
+
+最后会影响到的,把content和cur 都设置成和dock 一样的
+    	    mContentTop = mVoiceContentTop = mCurTop = mDockTop;
+            mContentBottom = mVoiceContentBottom = mCurBottom = mDockBottom;
+            mContentLeft = mVoiceContentLeft = mCurLeft = mDockLeft;
+            mContentRight = mVoiceContentRight = mCurRight = mDockRight;
+
+
+
+layoutStatusBar过程会改变的坐标
+status bar 不透明的情况:
+		mDockTop = mUnrestrictedScreenTop + mStatusBarHeight;
+                mContentTop = mVoiceContentTop = mCurTop = mDockTop;
+                mContentBottom = mVoiceContentBottom = mCurBottom = mDockBottom;
+                mContentLeft = mVoiceContentLeft = mCurLeft = mDockLeft;
+                mContentRight = mVoiceContentRight = mCurRight = mDockRight;
+
+
+
+
+
+ pf.left = df.left = mRestrictedOverscanScreenLeft;
+                        pf.top = df.top = mRestrictedOverscanScreenTop;
+                        pf.right = df.right = mRestrictedOverscanScreenLeft
+                                + mRestrictedOverscanScreenWidth;
+                        pf.bottom = df.bottom = mRestrictedOverscanScreenTop
+                                + mRestrictedOverscanScreenHeight;
+                        // We need to tell the app about where the frame inside the overscan
+                        // is, so it can inset its content by that amount -- it didn't ask
+                        // to actually extend itself into the overscan region.
+                        of.left = mUnrestrictedScreenLeft;
+                        of.top = mUnrestrictedScreenTop;
+                        of.right = mUnrestrictedScreenLeft + mUnrestrictedScreenWidth;
+                        of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+
+
+
+当有输入法存在的时候 mDockBottom和mCurBottom在有输入法的时候可能是输入法的高度
+一般情况下df 和pf是一样大的,除非不限制window大小pf将会设置为10000
+
+
+
+
+老罗是我们的救星啊
+
+  第二组成员变量是mCurLeft、mCurTop、mCurRight和mCurBottom，它们组成一个四元组（mCurLeft, mCurTop, mCurRight, mCurBottom），用来描述当前这轮窗口大小计算过程的屏幕装饰区，它对应于前面所提到的Activity窗口的可见区域边衬。
+
+        第三组成员变量是mContentLeft、mContentTop、mContentRight和mContentBottom，它们组成一个四元组（mContentLeft, mContentTop, mContentRight, mContentBottom），也是用来描述当前这轮窗口大小计算过程的屏幕装饰区，不过它对应的是前面所提到的Activity窗口的内容区域边衬。
+
+        第四组成员变量是mDockLeft、mDockTop、mDockRight、mDockBottom和mDockLayer，其中，前四个成员变量组成一个四元组（mDockLeft, mDockTop, mDockRight, mDockBottom），用来描述当前这轮窗口大小计算过程中的输入法窗口所占据的位置，后一个成员变量mDockLayer用来描述输入法窗品的Z轴位置。
+
+        第五组成员变量是mTmpParentFrame、mTmpDisplayFrame、mTmpContentFrame和mTmpVisibleFrame，它们是一组临时Rect区域，用来作为参数传递给具体的窗口计算大小的，避免每次都创建一组新的Rect区域来作来参数传递窗口。
+
+
+对于mDockBottom总会在输入法顶部
+mContentBottom 不一定在输入法底部,要看soft_input_flags
+
+我们来总结下输入法所在的区域
+mDockTop:
+如果状态栏不透明则在状态栏下面
+如果状态栏透明则在和与和状态栏顶部对其
+
+mDockBottom: 导航栏不透明则在导航栏上边, 导航栏透明则和导航栏底部对齐
+mDockLeft,mDockRight:同导航栏的逻辑
+
+mContentLeft: 和mDockLeft相同
+mContentTop:和mDockTop相同
+mContentRight:和mDockRight相同
+mContentBottom:如果根据输入法调整高度则等于输入法top,否则为mDockBottom
+
+
+
+
+
+
+

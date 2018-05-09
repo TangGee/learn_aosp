@@ -1,0 +1,93 @@
+PLATFORM_VERSION_CODENAME=REL
+PLATFORM_VERSION=8.0.0
+TARGET_PRODUCT=tissot
+TARGET_BUILD_VARIANT=userdebug
+TARGET_BUILD_TYPE=release
+TARGET_PLATFORM_VERSION=OPR1
+TARGET_BUILD_APPS=
+TARGET_ARCH=arm64
+TARGET_ARCH_VARIANT=armv8-a
+TARGET_CPU_VARIANT=generic
+TARGET_2ND_ARCH=arm
+TARGET_2ND_ARCH_VARIANT=armv7-a-neon
+TARGET_2ND_CPU_VARIANT=cortex-a53
+HOST_ARCH=x86_64
+HOST_2ND_ARCH=x86
+HOST_OS=linux
+HOST_OS_EXTRA=Linux-4.2.0-27-generic-x86_64-with-Ubuntu-14.04-trusty
+HOST_CROSS_OS=windows
+HOST_CROSS_ARCH=x86
+HOST_CROSS_2ND_ARCH=x86_64
+HOST_BUILD_TYPE=release
+BUILD_ID=OPR1.170623.026
+OUT_DIR=out
+AUX_OS_VARIANT_LIST=
+============================================
+
+product variant_and_version variant version  这几个变量要初始化
+product=${selection%%-*} # 也就是你lunch选择的那个去掉-后面部分的字符串
+variant_and_version=${selection#*-} #也就是你lunch选择的那个去掉-前面部分的字符串
+variant 是variant_and_version以-分割的前半部分
+version 是 variant_and_version 以-分割的后半部分
+TARGET_PRODUCT=$product 
+TARGET_BUILD_VARIANT=$variant 
+TARGET_PLATFORM_VERSION=$version 
+
+cached_vars = 2ND_TARGET_GCC_VERSION ANDROID_BUILD_PATHS BUILD_OS LLVM_PREBUILTS_VERSION print report_config TARGET_ARCH TARGET_BUILD_VARIANT TARGET_DEVICE TARGET_GCC_VERSION TARGET_PLATFORM_VERSION TARGET_PRODUCT
+
+
+cached_abs_vars = ANDROID_GCC_PREBUILTS ANDROID_PREBUILTS HOST_OUT HOST_OUT_TESTCASES print PRODUCT_OUT TARGET_OUT_TESTCASES 
+
+然后make dump-many-vars 命令 参数  :
+  CALLED_FROM_SETUP=true BUILD_SYSTEM=build/core
+  DUMP_MANY_VARS="$cached_vars" \
+                        DUMP_MANY_ABS_VARS="$cached_abs_vars" \
+                        DUMP_VAR_PREFIX="var_cache_" \
+                        DUMP_ABS_VAR_PREFIX="abs_var_cache_"`
+
+属性信息都是在这里配置的 最多只能有一个和设备相符合的
+寻找的方式
+board_config_mk := \  
+    $(strip $(wildcard \  
+        $(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)/BoardConfig.mk \  
+        device/*/$(TARGET_DEVICE)/BoardConfig.mk \  
+        vendor/*/$(TARGET_DEVICE)/BoardConfig.mk \ 
+
+device/xiaomi/tissot/BoardConfig.mk 
+
+TARGET_DEVICE确定方式:
+get-all-product-makefiles 函数从device/TARGET_DEVICE/product/
+device/xiaomi/tissot/AndroidProducts.mk
+
+找到的AndroidProducts.mk如下
+device/qcom/msm8953_32/AndroidProducts.mk
+device/qcom/msm8937_64/AndroidProducts.mk
+device/qcom/msm8937_32/AndroidProducts.mk
+device/qcom/msm8953_64/AndroidProducts.mk
+device/qcom/msm8996/AndroidProducts.mk
+device/xiaomi/tissot/AndroidProducts.mk
+device/generic/mini-emulator-x86_64/AndroidProducts.mk
+device/generic/mini-emulator-x86/AndroidProducts.mk
+device/generic/car/car-armv7-a-neon/AndroidProducts.mk
+device/generic/car/car-x86_64/AndroidProducts.mk
+device/generic/car/car-arm64/AndroidProducts.mk
+device/generic/car/car-x86/AndroidProducts.mk
+device/generic/x86_64/AndroidProducts.mk
+device/generic/mini-emulator-armv7-a-neon/AndroidProducts.mk
+device/generic/mini-emulator-arm64/AndroidProducts.mk
+device/generic/armv7-a-neon/AndroidProducts.mk
+device/generic/arm64/AndroidProducts.mk
+device/generic/x86/AndroidProducts.mk
+device/generic/qemu/AndroidProducts.mk
+device/sample/products/AndroidProducts.mk
+build/target/product/AndroidProducts.mk
+
+以tissot为例子 get-all-product-makefiles返回的结果
+build/core/product_config.mk:190: build/target/product/aosp_arm.mk build/target/product/aosp_arm64.mk build/target/product/aosp_arm64_a.mk build/target/product/aosp_arm64_ab.mk build/target/product/aosp_arm_a.mk build/target/product/aosp_mips.mk build/target/product/aosp_mips64.mk build/target/product/aosp_x86.mk build/target/product/aosp_x86_64.mk build/target/product/aosp_x86_arm.mk build/target/product/core.mk build/target/product/full.mk build/target/product/full_mips.mk build/target/product/full_x86.mk build/target/product/generic.mk build/target/product/generic_mips.mk build/target/product/generic_x86.mk build/target/product/sdk.mk build/target/product/sdk_arm64.mk build/target/product/sdk_mips.mk build/target/product/sdk_phone_arm64.mk build/target/product/sdk_phone_armv7.mk build/target/product/sdk_phone_mips.mk build/target/product/sdk_phone_mips64.mk build/target/product/sdk_phone_x86.mk build/target/product/sdk_phone_x86_64.mk build/target/product/sdk_x86.mk build/target/product/sdk_x86_64.mk device/generic/arm64/mini_arm64.mk device/generic/armv7-a-neon/mini_armv7a_neon.mk device/generic/car/car-arm64/car_emu_arm64.mk device/generic/car/car-armv7-a-neon/car_emu_arm.mk device/generic/car/car-x86/car_emu_x86.mk device/generic/car/car-x86_64/car_emu_x86_64.mk device/generic/mini-emulator-arm64/mini_emulator_arm64.mk device/generic/mini-emulator-armv7-a-neon/m_e_arm.mk device/generic/mini-emulator-x86/mini_emulator_x86.mk device/generic/mini-emulator-x86_64/mini_emulator_x86_64.mk device/generic/qemu/qemu_arm.mk device/generic/qemu/qemu_arm64.mk device/generic/qemu/qemu_mips.mk device/generic/qemu/qemu_mips64.mk device/generic/qemu/qemu_x86.mk device/generic/qemu/qemu_x86_64.mk device/generic/qemu/ranchu_arm64.mk device/generic/x86/mini_x86.mk device/generic/x86_64/mini_x86_64.mk device/qcom/msm8937_32/msm8937_32.mk device/qcom/msm8937_64/msm8937_64.mk device/qcom/msm8953_32/msm8953_32.mk device/qcom/msm8953_64/msm8953_64.mk device/qcom/msm8996/msm8996.mk device/sample/products/sample_addon.mk device/xiaomi/tissot/tissot.mk
+
+
+筛选之后
+device/xiaomi/tissot/tissot.mk
+
+
+

@@ -1,0 +1,372 @@
+02-14 14:19:26.267 17497 17526 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.WindowManagerService.updateRotationUnchecked:4101 com.android.server.wm.WindowManagerService.updateRotation:4046 com.android.server.policy.PhoneWindowManager.updateRotation:7703 
+02-14 14:19:26.268 17497 17526 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:26.268 17497 17526 V WindowManager: -------------------------------------
+02-14 14:19:26.268 17497 17526 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:26.270 17497 17526 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:26.270 17497 17526 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:26.272 17497 17526 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.272 17497 17526 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.273 17497 17526 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,130] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:26.273 17497 17526 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:26.273 17497 17526 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.273 17497 17526 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.273 17497 17526 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,88][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:26.274 17497 17526 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:26.274 17497 17526 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:26.274 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.274 17497 17526 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.274 17497 17526 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.274 17497 17526 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:26.274 17497 17526 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:26.274 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.275 17497 17526 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.275 17497 17526 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.275 17497 17526 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:26.275 17497 17526 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.275 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.275 17497 17526 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:26.275 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.275 17497 17526 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:26.276 17497 17526 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.276 17497 17526 V WindowManager: Window Title:DockedStackDivider  Resolving (mRequestedWidth=1078, mRequestedheight=132) to (pw=1080, ph=2246): frame=[0,0][0,0] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:26.276 17497 17526 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 0, 0) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:26.276 17497 17526 V WindowManager: 1ST PASS Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.276 17497 17526 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:26.277 17497 17526 V WindowManager: Window Title:yumin.com.window/yumin.com.window.MainActivity  Resolving (mRequestedWidth=1080, mRequestedheight=2158) to (pw=1080, ph=2246): frame=[0,0][1080,2246] ci=[0,88][0,130] vi=[0,88][0,130] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:26.277 17497 17526 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:26.277 17497 17526 V WindowManager: 1ST PASS Window{d5de795 u0 com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.277 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:26.278 17497 17526 V WindowManager: 1ST PASS Window{a39b43 u0 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.278 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:26.278 17497 17526 V WindowManager: 1ST PASS Window{366ebee u0 com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.278 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:26.278 17497 17526 V WindowManager: 1ST PASS Window{af66254 u0 com.google.android.apps.maps/com.google.android.maps.MapsActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.278 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:26.278 17497 17526 V WindowManager: 1ST PASS Window{f37cca7 u0 com.mi.android.globallauncher/com.miui.home.launcher.Launcher}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.279 17497 17526 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:26.279 17497 17526 V WindowManager: 1ST PASS Window{18798c6 u0 com.android.systemui.ImageWallpaper}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:26.279 17497 17526 V WindowManager:   GONE: mViewVisibility=0 mRelayoutCalled=true hidden=true hiddenRequested=false parentHidden=false
+02-14 14:19:35.954 17497 19201 V WindowManager: Relayout Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: viewVisibility=0 req=1080x2246 WM.LayoutParams{(0,0)(fillxfill) sim=#20 ty=1 fl=#81810100 extfl=#40 extpfl=0 pfl=0x20000 wanim=0x10302f6 vsysui=0x606 needsMenuKey=2 colorMode=0}
+02-14 14:19:35.955 17497 19201 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.WindowState.setDisplayLayoutNeeded:2228 com.android.server.wm.WindowManagerService.relayoutWindow:2187 com.android.server.wm.Session.relayout:239 
+02-14 14:19:35.956 17497 19201 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:35.956 17497 19201 V WindowManager: -------------------------------------
+02-14 14:19:35.956 17497 19201 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:35.957 17497 19201 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:35.957 17497 19201 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:35.958 17497 19201 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.958 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.958 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,130] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:35.958 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.959 17497 19201 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.959 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.959 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,88][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:35.959 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.959 17497 19201 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.960 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.960 17497 19201 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.960 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.960 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:35.960 17497 19201 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.960 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.960 17497 19201 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.960 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.960 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.961 17497 19201 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.961 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.961 17497 19201 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.961 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.961 17497 19201 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.961 17497 19201 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.962 17497 19201 V WindowManager: Window Title:DockedStackDivider  Resolving (mRequestedWidth=1078, mRequestedheight=132) to (pw=1080, ph=2246): frame=[0,0][0,0] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:35.962 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 0, 0) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.962 17497 19201 V WindowManager: 1ST PASS Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.962 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.963 17497 19201 V WindowManager: Window Title:yumin.com.window/yumin.com.window.MainActivity  Resolving (mRequestedWidth=1080, mRequestedheight=2246) to (pw=1080, ph=2246): frame=[0,88][1080,2246] ci=[0,0][0,130] vi=[0,0][0,130] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:35.963 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 88 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 88 - 1080, 2246)
+02-14 14:19:35.963 17497 19201 V WindowManager: 1ST PASS Window{d5de795 u0 com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.963 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.963 17497 19201 V WindowManager: 1ST PASS Window{a39b43 u0 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.964 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.964 17497 19201 V WindowManager: 1ST PASS Window{366ebee u0 com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.964 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.964 17497 19201 V WindowManager: 1ST PASS Window{af66254 u0 com.google.android.apps.maps/com.google.android.maps.MapsActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.964 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.964 17497 19201 V WindowManager: 1ST PASS Window{f37cca7 u0 com.mi.android.globallauncher/com.miui.home.launcher.Launcher}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.964 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.965 17497 19201 V WindowManager: 1ST PASS Window{18798c6 u0 com.android.systemui.ImageWallpaper}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.965 17497 19201 V WindowManager:   GONE: mViewVisibility=0 mRelayoutCalled=true hidden=true hiddenRequested=false parentHidden=false
+02-14 14:19:35.969 17497 19201 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2805 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 com.android.server.wm.RootWindowContainer.performSurfacePlacement:602 
+02-14 14:19:35.969 17497 19201 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:35.969 17497 19201 V WindowManager: -------------------------------------
+02-14 14:19:35.969 17497 19201 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:35.975 17497 19201 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:35.975 17497 19201 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:35.976 17497 19201 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.976 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.976 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:35.976 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.976 17497 19201 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.976 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.977 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,88][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:35.977 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.977 17497 19201 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.977 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.977 17497 19201 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.977 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.977 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:35.977 17497 19201 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.978 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.978 17497 19201 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.978 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.978 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.978 17497 19201 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.978 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.978 17497 19201 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.978 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.978 17497 19201 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.978 17497 19201 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.979 17497 19201 V WindowManager: Window Title:DockedStackDivider  Resolving (mRequestedWidth=1078, mRequestedheight=132) to (pw=1080, ph=2246): frame=[0,0][0,0] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:35.979 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 0, 0) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.979 17497 19201 V WindowManager: 1ST PASS Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.979 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.979 17497 19201 V WindowManager: Window Title:yumin.com.window/yumin.com.window.MainActivity  Resolving (mRequestedWidth=1080, mRequestedheight=2246) to (pw=1080, ph=2246): frame=[0,88][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:35.979 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 88 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 88 - 1080, 2246)
+02-14 14:19:35.979 17497 19201 V WindowManager: 1ST PASS Window{d5de795 u0 com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.980 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.980 17497 19201 V WindowManager: 1ST PASS Window{a39b43 u0 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.980 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.980 17497 19201 V WindowManager: 1ST PASS Window{366ebee u0 com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.980 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.980 17497 19201 V WindowManager: 1ST PASS Window{af66254 u0 com.google.android.apps.maps/com.google.android.maps.MapsActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.980 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.980 17497 19201 V WindowManager: 1ST PASS Window{f37cca7 u0 com.mi.android.globallauncher/com.miui.home.launcher.Launcher}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.980 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.980 17497 19201 V WindowManager: 1ST PASS Window{18798c6 u0 com.android.systemui.ImageWallpaper}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.980 17497 19201 V WindowManager:   GONE: mViewVisibility=0 mRelayoutCalled=true hidden=true hiddenRequested=false parentHidden=false
+02-14 14:19:35.984 17497 19201 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2805 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 com.android.server.wm.RootWindowContainer.performSurfacePlacement:602 
+02-14 14:19:35.984 17497 19201 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:35.984 17497 19201 V WindowManager: -------------------------------------
+02-14 14:19:35.984 17497 19201 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:35.985 17497 19201 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:35.985 17497 19201 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:35.985 17497 19201 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.985 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.986 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:35.986 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.986 17497 19201 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.986 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.986 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,88][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:35.986 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.986 17497 19201 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.986 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.987 17497 19201 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.987 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.987 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:35.987 17497 19201 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.987 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.987 17497 19201 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.987 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.987 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.987 17497 19201 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.987 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.987 17497 19201 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.987 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.987 17497 19201 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:35.987 17497 19201 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.988 17497 19201 V WindowManager: Window Title:DockedStackDivider  Resolving (mRequestedWidth=1078, mRequestedheight=132) to (pw=1080, ph=2246): frame=[0,0][0,0] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:35.988 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 0, 0) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:35.988 17497 19201 V WindowManager: 1ST PASS Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.988 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:35.988 17497 19201 V WindowManager: Window Title:yumin.com.window/yumin.com.window.MainActivity  Resolving (mRequestedWidth=1080, mRequestedheight=2246) to (pw=1080, ph=2246): frame=[0,88][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:35.988 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 88 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 88 - 1080, 2246)
+02-14 14:19:35.989 17497 19201 V WindowManager: 1ST PASS Window{d5de795 u0 com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.989 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.989 17497 19201 V WindowManager: 1ST PASS Window{a39b43 u0 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.989 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.989 17497 19201 V WindowManager: 1ST PASS Window{366ebee u0 com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.989 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.989 17497 19201 V WindowManager: 1ST PASS Window{af66254 u0 com.google.android.apps.maps/com.google.android.maps.MapsActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.989 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.989 17497 19201 V WindowManager: 1ST PASS Window{f37cca7 u0 com.mi.android.globallauncher/com.miui.home.launcher.Launcher}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.989 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:35.989 17497 19201 V WindowManager: 1ST PASS Window{18798c6 u0 com.android.systemui.ImageWallpaper}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:35.990 17497 19201 V WindowManager:   GONE: mViewVisibility=0 mRelayoutCalled=true hidden=true hiddenRequested=false parentHidden=false
+02-14 14:19:36.002 17497 19201 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.RootWindowContainer.performSurfacePlacement:732 com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementLoop:203 com.android.server.wm.WindowSurfacePlacer.performSurfacePlacement:151 
+02-14 14:19:36.005 17497 19201 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:36.005 17497 19201 V WindowManager: -------------------------------------
+02-14 14:19:36.005 17497 19201 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:36.006 17497 19201 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.006 17497 19201 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.006 17497 19201 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.006 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.006 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:36.006 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.007 17497 19201 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.007 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.007 17497 19201 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,88][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:36.007 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.007 17497 19201 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.007 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.007 17497 19201 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.007 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.007 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:36.007 17497 19201 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.007 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.007 17497 19201 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.007 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.007 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.007 17497 19201 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.008 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.008 17497 19201 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.008 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.008 17497 19201 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.008 17497 19201 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.008 17497 19201 V WindowManager: Window Title:DockedStackDivider  Resolving (mRequestedWidth=1078, mRequestedheight=132) to (pw=1080, ph=2246): frame=[0,0][0,0] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:36.008 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 0, 0) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.008 17497 19201 V WindowManager: 1ST PASS Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.008 17497 19201 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.008 17497 19201 V WindowManager: Window Title:yumin.com.window/yumin.com.window.MainActivity  Resolving (mRequestedWidth=1080, mRequestedheight=2246) to (pw=1080, ph=2246): frame=[0,88][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:36.008 17497 19201 V WindowManager:   LAYOUT: mFrame=Rect(0, 88 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 88 - 1080, 2246)
+02-14 14:19:36.009 17497 19201 V WindowManager: 1ST PASS Window{d5de795 u0 com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.009 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.009 17497 19201 V WindowManager: 1ST PASS Window{a39b43 u0 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.009 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.009 17497 19201 V WindowManager: 1ST PASS Window{366ebee u0 com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.009 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.009 17497 19201 V WindowManager: 1ST PASS Window{af66254 u0 com.google.android.apps.maps/com.google.android.maps.MapsActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.009 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.009 17497 19201 V WindowManager: 1ST PASS Window{f37cca7 u0 com.mi.android.globallauncher/com.miui.home.launcher.Launcher}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.009 17497 19201 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.009 17497 19201 V WindowManager: 1ST PASS Window{18798c6 u0 com.android.systemui.ImageWallpaper}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.009 17497 19201 V WindowManager:   GONE: mViewVisibility=0 mRelayoutCalled=true hidden=true hiddenRequested=false parentHidden=false
+02-14 14:19:36.017 17497 19201 V WindowManager: Relayout complete Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: outFrame=[0,88][1080,2246]
+02-14 14:19:36.018 17497 19192 V WindowManager: Relayout Window{eeec2c3 u0 RoundCorner}: viewVisibility=0 req=1078x140 WM.LayoutParams{(0,0)(fillxwrap) gr=#53 sim=#20 ty=2015 fl=#1000518 extfl=#0 extpfl=700 pfl=0x100010 fmt=-3 colorMode=0}
+02-14 14:19:36.018 17497 19192 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.WindowState.setDisplayLayoutNeeded:2228 com.android.server.wm.WindowManagerService.relayoutWindow:2187 com.android.server.wm.Session.relayout:239 
+02-14 14:19:36.019 17497 19192 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:36.019 17497 19192 V WindowManager: -------------------------------------
+02-14 14:19:36.019 17497 19192 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:36.020 17497 19192 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.020 17497 19192 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.020 17497 19192 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.021 17497 19192 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.021 17497 19192 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:36.021 17497 19192 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.021 17497 19192 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.022 17497 19192 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.022 17497 19192 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,88][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:36.022 17497 19192 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.022 17497 19192 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.022 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.022 17497 19192 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.022 17497 19192 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.023 17497 19192 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:36.023 17497 19192 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.023 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.023 17497 19192 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.023 17497 19192 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.023 17497 19192 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.023 17497 19192 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.023 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.023 17497 19192 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.024 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.024 17497 19192 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.024 17497 19192 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.024 17497 19192 V WindowManager: Window Title:DockedStackDivider  Resolving (mRequestedWidth=1078, mRequestedheight=132) to (pw=1080, ph=2246): frame=[0,0][0,0] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:36.024 17497 19192 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 0, 0) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.024 17497 19192 V WindowManager: 1ST PASS Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.024 17497 19192 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.025 17497 19192 V WindowManager: Window Title:yumin.com.window/yumin.com.window.MainActivity  Resolving (mRequestedWidth=1080, mRequestedheight=2246) to (pw=1080, ph=2246): frame=[0,88][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:36.025 17497 19192 V WindowManager:   LAYOUT: mFrame=Rect(0, 88 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 88 - 1080, 2246)
+02-14 14:19:36.025 17497 19192 V WindowManager: 1ST PASS Window{d5de795 u0 com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.025 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.025 17497 19192 V WindowManager: 1ST PASS Window{a39b43 u0 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.025 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.025 17497 19192 V WindowManager: 1ST PASS Window{366ebee u0 com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.025 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.025 17497 19192 V WindowManager: 1ST PASS Window{af66254 u0 com.google.android.apps.maps/com.google.android.maps.MapsActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.025 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.026 17497 19192 V WindowManager: 1ST PASS Window{f37cca7 u0 com.mi.android.globallauncher/com.miui.home.launcher.Launcher}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.026 17497 19192 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.026 17497 19192 V WindowManager: 1ST PASS Window{18798c6 u0 com.android.systemui.ImageWallpaper}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.026 17497 19192 V WindowManager:   GONE: mViewVisibility=0 mRelayoutCalled=true hidden=true hiddenRequested=false parentHidden=false
+02-14 14:19:36.035 17497 19192 V WindowManager: Relayout complete Window{eeec2c3 u0 RoundCorner}: outFrame=[0,2106][1080,2246]
+02-14 14:19:36.303 17497 17562 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.WindowState.setDisplayLayoutNeeded:2228 com.android.server.wm.WindowState.checkPolicyVisibilityChange:2295 com.android.server.wm.WindowStateAnimator.stepAnimationLocked:464 
+02-14 14:19:36.304 17497 17562 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.WindowState.setDisplayLayoutNeeded:2228 com.android.server.wm.WindowState.checkPolicyVisibilityChange:2295 com.android.server.wm.WindowStateAnimator.stepAnimationLocked:464 
+02-14 14:19:36.312 17497 17562 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:36.313 17497 17562 V WindowManager: -------------------------------------
+02-14 14:19:36.313 17497 17562 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:36.314 17497 17562 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.314 17497 17562 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.315 17497 17562 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.315 17497 17562 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.317 17497 17562 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:36.318 17497 17562 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.318 17497 17562 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.318 17497 17562 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.319 17497 17562 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:36.325 17497 17562 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.326 17497 17562 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.326 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.326 17497 17562 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.326 17497 17562 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.327 17497 17562 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:36.327 17497 17562 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.328 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.328 17497 17562 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.328 17497 17562 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.328 17497 17562 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.328 17497 17562 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.328 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.328 17497 17562 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.328 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.328 17497 17562 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.328 17497 17562 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.329 17497 17562 V WindowManager: Window Title:DockedStackDivider  Resolving (mRequestedWidth=1078, mRequestedheight=132) to (pw=1080, ph=2246): frame=[0,0][0,0] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,130] of=[0,0][0,0]
+02-14 14:19:36.329 17497 17562 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 0, 0) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.329 17497 17562 V WindowManager: 1ST PASS Window{66fe53d u0 yumin.com.window/yumin.com.window.MainActivity}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.329 17497 17562 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.330 17497 17562 V WindowManager: Window Title:yumin.com.window/yumin.com.window.MainActivity  Resolving (mRequestedWidth=1080, mRequestedheight=2246) to (pw=1080, ph=2246): frame=[0,88][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:36.330 17497 17562 V WindowManager:   LAYOUT: mFrame=Rect(0, 88 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 88 - 1080, 2246)
+02-14 14:19:36.331 17497 17562 V WindowManager: 1ST PASS Window{d5de795 u0 com.google.android.apps.photos/com.google.android.apps.photos.home.HomeActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.331 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.331 17497 17562 V WindowManager: 1ST PASS Window{a39b43 u0 com.google.android.gms/com.google.android.gms.auth.uiflows.addaccount.ErrorActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.331 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.331 17497 17562 V WindowManager: 1ST PASS Window{366ebee u0 com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.331 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.331 17497 17562 V WindowManager: 1ST PASS Window{af66254 u0 com.google.android.apps.maps/com.google.android.maps.MapsActivity}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.332 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.332 17497 17562 V WindowManager: 1ST PASS Window{f37cca7 u0 com.mi.android.globallauncher/com.miui.home.launcher.Launcher}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.332 17497 17562 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=true hiddenRequested=true parentHidden=false
+02-14 14:19:36.332 17497 17562 V WindowManager: 1ST PASS Window{18798c6 u0 com.android.systemui.ImageWallpaper}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.332 17497 17562 V WindowManager:   GONE: mViewVisibility=0 mRelayoutCalled=true hidden=true hiddenRequested=false parentHidden=false
+02-14 14:19:36.374 17497 19024 V WindowManager: Relayout Window{19fc70e u0 RoundCorner}: viewVisibility=0 req=1078x140 WM.LayoutParams{(0,0)(fillxwrap) gr=#33 sim=#20 ty=2015 fl=#1000518 extfl=#0 extpfl=700 pfl=0x100010 fmt=-3 colorMode=0}
+02-14 14:19:36.375 17497 19024 W WindowManager: setLayoutNeeded: callers=com.android.server.wm.WindowState.setDisplayLayoutNeeded:2228 com.android.server.wm.WindowManagerService.relayoutWindow:2187 com.android.server.wm.Session.relayout:239 
+02-14 14:19:36.377 17497 19024 W WindowManager: clearLayoutNeeded: callers=com.android.server.wm.DisplayContent.performLayout:2861 com.android.server.wm.DisplayContent.applySurfaceChangesTransaction:2810 com.android.server.wm.RootWindowContainer.applySurfaceChangesTransaction:876 
+02-14 14:19:36.377 17497 19024 V WindowManager: -------------------------------------
+02-14 14:19:36.377 17497 19024 V WindowManager: performLayout: needed=false dw=1080 dh=2246
+02-14 14:19:36.378 17497 19024 V WindowManager: Window Title:NavigationBar  Resolving (mRequestedWidth=1080, mRequestedheight=130) to (pw=1080, ph=130): frame=[0,2116][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.379 17497 19024 V WindowManager: Window Title:StatusBar  Resolving (mRequestedWidth=1080, mRequestedheight=88) to (pw=1080, ph=2246): frame=[0,0][1080,88] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,0] of=[0,0][0,0]
+02-14 14:19:36.379 17497 19024 V WindowManager: 1ST PASS Window{eeec2c3 u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.379 17497 19024 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.380 17497 19024 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,2106][1080,2246] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,0][0,130] of=[0,0][0,0]
+02-14 14:19:36.381 17497 19024 V WindowManager:   LAYOUT: mFrame=Rect(0, 2106 - 1080, 2246) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.381 17497 19024 V WindowManager: 1ST PASS Window{19fc70e u0 RoundCorner}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.381 17497 19024 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.382 17497 19024 V WindowManager: Window Title:RoundCorner  Resolving (mRequestedWidth=1078, mRequestedheight=140) to (pw=1080, ph=2246): frame=[0,0][1080,140] ci=[0,0][0,0] vi=[0,0][0,0] si=[0,88][0,0] of=[0,0][0,0]
+02-14 14:19:36.382 17497 19024 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 140) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.382 17497 19024 V WindowManager: 1ST PASS Window{1ec178d u0 GestureStub}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.382 17497 19024 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.383 17497 19024 V WindowManager: 1ST PASS Window{30dd974 u0 NavigationBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.383 17497 19024 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.383 17497 19024 V WindowManager:   LAYOUT: mFrame=Rect(0, 2116 - 1080, 2246) mContainingFrame=Rect(0, 2116 - 1080, 2246) mDisplayFrame=Rect(0, 2116 - 1080, 2246)
+02-14 14:19:36.383 17497 19024 V WindowManager: 1ST PASS Window{518b637 u0 RecentsPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.384 17497 19024 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.384 17497 19024 V WindowManager: 1ST PASS Window{99d7305 u0 StatusBar}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.385 17497 19024 V WindowManager:   VIS: mViewVisibility=0 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.385 17497 19024 V WindowManager:   LAYOUT: mFrame=Rect(0, 0 - 1080, 88) mContainingFrame=Rect(0, 0 - 1080, 2246) mDisplayFrame=Rect(0, 0 - 1080, 2246)
+02-14 14:19:36.385 17497 19024 V WindowManager: 1ST PASS Window{b822aa u0 Keyguard}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=false
+02-14 14:19:36.385 17497 19024 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.385 17497 19024 V WindowManager: 1ST PASS Window{302656b u0 AssistPreviewPanel}: gone=true mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.385 17497 19024 V WindowManager:   GONE: mViewVisibility=8 mRelayoutCalled=true hidden=false hiddenRequested=false parentHidden=false
+02-14 14:19:36.385 17497 19024 V WindowManager: 1ST PASS Window{77d38ee u0 DockedStackDivider}: gone=false mHaveFrame=true mLayoutAttached=false screen changed=true
+02-14 14:19:36.385 17497 19024 V WindowManager:   VIS: mViewVisibility=4 mRelayoutCalled=true hidden=false hidde

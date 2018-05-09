@@ -1,0 +1,17 @@
+build/soong/scripts/microfactory.bash
+soong_build_go soong_ui android/soong/cmd/soong_ui
+exec "$(getoutdir)/soong_ui" "$@
+
+
+build_go 函数参数 
+soong_ui android/soong/cmd/soong_ui  
+ EXTRA_ARGS="-pkg-path android/soong=${TOP}/build/soong"
+ BUILDDIR=out 
+ SRCDIR=${TOP}
+ BLUEPRINTDIR=${TOP}/build/blueprint
+
+/home/mi/ext/D5X_PP/out/.microfactory_Linux_intermediates/src
+/home/mi/ext/D5X_PP/prebuilts/go/linux-x86/
+
+命令
+/home/mi/ext/D5X_PP/prebuilts/go/linux-x86/go run /home/mi/ext/D5X_PP/out/.microfactory_Linux_intermediates/src/microfactory.go -b soong_ui -pkg-path github.com/google/blueprint=${TOP}/build/blueprint -trimpath ${TOP} -pkg-path android/soong=${TOP}/build/soong -o out/soong_ui  android/soong/cmd/soong_ui

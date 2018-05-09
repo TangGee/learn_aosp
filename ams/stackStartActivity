@@ -1,0 +1,53 @@
+mTargetStack.startActivityLocked(mStartActivity, topFocused, newTask, mKeepCurTransition,
+                mOptions)
+参数1 要启动的activity 
+参数2 之前的焦点activity
+参数3 是否启动了新的task
+参数4 mKeepCurTransition保持当前动画
+参数5 AppOptions
+
+
+如果activity要在前台启动并且如果task不在stack中或者是一个新创建的task,需要把这个task放到stack的最上面
+ insertTaskAtTop(rTask, r) 使用这个函数去操作
+  private void insertTaskAtTop(TaskRecord task, ActivityRecord starting) {
+        updateTaskReturnToForTopInsertion(task);
+        // TODO: Better place to put all the code below...may be addTask...
+        mTaskHistory.remove(task);
+        // Now put task at top.
+        final int position = getAdjustedPositionForTask(task, mTaskHistory.size(), starting);
+        mTaskHistory.add(position, task);
+        updateTaskMovement(task, true);
+        mWindowContainerController.positionChildAtTop(task.getWindowContainerController(),
+                true /* includingParents */);
+    }
+首先更新task的返回类型
+找到合适的位置添加到TastHistory(如果activity或者task能显示就放到stack顶部),这里设置task的操作我们先不去分析,只是分析activty的启动
+然后如果要启动的activity的task被其他task遮挡,则直接创建一个AppWindowContainerController用于创建AppWindowToken,并且添加到mTokenMap集合中,然后直接返回. 
+如果task不在stack顶部则不需要调用UserLeaving 函数,然后创建WindowContainerController
+
+
+TaskWindowContainerController这是TaskRecord和Task的关系维护者,是ams和wms对于task管理的桥梁
+创建AppWindowContainerController的过程会创建AppWindowToken然后还会将AppWindowToken添加到DisplayContent的AppWindowToken中. 同时会添加到WMS端的Task中. 建立了如uml所示的关系
+更新前台task. 
+添加app切换动画,这里不包含task的切换,所以设置app切换为TRANSIT_ACTIVITY_OPEN 或者TRANSIT_TASK_OPEN_BEHIND 不启动到前台. 
+当启动前台activity的时候处理FLAG_ACTIVITY_RESET_TASK_IF_NEEDED标志
+可能创建startingwindow ,可见Stack.startActivityLocked()并没有启动activity,只是设置了一些动画和对task的一些操作,初始化了wms中的一些关系. 其实对activity的启动做准备工作
+
+真正启动activity的过程在mSupervisor.resumeFocusedStackTopActivityLocked(mTargetStack, mStartActivity,
+                        mOptions)中吗??? 其实也是不在的,要想启动一个activity首先要把它下面的activity掩盖
+boolean resumeTopActivityUncheckedLocked(ActivityRecord prev, ActivityOptions options) --> 的信息保存下来主要就是原来的taskinfo信息和intent信息, 最后设置mSourceRecord = null;
+        mSourceStack = null;保存task的intent信息和taskinfo信息是为了新建task的时候尝试恢复这个task
+
+--> private boolean resumeTopActivityInnerLocked(ActivityRecord prev, ActivityOptions options) 这个流程也是个老大难
+如果在booting之前resume是不可以的,返回false
+获取最上层的activity,也就是我们要启动的这个Activity,如果不为空说明有可以resume的Activity,设置hasRunningActivity为true,代表我们可以把这个task上的Activity设置为可见
+如果我们要设置为可见的这个Activity它的父Activity是不可见的,或者我们的stack还没有attached到display上是没有办法显示的,所以直接返回false
+取消掉正在初始化的Activity, 遍历每个stack执行cancelInitializingActivities 为了移除那些不可见的ativity的startingWindow
+cancelInitializingActivities 函数首先判断stack是否可见使用函数shouldBeVisible函数. 
+首先如果stack没有acttch或者被强制隐藏, 返回STACK_INVISIBLE 也就是stack不可见. 如果stack在display的最前边或者stack是fourceable的则返回返回STACK_VISIBLE代表stak可见
+如果stack上不存在运行的Activity,则寻找下一个焦点stack上使上面的Activity可见. 
+如果要执行可见的Activity就是当前stack的resuActivity,并且也是可见的,直接指定切换动画返回false
+
+
+
+

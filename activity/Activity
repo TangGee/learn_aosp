@@ -1,0 +1,52 @@
+1到这里完成了一些小插曲的处理之后就可以真正的去启动Activity了,首先创建一个传出参数ActivityRecord[] outRecord = new ActivityRecord[1], 这里使用数组就是为了做传出参数
+2 我们先看从startActivityLocked返回之后的处理,首先恢复了Binder信息
+3 判断stack.mConfigWillChange检查config是否发生变化,在这里更新config  为什么在这里更新我们先留作一个疑问,根据注释桑说是 因为我们正在等待当前的activity pause,并且还没有启动下一个activity(看似这个时机很合适啊),我们要关注从startActivityLocked返回到底是不是这个时机
+4 如果返回结果不为空则 设置outResult.result = res  (WaitResult outResult),之后对结果进行处理, 其实这个WaitResult 比较无关紧要,就是提供了启动的一些信息用于记录启动情况. 在系统中只有使用shell am启动的时候会加上这个参数, 所以我们只是简单的分析下
+    1 如果Activity启动成功,返回的结果为ActivityManager.START_SUCCESS,就把她加入到 mSupervisor.mWaitingActivityLaunched中,然后 wait,指导utResult.result==START_TASK_TO_FRONT(移动到了前台) 或者启动超时,或者outResult.who != null(真的启动了activity)否则就一直等,最后如果outResult.result == START_TASK_TO_FRONT表示没有启动activiy只是移动到了前台,这样设置返回结果为START_TASK_TO_FRONT
+    2 如果res == START_TASK_TO_FRONT 表明没有真正启动activity做如下处理
+       如果activity已经正常显示了(应该是这个activiy本身就在可见的栈顶) 就设置outResult.timeout = false;
+                               outResult.who = r.realActivity;
+                                                       outResult.totalTime = 0;
+                                                                               outResult.thisTime = 0;
+       否则的话还要等待activity变成显示状态,这就还要等了,直到超时或者activity已经显示起来 
+    3 这里我们可以得到这样的信息,Activity的显示和启动都是异步的(包括后后台拿到前台和新启动) ,等待的记录由mWaitingActivityLaunched和mWaitingForActivityVisible维护,一个等待启动,一个等待显示
+5 最终记录log mSupervisor.mActivityMetricsLogger.notifyActivityLaunched(res, outRecord[0]) 并返回,注意这里我们实际上不一定已经看到了activity,也不一定执行了activity的onCreate方法
+6 返回启动的结果
+
+
+
+ActivityStarter----->
+   int startActivityLocked(IApplicationThread caller, Intent intent, Intent ephemeralIntent,
+               String resolvedType, ActivityInfo aInfo, ResolveInfo rInfo,
+                           IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,
+                                       IBinder resultTo, String resultWho, int requestCode, int callingPid, int callingUid,
+                                                   String callingPackage, int realCallingPid, int realCallingUid, int startFlags,
+                                                               ActivityOptions options, boolean ignoreTargetSecurity, boolean componentSpecified,
+                                                                           ActivityRecord[] outActivity, ActivityStackSupervisor.ActivityContainer container,
+                                                                                        TaskRecord inTask, String reason)
+  
+1 设置下面三个值
+mLastStartReason = reason;
+mLastStartActivityTimeMs = System.currentTimeMillis();
+mLastStartActivityRecord[0] = null;
+
+2 startActivity(caller, intent, ephemeralIntent, resolvedType,
+                aInfo, rInfo, voiceSession, voiceInteractor, resultTo, resultWho, requestCode,
+                                callingPid, callingUid, callingPackage, realCallingPid, realCallingUid, startFlags,
+                                                options, ignoreTargetSecurity, componentSpecified, mLastStartActivityRecord,
+                                                                container, inTask)
+3 设置返回结果返回
+
+
+
+
+
+
+
+
+
+
+
+
+
+

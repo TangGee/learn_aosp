@@ -1,0 +1,11 @@
+PhoneWindowManager
+  interceptKeyBeforeQueueing 键盘处理流程分析
+
+1 如果系统没有启动完成　直接返回
+2 interactive down  cancel  keycode isInjected(用户注入的)
+3 keyguardActive 是否在解锁界面
+4　isWakeKey
+
+5 interactive || (isInjected && !isWakeKey)  交互状态或者　（注入的键且　不是唤醒的）　怀疑这个交互状态是指纹识别的时候用的
+如果是交互模式，　keyCode == pendingWakeKey && !down result设置为0  mPendkcode 设置为PENDING_KEY_NULL
+

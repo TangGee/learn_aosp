@@ -1,0 +1,12 @@
+在DecorView中有个navigationBarBackground的view,默认宽度是MATCH,高度是一个固定高度.
+当横竖屏切换的时候是没有问题的(有些应用指定了宽度导致出现一半黑色)
+通过updateColorViews()更新这个view,另外更新的时候还需要考虑导航键是否是隐藏的,是否显示,是否半透明
+一般在引起updateColorViews()的方法有:
+1 onWindowSystemUiVisibilityChanged systemui变化
+2 onApplyWindowInsets 边称区域变化
+3 onWindowDragResizeStart 调整分屏大小
+4 onWindowDragResizeEnd 大小调整完成
+5 dispatchWindowAttributesChanged window属性变化
+6 setStatusBarColor 主动设置
+7 setNavigationBarColor 导航栏变化
+

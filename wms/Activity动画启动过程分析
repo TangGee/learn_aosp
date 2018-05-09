@@ -1,0 +1,134 @@
+ 1 AppTransition
+  首先设置mNextAppTransition类型 表示下一个要执行的动画任务类型,,有15中类型,Activity在一个老的task上启动是public static final int TRANSIT_ACTIVITY_OPEN = 6
+
+  当前状态有一下几种类型
+  private final static int APP_STATE_IDLE = 0;
+    private final static int APP_STATE_READY = 1;
+    private final static int APP_STATE_RUNNING = 2;
+    private final static int APP_STATE_TIMEOUT = 3;
+
+    注意这个值mLastClipRevealTransitionDuration miui有修改默认值
+
+准备AppTransaction状态后就执行如下语句发出个超时检查消息
+if (isTransitionSet()) {
+            mService.mH.removeMessages(H.APP_TRANSITION_TIMEOUT);
+            mService.mH.sendEmptyMessageDelayed(H.APP_TRANSITION_TIMEOUT, APP_TRANSITION_TIMEOUT_MS);
+        }
+
+        设置WMS.mSkipAppTransitionAnimation=false
+
+
+      设置好AppTransaction状态后就添加一个AppWindowToken到AMS,key是IApplicationToken token,value就是该AppWindowToken
+
+     之后showStartingWindow:
+      Message m = mH.obtainMessage(H.ADD_STARTING, wtoken);
+            // Note: we really want to do sendMessageAtFrontOfQueue() because we
+            // want to process the message ASAP, before any other queued
+            // messages.
+            if (DEBUG_STARTING_WINDOW) Slog.v(TAG_WM, "Enqueueing ADD_STARTING");
+            mH.sendMessageAtFrontOfQueue(m);
+
+
+
+
+从log和代码分析
+1.setAppStartingWindow 
+首先针对主题进行检查 有一些主题下是不能显示startingwindow的
+final boolean windowIsTranslucent = ent.array.getBoolean(
+                        com.android.internal.R.styleable.Window_windowIsTranslucent, false);
+                final boolean windowIsFloating = ent.array.getBoolean(
+                        com.android.internal.R.styleable.Window_windowIsFloating, false);
+                final boolean windowDisableStarting = ent.array.getBoolean(
+                        com.android.internal.R.styleable.Window_windowDisablePreview, false);
+                        如上面三种
+
+  另外对于设置了
+   final boolean windowShowWallpaper = ent.array.getBoolean(
+                        com.android.internal.R.styleable.Window_windowShowWallpaper, false);  以当前背景为壁纸
+还要设置                       
+ windowFlags |= FLAG_SHOW_WALLPAPER
+
+检查完主题之后 根据主题设置依稀样式相关的数据 保存在StartingData 数据结构里面,然后抛出消息给mH所在线程处理
+wtoken.startingData = new StartingData(pkg, theme, compatInfo, nonLocalizedLabel,
+                    labelRes, icon, logo, windowFlags);
+  Message m = mH.obtainMessage(H.ADD_STARTING, wtoken);
+            // Note: we really want to do sendMessageAtFrontOfQueue() because we
+            // want to process the message ASAP, before any other queued
+            // messages.
+            if (DEBUG_STARTING_WINDOW) Slog.v(TAG_WM, "Enqueueing ADD_STARTING");
+            mH.sendMessageAtFrontOfQueue(m);
+设置AppWindowToken.startingView 为创建的decorview
+
+
+
+
+
+2.处理过程case ADD_STARTING
+通过日志可以分析 首先创建window和viww 通过PhoneWindowManager创建window 和viewRoot,并且addWindow到WMS,
+创建WindowState和surface数据  整个过程可以根据log看出
+mPolicy.addStartingWindow(wtoken.token, sd.pkg, sd.theme,
+                            sd.compatInfo, sd.nonLocalizedLabel, sd.labelRes, sd.icon, sd.logo,
+                            sd.windowFlags, overrideConfig);
+
+   12-29 08:30:31.314 31101-32230/system_process V/WindowManager: setAppStartingWindow: token=Token{5108b27 ActivityRecord{cea59e6 u0 com.android.providers.downloads.ui/.activity.InterDownloadTaskDetailActivity t4}} pkg=com.android.providers.downloads.ui transferFrom=null
+12-29 08:30:31.314 31101-32230/system_process V/WindowManager: Checking theme of starting window: 0x100d0017
+12-29 08:30:31.314 31101-32230/system_process V/WindowManager: Translucent=false Floating=false ShowWallpaper=false
+12-29 08:30:31.314 31101-32230/system_process V/WindowManager: Creating StartingData
+12-29 08:30:31.314 31101-32230/system_process V/WindowManager: Enqueueing ADD_STARTING
+
+
+
+
+3. 之后的阶段就是有过几次事务状态变化,但是mDrawState=DRAW_PENDING  不做任何处理,直到客户端最后调用mWindowSession.finishDrawing(mWindow) 周后才会对动画状态进行切换,切换到COMMIT_DRAW_PENDING
+12-29 08:30:31.344 31101-32230/system_process I/WindowManager: commitFinishDrawingLocked: Window{4730896 u0 Starting com.android.providers.downloads.ui} cur mDrawState=DRAW_PENDING
+12-29 08:30:31.344 31101-32230/system_process D/WindowManager: updateWindows: starting Window{4730896 u0 Starting com.android.providers.downloads.ui} isOnScreen=false allDrawn=false freezingScreen=false
+12-29 08:30:31.358 31101-32230/system_process I/WindowManager: commitFinishDrawingLocked: Window{4730896 u0 Starting com.android.providers.downloads.ui} cur mDrawState=DRAW_PENDING
+12-29 08:30:31.358 31101-32230/system_process D/WindowManager: updateWindows: starting Window{4730896 u0 Starting com.android.providers.downloads.ui} isOnScreen=false allDrawn=false freezingScreen=false
+12-29 08:30:31.360 31101-31218/system_process V/WindowManager: Finishing drawing window Window{4730896 u0 Starting com.android.providers.downloads.ui}: mDrawState=DRAW_PENDING
+
+
+4  这是在进行事务处理的时候就会有所变化,切换到READY_TO_SHOW状态,但是由于现在app还没有准备好  mAppTransition.isReady() ==false 还不能绘制
+12-29 08:30:31.360 31101-31218/system_process V/WindowManager: Draw state now committed in Window{4730896 u0 Starting com.android.providers.downloads.ui}
+12-29 08:30:31.361 31101-31218/system_process I/WindowManager: commitFinishDrawingLocked: Window{4730896 u0 Starting com.android.providers.downloads.ui} cur mDrawState=COMMIT_DRAW_PENDING
+
+12-29 08:30:31.362 31101-31218/system_process V/WindowManager: performShow on WindowStateAnimator{7e561ed Starting com.android.providers.downloads.ui}: mDrawState=READY_TO_SHOW readyForDisplay=false starting=true 
+during animation: policyVis=true attHidden=false tok.hiddenRequested=true tok.hidden=true animating=false tok animating=false Callers=com.android.server.wm.WindowStateAnimator.commitFinishDrawingLocked:631 com.android.server.wm.WindowSurfacePlacer.applySurfaceChangesTransaction:761 com.android.server.wm.WindowSurfacePlacer.performSurfacePlacementInner:324 
+
+12-29 08:30:31.362 31101-31218/system_process D/WindowManager: updateWindows: starting Window{4730896 u0 Starting com.android.providers.downloads.ui} isOnScreen=false allDrawn=false freezingScreen=false
+12-29 08:30:31.365 31101-32230/system_process I/WindowManager: commitFinishDrawingLocked: Window{4730896 u0 Starting com.android.providers.downloads.ui} cur mDrawState=READY_TO_SHOW
+
+
+5 直到handleAppTransitionReadyLocked被调用之后 app才准备好 readyForDisplay,就可以把状态切换为HAS_DRAWN
+mDrawState = HAS_DRAWN
+12-29 08:30:31.373 31101-32230/system_process V/WindowManager: performShow on WindowStateAnimator{7e561ed Starting com.android.providers.downloads.ui}: mDrawState=READY_TO_SHOW readyForDisplay=true starting=true during animation: policyVis=true attHidden=false tok.hiddenRequested=false tok.hidden=false animating=false tok animating=false Callers=com.android.server.wm.AppWindowAnimator.showAllWindowsLocked:458 com.android.server.wm.WindowSurfacePlacer.handleOpeningApps:1263 com.android.server.wm.WindowSurfacePlacer.handleAppTransitionReadyLocked:1197 
+
+
+6 真正的window启动之后,就会改变windowState的mAttrs.type 变成非TYPE_APPLICATION_STARTING的,
+执行void onFirstWindowDrawn(WindowState win, WindowStateAnimator winAnimator)方法
+该方法会把 方法哦WMS的mFinishString队列中 之后发送消息
+void onFirstWindowDrawn(WindowState win, WindowStateAnimator winAnimator) {
+        firstWindowDrawn = true;
+
+        // We now have a good window to show, remove dead placeholders
+        removeAllDeadWindows();
+
+        if (startingData != null) {
+            if (DEBUG_STARTING_WINDOW || DEBUG_ANIM) Slog.v(TAG, "Finish starting "
+                    + win.mToken + ": first real window is shown, no animation");
+            // If this initial window is animating, stop it -- we will do an animation to reveal
+            // it from behind the starting window, so there is no need for it to also be doing its
+            // own stuff.
+            winAnimator.clearAnimation();
+            winAnimator.mService.mFinishedStarting.add(this);
+            winAnimator.mService.mH.sendEmptyMessage(H.FINISHED_STARTING);
+        }
+        updateReportedVisibilityLocked();
+    }
+
+12-29 08:30:31.486 31101-31218/system_process V/WindowManager: Finish starting AppWindowToken{8089f7d token=Token{5108b27 ActivityRecord{cea59e6 u0 com.android.providers.downloads.ui/.activity.InterDownloadTaskDetailActivity t4}}}: first real window is shown, no animation
+
+
+7 之后WMS处理消息 case FINISHED_STARTING:
+调用mPolicy.removeStartingWindow(token, view) 移除window
+
+8 最后destorySurface的时候清理

@@ -1,0 +1,17 @@
+首先从main函数开始进行分析
+ 1　初始化logformat
+ 2  如果参数指定--help直接输出帮助信息　退出
+ 3  之后就是参数解析的部分　不足为奇
+ 4　setupOutput 打开输出文件
+ 5　不指定打印那种log的话就打印main system crash
+ 7 创建loglist 里面包含mode tail_time tail_line pid
+ 8 遍历device
+ 9 logger_list 形成双向链表
+ 10 之后调用android_logger_list_read　读取数据（包括两种情况，一读取固定行数　2 一直读取
+　）
+11 android_logger_list_read 这里有个用于输出的参数　叫log_msg 我们来看看如何生成这个比
+	12 init_transport_context
+		13 __android_log_config_read
+		  14 __android_log_add_transport 把logdLoggerRead　pmsgLoggerRead　				添加到队列中　在log_reader.c中
+		   创建log transport进行数据传输使用<F9>
+

@@ -1,0 +1,68 @@
+计算需要buffer的大小
+三个因素
+1 采样率
+2 通道数量
+3 格式
+
+支持的格式
+#define ENCODING_PCM_16BIT      2
+#define ENCODING_PCM_8BIT       3
+#define ENCODING_PCM_FLOAT      4
+#define ENCODING_AC3            5
+#define ENCODING_E_AC3          6
+#define ENCODING_DTS            7
+#define ENCODING_DTS_HD         8
+#define ENCODING_MP3            9
+#define ENCODING_AAC_LC         10
+#define ENCODING_AAC_HE_V1      11
+#define ENCODING_AAC_HE_V2      12
+#define ENCODING_IEC61937       13
+#define ENCODING_DOLBY_TRUEHD   14
+
+#define ENCODING_INVALID    0
+#define ENCODING_DEFAULT    1
+
+查询最小要需要的buffer大小
+
+创建AudioRecord 需要指定的参数
+1 声音源 一般指定MIC
+2 采样率 
+3 通道
+4 格式
+5 buffer大小
+
+
+创建native AudioRecord
+最关键调用set方法
+  openRecord_l()
+      AudioSystem::acquireAudioSessionId(mSessionId, -1) 创建session 
+      AudioSystem::getInputForAttr  获取设备线程索引audio_io_handle_t input
+      通过参数mSelectedDeviceId 返回需要的设备
+         AudioPolicyService->getInputForAttr(
+                     attr, input, session, pid, uid,
+                                 samplingRate, format, channelMask, flags, selectedDeviceId)
+      
+
+             mAudioPolicyManager->getInputForAttr(attr, input, session, uid,
+                                                                  samplingRate, format, channelMask,
+                                                                                                                                                                            flags, selectedDeviceId,
+                                                                                                                                                                            &inputType)
+             
+                    获取device
+                    getDeviceAndMixForInputSource(inputSource, &policyMix)
+                    getInputForDevice(device, address, session, uid, inputSource,
+                                                   samplingRate, format, channelMask, flags,
+                                                                                  policyMix)  获取具体的输入线程索引
+                                                                                   
+
+                   创建audioSession 
+                   sp<AudioSession> audioSession = new AudioSession(session,inputSource,                                                                   format, samplingRate                                                                                       channelMask,flags,uid,
+                                                isSoundTrigger,                                                                                            policyMix, mpClientInterface);
+
+                   不复用的话
+                   sp<RecordThread> thread = openInput_l(module, input, config, *devices, address, source, flags);               
+                   创建一个RecordThread 包含一个AudioStreamIn的流
+                   创建AudioInputDescriptor 
+
+startRecorder 
+

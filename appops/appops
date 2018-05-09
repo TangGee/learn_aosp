@@ -1,0 +1,87 @@
+检查权限的代码 
+
+    
+    @Override
+    public int checkOperation(int code, int uid, String packageName) {
+	//1 首先检查uid,要检查UPDATE_APP_OPS_STATS权限.没有权限是不允许查询的
+        verifyIncomingUid(uid);
+	//2检查code超出范围报错
+        verifyIncomingOp(code);
+	//3 解析包名,这里有几个特殊uid直接返回对应用户,其他的返回packageName
+        String resolvedPackageName = resolvePackageName(uid, packageName);
+        if (resolvedPackageName == null) {
+            return AppOpsManager.MODE_IGNORED;
+        }
+        synchronized (this) {
+	    //4 检查受限用户,这里主要针对多用户
+            if (isOpRestrictedLocked(uid, code, resolvedPackageName)) {
+                return AppOpsManager.MODE_IGNORED;
+            }
+	    //5对code进行转化,有时候多个code对应一种Op,也是通过AppOpsManager查表的方式进行转化
+            code = AppOpsManager.opToSwitch(code);
+            UidState uidState = getUidStateLocked(uid, false);
+            //6 对opModes进行验证,opModes是uid级别的,要与pkg级别,优先级更高,先检验uid整体权限,如果有相应规则直接返回
+            if (uidState != null && uidState.opModes != null
+                    && uidState.opModes.indexOfKey(code) >= 0) {
+                return uidState.opModes.get(code);
+            }
+	    //7 如果针对uid没有对应规则,再查看pkg节点下有没有对应规则
+            Op op = getOpLocked(code, uid, resolvedPackageName, false);
+            if (op == null) {
+		//8 pkg下没有对应规则,直接返回默认规则
+                return AppOpsManager.opToDefaultMode(code);
+            }
+	    //9 返回op下的规则
+            return op.mode;
+        }
+    }
+
+这里code为要检查的权限的代号
+在AppOpsManager里面是这么调用的
+   public int checkOpNoThrow(String op, int uid, String packageName) {
+        return checkOpNoThrow(strOpToOp(op), uid, packageName);
+    }
+首先把权限字符串转换成ops code,是通过sOpStrToOp维护的映射关系去转换的,初始化代码如下
+ for (int i=0; i<_NUM_OP; i++) {
+            if (sOpToString[i] != null) {
+                sOpStrToOp.put(sOpToString[i], i);
+            }
+        }
+sOpToString是一个数组,记录了各权限的名称,其中有一些权限是没有名字的
+
+
+private final ArrayMap<IBinder, ClientRestrictionState> mOpUserRestrictions = new ArrayMap<>();
+//检查多用户权限
+private boolean isOpRestrictedLocked(int uid, int code, String packageName) {
+        int userHandle = UserHandle.getUserId(uid);
+        final int restrictionSetCount = mOpUserRestrictions.size();
+
+        for (int i = 0; i < restrictionSetCount; i++) {
+            // For each client, check that the given op is not restricted, or that the given
+            // package is exempt from the restriction.
+            ClientRestrictionState restrictionState = mOpUserRestrictions.valueAt(i);
+            if (restrictionState.hasRestriction(code, packageName, userHandle)) {
+                if (AppOpsManager.opAllowSystemBypassRestriction(code)) {
+                    // If we are the system, bypass user restrictions for certain codes
+                    synchronized (this) {
+                        Ops ops = getOpsRawLocked(uid, packageName, true);
+                        if ((ops != null) && ops.isPrivileged) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+这里可以看出来对userid检查是粒度更大的检查,检查一个用户是否具有某种权限的限制.
+这里的mOpUserRestrictions分为两层
+1 第一层是用一个mOpUserRestrictions描述多种限制,每种限制用一个ClientRestrictionState数据结构表示,代表一个客户端
+2 每个ClientRestrictionState包含多个user属性的限制,用perUserRestrictions描述的一个bool数组表示op code是否收到限制,
+另外还有一个perUserExcludedPackages描述多个user的白名单策略
+
+上面isOpRestrictedLocked检查后还有一些权限对于系统应用是开放的,通过AppOpsManager.opAllowSystemBypassRestriction(code)判断是否还要继续检查是否为系统应用,如果最终检查不通过会返回true表示权限被禁止,否则返回false,表示权限授予
+
+

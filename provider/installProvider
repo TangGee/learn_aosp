@@ -1,0 +1,95 @@
+ContentResolver query过程
+ android.util.SeempLog.record_uri(13, uri);  注意之后分析seempLog是干啥的
+
+public final IContentProvider acquireUnstableProvider(Uri uri)
+   1 判断是否为content的scheme
+   2 获取auth 
+   3 IContentProvider acquireUnstableProvider(Context c, String name)  在ContextImpl.ApplicationContentResolver中实现
+   4 ActivityThread->public final IContentProvider acquireExistingProvider(
+               Context c, String auth, int userId, boolean stable)
+               首先看mProviderMap里面是否已经存在相应的provider,如果不存在或者已经死亡直接返回null,如果死亡还要移除provider , 如果存在正常的provider把引用计数加1 返回
+               ActivityThread->private final void incProviderRefLocked(ProviderRefCount prc, boolean stable) 增加引用计数过程,分为stable和非stable两种过程
+                对于stable状态增加prc.stableCount
+   5 ActivityThread->holder = ActivityManager.getService().getContentProvider(getApplicationThread(), auth, userId, stable) 从AMS获取holder
+    见服务端获取provider的过程
+   6 ContentProviderHolder installProvider(Context context,
+               ContentProviderHolder holder, ProviderInfo info,
+                           boolean noisy, boolean noReleaseNeeded, boolean stable)
+        1 holder == null 或者holder.provider的时候有可能provider可以在本进程中创建实例
+          1这时候有三种情况创建不同的context对象
+           1 context.getPackageName().equals(ai.packageName) 使用自己的context
+           2,3 分别对应shareduid情况或者provider指定多进程模式和运行在其他进程中
+          2 创建provider 实例多想和获取对应的Binder对象
+        2 直接从holder中获取provider 对象,这种情况对应使用其他应用的provider
+        3 对于本应用作为宿主的直接添加到mLocalProvidersByName   mLocalProvidersByName.put(cname, pr)
+          创建ProviderClientRecord  new ProviderClientRecord(
+                          auths, provider, localProvider, holder) 其中provider代表provider的binder对象
+                          localProvider代表本宿主发布的provider 不一定都不为null
+
+
+
+
+
+服务端getContentProviderImpl 获取provider的过程
+    1  获取Caller的ProcessRecord 不存在抛出异常
+    2  获取mProviderMap中的ContentProviderRecord
+       这里有一段波折,先从singletonByName集合里面找(有可能是多个用户对应一个provider的.如果没有再从对应的
+       user集合下面去找,如果还是找不到要先在用USER_SYSTEM找一次, 找到后判断这个提供provider的应用是否是singleton的(就是一个user服务多个user,对于不是系统进程的要具备cross_user权限和FLAG_SINGLE_USER标志,对于phone进程,system进程和常驻进程天生具备该权限
+     这里看来user_system的provider可以为其他进程服务,但是如果不是singleto的服务则要减产crossUser权限
+
+   3 providerRunning 表示该provider有实例还在发布
+       1 进行权限检查
+       2 如果provider可以运行在调用这进程的情况(包括两种情况 1就是属于自己应用的provider,2可以运行在多进程中)     对于这种情况就可以由进程直接创建provider实例
+       3 使用pms确定provider是否存在,防止正常程序访问到instant程序的provider
+       4 incProviderCountLocked(r, cpr, token, stable); 增加provider引用计数
+           1找到本进程是否创建了相应provider的链接,如果有了则增加相应的引用计数,关于引用计数最后总结
+           2如果没有对应的引用计数创建stableCount,ContentProviderConnection结构包含两个信息1 客户端进程2cpr
+           设置对应引用计数为1,添加到cpr.connections和ProcessRecorder.conProviders 中
+       5 看看是不是要更新provider进程的lru
+       6 更新provider的adj
+       7 maybeUpdateProviderUsageStatsLocked 如果provider进程优先级<= ActivityManager.PROCESS_STATE_IMPORTANT_FOREGROUND要放到 userState.mProviderLastReportedFg集合中
+      8 如果更新adj过程中provider进程已经死亡,做一些清理,没有死亡则cpr.proc.verifiedAdj = cpr.proc.setAdj
+       并且设置providerRunning=flase要重新启动provider 进程
+
+   4 provider 没有实例发布 !providerRunning 
+      1 PMS查询provider
+      2 如果是singleton的provider  设置userId = UserHandle.USER_SYSTEM
+      3 设置applicationInfo
+      4 如果没有systemready则只能查询system进程的provider否则会抛出异常
+      5 如果provider 对应的user没有运行则返回null
+      6 根据class查询一把cpr 
+      7 如果找到了,再次获取applicationInfo,创建ContentProviderRecord
+      8 如果可以运行在客户端进程中直接返回Holder
+      9 如果provider没有正在启动
+           1 PMS设置该应用不能被stop
+           2 获取provider进程信息
+           3 如果provider进程存活 
+              1如果进程还没有发布这个provider添加到proc.pubProviders中去并且调用proc.thread.scheduleInstallProvider(cpi)添加provider
+           4 如果没有运行或者被杀死了
+              1 启动进程
+              2 进程启动之后设置cpr.launchingApp = proc 
+              3 mLaunchingProviders.add(cpr)
+              4 如果firstClass则添加到mProviderMap.putProviderByClass进行缓存
+              5 mProviderMap.putProviderByName(name, cpr)
+              6 增加引用计数
+              7 这个过程中虽然已经把provider 添加到了两个集合中,但是还没有创建ContentProviderConnection,因为服务端还没有添加provider的binder进来.要增加外部引用计数externalProcessNoHandleCount,另外需要考虑如果这个时候有另一个进程访问这个provider会怎样? 可以从前边看到现在cpr.process还是空的,所以会走!providerRunning这个分支,而该cpr又在mLaunchingProviders中所以不会重新发布,并且cpr.launchingApp = proc
+              8 这里又走incProviderCountLocked函数创建一个ContentProviderConnection变量
+              9 设置conn.waiting = true
+    5 cpr.provier==null 还没有创建完成并且没有在启动app过程中,说明真的找不到provider了,直接返回null.
+       等待进程启动发布在waiting在conn上
+    6 知道cpr.provider == null时候返回
+
+
+
+    从上面AMS的过程来看主要有一下几点需要注意
+      1 宿主进程已经启动但是provider没有发布使用proc.thread.scheduleInstallProvider(cpi)发布 阻塞过程
+      2 宿主进程没有启动但是provider允许在客户端进程中启动直接返回ProviderHolder
+      3 宿主进程启动了并且provider已经存在直接增加引用计数
+      4 宿主进程没有启动 要先启动宿主进程,将cpr设置到mProviderMap by class 和mProviderMap by name中站上位置,并且添加到mLaunchingProviders中防止重复启动,设置 cpr.launchingApp =proc 标志还没有创建对应的关系,需要等待进程发布provider  设置conn.waiting=true表示要进行等待, 另外关键步骤cpr.wait() 等待发布
+
+      1如何做到天衣无缝,如在等待过程中新启动的进程就挂了???  肯定是放在进程死亡时候清理
+      2 进程正常何时notify? cleanupAppInLaunchingProvidersLocked函数
+
+              
+
+

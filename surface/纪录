@@ -1,0 +1,2 @@
+frameworks/native/opengl/libs/EGL/egl_display.cpp  : makeCurrent
+    frameworks/native/opengl/libagl/egl.cpp  :makeCurrent

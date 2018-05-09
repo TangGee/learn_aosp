@@ -1,0 +1,10 @@
+1 构造函数
+
+对内建的屏幕进行遍历 
+之后调用createBuiltinDisplayLocked 之后建立DisplayDeviceState 和创建的BBinder的关系 
+
+创建生产者消费者模型，和对应的GraphicBufferAlloc 
+ 分别是类BufferQueueCore  BufferQueueProducer  BufferQueueConsumer GraphicBufferAlloc 
+ 创建FramebufferSurface 这个和消费者相关联
+ 创建DisplayDevice描述一个DisplayDevice
+

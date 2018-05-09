@@ -1,0 +1,223 @@
+/home/mi/ssd/c66o/miui/frameworks/base/core/java/android/app/MiuiNotification.java
+/home/mi/ssd/c66o/miui/frameworks/base/core/java/miui/provider/KeyguardNotification.java 这两个定义了一些常量
+/home/mi/ssd/c6/miui/frameworks/base/v24/core/java/android/app/ExtraNotificationManager.java 定义了一些zenmode
+
+其他接口部分大多是通用的
+再比较下其他　RemoteView
+
+com.google.android.ext.services/android.ext.services.notification.Ranker
+
+/home/mi/d2a/frameworks/base/packages/ExtServices/src/android/ext/services/notification/Ranker.java Ranker排序器
+/home/mi/d2a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java　显示服务
+
+
+/home/mi/d2a/frameworks/base/services/core/java/com/android/server/notification/NotificationUsageStats.java　追踪通知状态　这里主要跟新mState中的状态　包括时间　和app通知数量　按照package划分，多一个
+　　global
+ public RateEstimator enqueueRate 速率追踪　速率太快是不允许的
+
+Notification 中的变量
+Notifiacation Key生成规则　　userId|pkg|id|tag|uid　所以取消一个notification要通过id和tag，分组是按照tag+id进行分组
+mNotificationsByKey　按照key保存Notification
+mNotificationList　存储notification　按照顺序
+
+
+处理流程
+添加notification过滤条件
+　1 速率不能过快
+　2 uid+package 下不能超过50个notification 
+
+pendingIntents处理
+　allPendingIntents.size>0 做白名单时间限制　后面分析
+计算优先级
+创建NotificationRecord
+post EnqueueNotificationRunnable
+   run
+   1 根据key查看是否原来已经存在该notification
+   2 从旧的拷贝runkingInfo
+ 
+runkingInfo 包括如下信息：
+  粘性　private float mContactAffinity　亲和力
+ private boolean mRecentlyIntrusive 最近侵入？
+ private int mPackagePriority 包优先级
+ private int mPackageVisibility　包可见
+ private boolean mIntercept 正在被勿扰模式拦截
+ private long mRankingTimeMs 排序使用时间
+ private long mCreationTimeMs 第一次post时间
+ private long mVisibleSinceMs　最近可见事件时间　
+
+3 群组处理　熟悉下群组逻辑再分析
+4 mRankingHelper.extractSignals(r)　排序助手搞点事情　
+　　如下这些类在排名中搞点事情
+　  <string-array name="config_notificationSignalExtractors">
+        <item>com.android.server.notification.ValidateNotificationPeople</item>
+		<item>com.android.server.notification.PriorityExtractor</item>
+	    <item>com.android.server.notification.ImportanceExtractor</item>
+		<item>com.android.server.notification.NotificationIntrusivenessExtractor</item>
+		<item>com.android.server.notification.VisibilityExtractor</item>
+	</string-array>
+    这些类初始化要构造extractor.initialize　和配置extractor.setConfig(this)　应该是一个职责链模式 调用方法process对NotificationRecord进行处理
+	extractor处理后生成RankingReconsideration对象　，又调用RankingHandler.requestReconsideration(recon)异步处理　看一下这几个类是如何处理的　索性这几个类还比较简单
+
+	1com.android.server.notification.ValidateNotificationPeople 根据联系人做一些处理
+	extractSignals　有个异步处理过程，如果notification发生变化会调用　notifyRankingUpdate更新状态　可能需要更新buzzBeepBlinkLocked
+　　handleRankingReconsideration之后对　RankingReconsideration进行处理，这个会改变runker分数值　,普通的能查到联系人的是0.5　加星标的联系人是1 一个小时内的缓存结果是可用的
+
+    com.android.server.notification.PriorityExtractor这个优先级是从某些文件读进来的　
+	com.android.server.notification.ImportanceExtractor 也是读进来的重要
+	com.android.server.notification.ImportanceExtractor 也是读进来的重要
+	处理第一个后面几个都是根据配置文件处理
+
+　上面几个类分别对notificatio的一些排序相关的字段进行赋值，有些是异步的，有些是同步的
+　
+　最后mRankingHelper.sort进行排序
+　　　　看下排序的规则
+　　　　　　1 二话不说　Collections.sort(notificationList, mPreliminaryComparator) 
+               mPreliminaryComparator 的优先级规则　
+			   　 1 Importance
+			      2 PackagePriority
+				  3 Notification().priority
+				  4 ContactAffinity
+				  5 RankingTimeMs
+
+		  组排序　gsk =“”<gsk = non-null-string <gsk = null
+		  对组进行处理后继续排序　简单的字符串比较
+　　　　
+　　　注意overrideGroupKey可能和自动分组有关　还有那个ExtService
+
+5 notifyPostedLocked 发送通知
+     投放消息时候都会生成makeRankingUpdateLocked　这也是一个重要的参数对于服务端处理，我们分析下他做了什么事情
+	 四个Bundle　三个ArrayList  首先判断该notification是否对该notification service可见，判断一句就是service是否可用和uid，对于系统的服务则都是可见的
+	 三个list分别用于保存importance notification的key ，isInterrupt的key,所有的key
+	 四个Bundle分别保存importance的说明，抑制视觉效果的flags, 包可见信息，group override,
+   
+     最后这些信息都保存到NotificationRankingUpdate传给相应的服务
+   
+　　　notifyPosted
+
+ 　　　
+
+2 更新notification两种途径 之后仔细分析这两个函数　　
+ 1 notifyPosted
+ 2 notifyRankingUpdate
+
+
+
+ android.ext.services.notification.NotificationRankerService用于分组
+
+
+
+
+/home/mi/d2a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/BaseStatusBar.java 逻辑　部分逻辑在子类里面
+　这里边的入口
+　　　　onNotificationPosted
+
+/home/mi/d2a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java
+        addNotification
+
+
+
+创建ContentView的类型  目前发现这四中
+  1 createContentView		   getBaseLayoutResource    R.layout.notification_template_material_base
+  2 createBigContentView       getBigBaseLayoutResource   R.layout.notification_template_material_big_base
+  3 createHeadsUpContentView   getBigBaseLayoutResource    R.layout.notification_template_material_big_base
+  4 makePublicContentView      getBaseLayoutResource    R.layout.notification_template_material_base
+
+模板类型:
+  另外几种模板
+  　这四种用于生成createBigContentView
+    getBigBaseLayoutResource
+  　getBigPictureLayoutResource　notification_template_material_big_picture
+  　getBigTextLayoutResource　　notification_template_material_big_text
+　　getInboxLayoutResource　　　notification_template_material_inbox
+  　getMessagingLayoutResource　notification_template_material_messaging　
+
+  　这三种只是根据action生成buttion
+  　getActionLayoutResource　notification_material_action
+  　getEmphasizedActionLayoutResource　notification_material_action_emphasized
+  　getActionTombstoneLayoutResource　notification_material_action_tombstone
+
+　　　
+　　这个比较多　各种位置都可能用这个布局
+　　getBaseLayoutResource    R.layout.notification_template_material_base
+
+
+综上总结生成四个位置的八种布局
+位置包括
+　　　setContractedChild　
+　　　setExpandedChild  对应　createBigContentView
+　　　setHeadsUpChild   MessagingStyle getBigBaseLayoutResource MediaStyle
+　　　setContractedChild
+
+
+  BigPictureStyle　getBigPictureLayoutResource　notification_template_material_big_picture
+  BigTextStyle　　　getBigTextLayoutResource　　notification_template_material_big_text
+  InboxStyle　　　getInboxLayoutResource　　　notification_template_material_inbox
+  MessagingStyle　　getMessagingLayoutResource　notification_template_material_messaging
+  getActionLayoutResource　getActionLayoutResource　notification_material_action  getEmphasizedActionLayoutResource notification_material_action_emphasized  getActionTombstoneLayoutResource　notification_material_action_tombstone
+
+
+ ExpandableNotificationRow有两部分值得注意　类型全部都是NotificationContentView
+  1 PrivateLayout
+    包含如下几部分 1 setContractedChild 
+	               2 setExpandedChild
+				   3 setHeadsUpChild
+				   　
+
+  2 PublicLayout 
+     包含一部分　　setContractedChild
+
+
+onNotification　处理流程
+ 把任务post到handler中执行　主线程
+1　处理remoteInput　主要是对可穿戴设备处理　如手表　我们不关注processForRemoteInput
+2 通过mKeysKeptForRemoteInput　用于断点续输　新建则移除原来的
+3 根据是update还是add调用不同方法
+
+addNotification　添加Notification
+
+/home/mi/d2a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java
+
+addNotification
+1 mNotificationData用于保存系统中Notification的信息  　根据rank重新排序
+2 createNotificationViews 创建view相关
+	 1createIcon 创建icon　必须全有
+     2创建NotificationData.Entry 　
+	 3inflateViews　参数分别是enrty和mStackScroller(这个是整个PhoneStatusBar的根布局，只是作为View的parent传入)
+	   1 entry.cacheContentViews 创建了四个布局 上
+	   2 创建ExpandableNotificationRow 设置GroupManager HeaderManager　//TODO
+	   3 mRemoteInputController 远程输入管理器
+	   4 setOnExpandClickListener(PhoneStatusBar) 展开的回调　这里没有使用
+	   5 workAroundBadLayerDrawableOpacity　看样子优化使用没有实现
+	   6 bindDismissListener 删除listener
+       7 获取两个区域PrivateLayout　PublicLayout
+	   8 注册整体点击事件mNotificationClicker.register
+	   9 下面的所有流程都是对PrivateLayout　PublicLayout区域进行填充
+	   10 RemoteView的apply
+       11 setOnActivatedListener
+	   12 如果BigContentView存在就可以 Expand
+	   13 根据api级别设置一些显示背景
+	   14 setUserExpanded
+	   15 setUserLocked
+	   16 onNotificationUpdated
+　　加载完View之后
+　　Header_UP公式展示　也就是在顶部弹出功能
+　　1 mHeadsUpManager.showNotification负责显示该Notification
+    2　对fullScreenIntent处理　　注意　智力FullScreenIntent和headUp有些冲突，我们之后用到详细分析
+	3  addNotificationViews  添加到NotificationData中
+    	updateNotifications
+	 	 updateNotificationShade
+	  	  1遍历getActiveNotifications
+          2 设置showingPublic状态
+		  3  移除通知　　移除child条目
+		  4 添加
+		  5updateRowStates　调按和锁定通知状态
+		  6updateSpeedbump减速带
+		  7 
+
+
+
+
+
+MIUI Notification流程分析
+1 首先它把runkMap丢了
+2

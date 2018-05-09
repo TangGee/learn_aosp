@@ -1,0 +1,38 @@
+设计角度
+1 caller 应该有该权限过着为systemApp, 如果跨用户caller则应该有更高一级的权限
+2 provider  granturi应该描述该应用的权限 uri 以及相应的userid
+3 授权应用 uid,targepackage, userid没有指定应该和caller的userid想用
+
+
+1 ActivityManagerService->grantUriPermission(IApplicationThread caller, String targetPkg, Uri uri,
+            final int modeFlags, int userId)
+           检查 caller targetPkg userid  granturi  modeflags
+
+ 2 ActivityManagerService-> grantUriPermission()->grantUriPermissionLocked(int callingUid, String targetPkg, GrantUri grantUri,
+            final int modeFlags, UriPermissionOwner owner, int targetUserId)
+    1 根据caller userid  获取targetUid(授权应用)
+     2 ActivityManagerService-> grantUriPermission()->grantUriPermissionLocked()->int checkGrantUriPermissionLocked(int callingUid, String targetPkg, GrantUri grantUri,
+            final int modeFlags, int lastTargetUid) 检查是否要需要授权
+         1 检查modeFlags 检查targetPkg ,检查uri scheme
+         2 获取providerInfo
+         3 ActivityManagerService-> grantUriPermission()->grantUriPermissionLocked()->int checkGrantUriPermissionLocked()-> checkHoldingPermissionsLocked(
+            IPackageManager pm, ProviderInfo pi, GrantUri grantUri, int uid, final int modeFlags)
+             1    targetuserid!=callerUserId 如果没有across_user权限则直接返回
+              2 checkHoldingPermissionsInternalLocked(IPackageManager pm, ProviderInfo pi,
+                                                 GrantUri grantUri, int uid, final int modeFlags, boolean considerUidPermissions)
+
+                       1 如果要授权的应用就是provder自己 返回true
+                       2 如果不导出 返回false
+                       3 检查读写权限,如果没有读写权限才检查pathPermission,如果有直接返回true,由此可见r/w权限优先级高于path
+                       4 检查path权限
+                       5 对于calluserid!=targetid的检查是否有权限,这里必然返回false
+                       6 对于没有设置跨用户申请权限的
+                           1 检查没有声明grantUri 是不允许动态授权的
+                            2 如果path与grantUri对上
+                       7  如果calluid有权限或者是系统应用则检查通过 否则检查权限级别
+
+                       综上所述 检查的内容有modeFlags target export   r/w 权限
+           4 授权,放入到mGrantdUriPermissions中
+
+
+  关键 权限创博:caller有权限则可以授权

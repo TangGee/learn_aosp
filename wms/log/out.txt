@@ -1,0 +1,345 @@
+07-01 20:03:51.172   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.189   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.206   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.223   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.239   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.256   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.273   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.289   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.306   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.323   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.340   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.356   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.373   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.390   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.406   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.423   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.440   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.456   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.474   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:51.556   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.352   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.435   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.502   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.519   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.553   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.570   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.586   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.603   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.620   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.636   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.653   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.670   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.686   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.703   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.720   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.736   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.753   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.770   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.787   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.803   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.820   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.837   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.853   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.870   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.886   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.920   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.937   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.954   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.970   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:56.987   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.004   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.021   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.037   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.054   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.071   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.087   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.104   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.121   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.138   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.154   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.171   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.188   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.204   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.221   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.238   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.254   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.271   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.288   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.304   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.321   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.338   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.355   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.371   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.388   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.405   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.421   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.438   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.455   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.471   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.488   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.505   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.521   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.535  1464  1948 E AAAA    : start user in background
+07-01 20:03:57.538   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.555   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.572   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.588   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.605   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.622   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.639   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.655   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.672   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.688   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.705   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.736   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.739   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.755   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.773   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.789   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.805   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.822   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.905   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.939   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.956   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.973   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:57.989   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.006   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.023   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.040   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.056   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.089   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.106   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.123   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.140   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.156   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.173   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.190   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.207   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.223   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.240   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.256   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.273   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.290   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.307   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.325   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.340   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.357   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.374   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.374   434   434 E AAAA    : layer name 
+07-01 20:03:58.390   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.390   434   434 E AAAA    : layer name 
+07-01 20:03:58.407   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.407   434   434 E AAAA    : layer name 
+07-01 20:03:58.424   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.424   434   434 E AAAA    : layer name 
+07-01 20:03:58.441   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.441   434   434 E AAAA    : layer name 
+07-01 20:03:58.458  1464  1498 E AAAA    : start user in foreground
+07-01 20:03:58.524   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.557   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.575   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.575   434   434 E AAAA    : layer name ScreenshotSurface
+07-01 20:03:58.657   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.742   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:03:58.743   434   434 E AAAA    : layer name ScreenshotSurface
+07-01 20:03:58.758   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.775   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:03:58.841   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:00.378   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:00.445   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:00.880   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:00.965   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.367   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.371  1464  1497 E AAAA    : background and initialized
+07-01 20:04:02.384   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.400   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:02.401   434   434 E AAAA    : layer name ScreenshotSurface
+07-01 20:04:02.417   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.434   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.450   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.467   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.484   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.501   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.517   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.534   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.551   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.567   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.584   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.601   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.668   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.684   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.718   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.751   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.768   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.818   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.835   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.852   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.868   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:02.921   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:02.922   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:06.613  1464  2636 E AAAA    : foreground and initialized
+07-01 20:04:06.878   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:06.878   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:06.895   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:06.895   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:06.929   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:06.929   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:06.997   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:06.997   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.079   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.079   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.096   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.096   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.112   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.112   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.129   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.129   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.148   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.149   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.162   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.163   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.179   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.179   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.196   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.196   434   434 E AAAA    : layer name StatusBar
+07-01 20:04:07.213   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.229   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.251   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.263   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.279   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.296   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.313   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.330   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.346   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:07.363   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.363   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.381   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.385   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.396   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.396   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.413   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.415   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.430   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.430   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.446   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.447   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.463   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.463   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.480   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.480   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.497   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.497   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.513   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.513   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.530   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.530   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.547   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.547   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.563   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.564   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.580   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.580   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.597   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.597   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.614   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.614   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.630   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.630   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.714   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.948   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.948   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.964   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:07.965   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:07.998   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:08.002   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:08.082   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:08.216   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:08.216   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:08.232   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:08.232   434   434 E AAAA    : layer name Starting com.miui.securitycore
+07-01 20:04:08.249   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.265   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.282   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.299   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.315   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.332   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.349   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.366   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.383   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:08.399   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:08.399   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:08.417   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:08.418   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:08.482   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.068   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.070   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.101   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.101   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.184   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.585   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.585   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.619   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.619   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.652   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.652   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.737   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.752   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.753   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.786   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.786   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.803   434   434 E AAAA    : setUpHWComposer: empty: hasOne  wasEmpty: notEmpty
+07-01 20:04:09.803   434   434 E AAAA    : layer name com.miui.securitycore/com.miui.securityspace.ui.activity.GuideStartActivity
+07-01 20:04:09.819   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.836   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.853   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.870   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.886   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.903   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.920   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.936   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.953   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.972   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:09.988   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.006   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.020   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.037   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.054   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.138   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.154   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.171   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.204   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.221   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.238   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.256   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.271   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.288   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.304   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.322   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.339   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.356   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.372   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.388   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.405   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.425   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.438   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.455   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.473   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.495   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.505   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.521   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.538   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.555   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.572   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.588   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.605   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.622   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.638   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.655   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.672   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.688   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.705   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.722   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:10.805   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:11.190   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty
+07-01 20:04:11.273   434   434 E AAAA    : setUpHWComposer: empty: more  wasEmpty: notEmpty

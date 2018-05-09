@@ -1,0 +1,86 @@
+queryIntentActivities 流程分析
+
+public @NonNull ParceledListSlice<ResolveInfo> queryIntentActivities(Intent intent,
+            String resolvedType, int flags, int userId)   
+	
+     private @NonNull List<ResolveInfo> queryIntentActivitiesInternal(Intent intent,
+	             String resolvedType, int flags, int userId)
+
+		1 检查user是否存在
+		2 int updateFlagsForResolve(int flags, int userId, Object cookie)  
+		   安全模式只能查询系统intent
+		     private int updateFlagsForComponent(int flags, int userId, Object cookie) 
+			   private int updateFlags(int flags, int userId)
+			     如果没指定对directboot的设置则在userlock时候添加PackageManager.MATCH_DIRECT_BOOT_AWARE标志 只能查询directboot的组件
+				 否则添加  PackageManager.MATCH_DIRECT_BOOT_AWARE | MATCH_DIRECT_BOOT_UNAWARE 表示都能查询
+	   3 检查权限 主要是cross user的权限
+	   4.1  如果指定了ComponentName 则直接在对应包下查找 使用函数 
+	       public ActivityInfo getActivityInfo(ComponentName component, int flags, int userId)
+	   4.2  查找对应的组件的过程 分为两种情况 一种是intent提供了包名,第二种没有提供包名
+	       1 没有提供包名
+		      1 获取匹配的filter
+		      private List<CrossProfileIntentFilter> getMatchingCrossProfileIntentFilters(Intent intent,
+			              String resolvedType, int userId) 
+						  获取CrossProfileUser的Resolver 去查询,如果该user没有对应的Resolver则直接返回null
+			  2 ResolveInfo.queryIntent(
+			                          intent, resolvedType, flags, userId), userId) 进行查询
+					见queryIntent分析
+            2 filterIfNotSystemUser 用于过滤只能被系统查询到的
+            3 queryCrossProfileIntents
+		       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public List<R> queryIntent(Intent intent, String resolvedType, boolean defaultOnly,
+            int userId)
+  queryIntent过程
+
+  首先要知道PMS维护的几个集合
+  1 mFilters 所有的filters
+  2 mTypeToFilter 所有的typefilter  如image/*  image/jepg等
+  3 mBaseTypeToFilter 用于存放basetype ,如 ${basetype}/yyy 
+  4 mWildTypeToFilter 用于存放basetype, 如 ${basetype}/*   
+  5 mSchemeToFilter 存放指定scheme的
+  6 mActionToFilter 存放actiion 没有指定data的
+  7 mTypedActionToFilter 存放所有指定data的action 
+
+
+ 匹配过程
+  三级 
+  firstTypeCut
+  secondTypeCut
+  thirdTypeCut
+  schemeCut
+  1 对于指定mime type 为  ${basetype}/xxx的 xxx不为*,则从mTypeToFilter中获取最准确的mine type支持
+  mWildTypeToFilter 提供二级  mWildTypeToFilter提供三级的
+  2 对于指定mime type为 ${basetype}/*的则 mBaseTypeToFilter提供一级的, mWildTypeToFilter提供二级的
+  mWildTypeToFilter提供三级的
+
+ 如果basetype=* 则匹配action,mTypedActionToFilter提供firstCut
+
+ schemeCut从mSchemeToFilter中选择
+ 如果 没有提供scheme, resolverType从mActionToFilter 中获取 firstTypeCut
+ 获取categories 
+ 以上筛选出来的都是可能处理请求的,还要进一步筛选,通过buildResolveList 函数筛选
+
+
+ filter的match函数 
+ match
+  1 必须匹配action
+  2 必须匹配secheme
+  3 匹配mimetype 
+  4 匹配catagory
+  中的越多 分数越高
+  

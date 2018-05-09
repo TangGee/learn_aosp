@@ -1,0 +1,73 @@
+ 这个多线程各种回调有点懵逼，需要细细分析
+
+RootCache类 看样是是用于缓存的 我们来看看他都能缓存什么东西
+Cache of known storage backends and their roots 知道的存储后端 什么鬼
+
+mRecentsRoot 这个应该是最近打开的路径
+mRoots 缓存的打开的目录吧
+mStoppedAuthorities 停止观察的authority 应该要做一些善后工作
+mObservedAuthorities 监听的authority
+
+默认的mRecentsRoot RootInfo.TYPE_RECENTS
+
+当downloadprovider发生变化的时候 调用            updateAuthorityAsync(uri.getAuthority());
+
+updateAsync update所有的
+updatePackageAsync update指定的包
+updateAuthorityAsync
+ 
+getRootOneshot 返回root info
+getRootBlocking 
+isIconUniqueBlocking
+getRecentsRoot
+isRecentsRoot
+getRootsBlocking
+getRootsForAuthorityBlocking
+getDefaultRootBlocking
+
+
+1 UpdateTask 首先找到
+android.content.action.DOCUMENTS_PROVIDER 这个action对应的provider 可能有多个，目前系统能识别的有如下几个provider
+        集成DocumentsProvider 配置action我们也能搞一个 么么么么
+	com.android.externalstorage.documents 两个 home和其他
+	com.android.providers.downloads.documents
+	com.android.providers.media.documents
+        com.android.providers.media.documents
+        com.android.providers.media.documents
+        com.android.mtp.documents
+ 数据表结构大概是
+   root_id  flags icon title  summary document_id available_bytes capacity_bytes mime_types
+
+2 handleDocumentsProvider 
+	将停止的provider添加到mTaskStoppedAuthorities 这些现在不会查询，要到ui初始化的时候查询
+       已经启动的则加载数据添加到mTaskRoots中去
+3 loadRootsForAuthority
+	注册监听数据库变化 路径是authority/root 
+	如果不强制加载就在（ContentService）cache中加载，加载不到也不管
+	设置了个超时上报anr的东西
+	查询authority/root 结果填充RootInfo，添加到Roots中
+	关闭资源 
+	putCache到ContentService中去
+        通知界面更新
+
+另外一部分当数据库变化的时候重新加载该authority对应的rootinfo
+
+由于我们现在在调查download provider所以我们分析下
+ com.android.providers.downloads.documents里面
+
+注册了如下一些路径
+root   root/*    root/*/recent   root/*/search     document  document/*/children  tree/*/document/*  tree/*/document/*/children
+
+我们这里关注的MATCH_ROOTS
+   queryRoots
+   返回一行结果 
+   rootid:STORAGE_ROOT_ID  
+   flags:FLAG_LOCAL_ONLY|FLAG_SUPPORTS_RECENTS|FLAG_SUPPORTS_CREATE
+   icon: ic_launcher_download
+   COLUMN_TITLE:root_downloads
+   document_id:DOC_ID_ROOT
+  
+
+
+FileFragment
+ 
